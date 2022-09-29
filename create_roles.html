@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Assign Skills to Roles</title>
+
+     <!-- Bootstrap CSS -->
+     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" 
+     rel="stylesheet" 
+     integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" 
+     crossorigin="anonymous">
+
+    <style>
+      body {
+        background-color: antiquewhite;
+      }
+    </style>
+      <br>
+      <div class="container"> 
+        <h4> Creating a new Role</h4>
+        <br>
+        <div class="mb-3">
+          <label for="exampleInputEmail1" class="form-label">Role ID</label>
+          <input type="integer" class="form-control" id="roleID">
+
+        </div>
+
+        <div class="mb-3">
+          <label for="exampleInputPassword1" class="form-label">Role Title</label>
+          <input type="text" class="form-control" id="roleTitle">
+        </div>
+
+        <div class="mb-3">
+          <label for="exampleInputPassword1" class="form-label">Role Description</label>
+          <input type="text" class="form-control" id="roleDescription">
+        </div>
+
+        <div class="mb-3">
+          <label for="skillsGained" class="form-label">Skills required: </label>
+          <select class="form-select" multiple aria-label="multiple select example">
+            <option value="1">Skill 1 </option>
+            <option value="2">Skill 2</option>
+            <option value="3">Skill 3</option>
+            <option value="4">Skill 4</option>
+            <option value="5">Skill 5</option>
+            <option value="6">Skill 6</option>
+          </select>
+        </div>
+        <br>
+        <button type="submit" class="btn btn-warning">Create role</button>
+  </div>
+
+    <!-- Option 1: Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj" crossorigin="anonymous"></script>
+
+  </body>
+</head>
+</html>
