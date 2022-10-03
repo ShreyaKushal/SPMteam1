@@ -26,33 +26,34 @@
 </head>
 <body>
 
-    <table id="JobRolesTable" class='table table-striped' border='1'>
+    <table id="SkillsTable" class='table table-striped' border='1'>
         <thead class='thead-dark'>
             <tr>
-                <th>Job Role ID</th>
-                <th>Job Role's Name</th>
+                <th>Skill ID</th>
+                <th>Skill Name</th>
+                <th>Skill Description</th>
             </tr>
         </thead>
         <tbody>
-            <tr v-for="JobRole in JobRoles">
-                <td><strong>{{ JobRole.JobRole_ID }}</strong></td>
-                <td>{{ JobRole.JobRole_Name }}</td>
+            <tr v-for="Skill in Skills">
+                <td>{{ Skill.Skill_ID }}</td>
+                <td>{{ Skill.Skill_Name }}</td>
+                <td>{{ Skill.Skill_Desc }}</td>
             </tr>
         </tbody>
     
 
-
         <script>
 
             const vm = new Vue({
-                el: '#JobRolesTable',
+                el: '#SkillsTable',
                 data: {
-                    JobRoles: []
+                    Skills: []
                 },
                 mounted: function() {
-                    axios.get('http://localhost:5001/JobRoles')
+                    axios.get('http://localhost:5001/Skills')
                         .then(response => {
-                            this.JobRoles = response.data.data;
+                            this.Skills = response.data.data;
                         })
                         .catch(error => alert(error));
                 }
@@ -69,3 +70,6 @@
 
 </body>
 </html>
+
+
+
