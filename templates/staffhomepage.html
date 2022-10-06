@@ -27,6 +27,14 @@
             align-items: center;
         }
 
+        .upperItemDescription {
+            display: flex;
+            align-items: stretch; 
+            flex-direction: row;
+            color:black; 
+            margin-top: 0.8rem; 
+        }
+
         .initialHeading {
             margin-bottom: 2rem;
             font-weight:700; 
@@ -41,13 +49,25 @@
             display:flex; 
             flex-direction: row;
             align-items: stretch;
+            justify-content: center;
         }
 
+        
     </style>
 </head>
 <body>
     <div class="container-fluid">
-        <div class='topmostPortion'>
+        <div class='topmostPortion container-fluid'>
+            <div class="row">
+                <div class="row upperItemDescription">
+                <div class="col-3">
+                    LJPS
+                </div>
+                <div class="col-9">
+                    Welcome, {{StaffName}}
+                </div>
+                </div>
+            </div>
         </div>
         <div class='middlePortion container-fluid'>
             <div class="row">
@@ -69,20 +89,15 @@
                         <li class="nav-item">
                           <a class="nav-link" href="#">My Learning Journeys</a>
                         </li>
-                        <li class="nav-item dropdown">
-                          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Dropdown
-                          </a>
-                          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="#">Action</a>
-                            <a class="dropdown-item" href="#">Another action</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="#">Something else here</a>
-                          </div>
-                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Add Learning Journey</a>
+                          </li>
                       </ul>
                     </div>
                   </nav>
+            </div>
+            <div class="row course-location">
+                <!-- add courses here when db is updated. use v-for to output courses via backend-->
             </div>
         </div>
     </div>
