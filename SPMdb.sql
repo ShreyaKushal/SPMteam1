@@ -4,7 +4,7 @@ USE `spm`;
 
 create table Role
 (	Role_ID	int	primary key,
- 	Role_Name	varchar(50) not null
+ 	Role_Name	varchar(50) 
 );
 
 insert into Role (Role_ID, Role_Name) values 
@@ -14,9 +14,9 @@ insert into Role (Role_ID, Role_Name) values
 
 create table Staff
 (	Staff_ID	int	primary key,
-	Staff_Fname	varchar(50)	not null,
- 	Staff_Lname varchar(50) not null,
-    Department varchar(50) not null,
+	Staff_Fname	varchar(50)	,
+ 	Staff_Lname varchar(50) ,
+    Department varchar(50) ,
 	-- Department refers to: Staff, HR, Manager
     Email varchar(50) not null,
 	Role_ID int not null,
@@ -32,7 +32,7 @@ insert into Staff (Staff_ID, Staff_Fname, Staff_Lname, Department, Email, Role_I
 
 create table Courses
 (	Course_ID	varchar(50)	primary key,
- 	Course_Name	varchar(50)	not null,
+ 	Course_Name	varchar(50)	,
  	Course_Desc	varchar(255) not null,
  	Course_Status varchar(15) not null,
     Course_Type varchar(10) not null,
@@ -62,15 +62,16 @@ insert into JobRoles (JobRole_ID, JobRole_Name) values
 create table Skills
 (	Skill_ID varchar(50)	primary key,
  	Skill_Name	varchar(50)	not null,
- 	Skill_Desc	varchar(255) not null
+ 	Skill_Desc	varchar(255) not null,
+	Skill_Status varchar(255) not null
 );
 
-insert into Skills (Skill_ID, Skill_Name, Skill_Desc) values
-("ST1", "Statistics", "Understand the basics of Statistics"),
-("LE2", "Leadership", "Strong sense of leadership"),
-("PY3", "Python", "Able to code in Python"),
-("C4", "C++", "Able to code in C++"),
-("ME5", "Microsoft Excel", "Able to use Microsoft Excel");
+insert into Skills (Skill_ID, Skill_Name, Skill_Desc, Skill_Status) values
+("ST1", "Statistics", "Understand the basics of Statistics", "Active"),
+("LE2", "Leadership", "Strong sense of leadership", "Active"),
+("PY3", "Python", "Able to code in Python", "Active"),
+("C4", "C++", "Able to code in C++", "Active"),
+("ME5", "Microsoft Excel", "Able to use Microsoft Excel", "Active");
 
 create table JobRoleWithSkills
 (JobRole_ID varchar(50) not null,
