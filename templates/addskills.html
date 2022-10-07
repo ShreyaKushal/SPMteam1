@@ -27,15 +27,7 @@
 <link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap/dist/css/bootstrap.min.css" />
 <link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.css" />
 
-<!-- Load polyfills to support older browsers -->
-<script src="https://polyfill.io/v3/polyfill.min.js?features=es2015%2CIntersectionObserver" crossorigin="anonymous"></script>
 
-<!-- Load Vue followed by BootstrapVue -->
-<script src="https://unpkg.com/vue@latest/dist/vue.min.js"></script>
-<script src="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.js"></script>
-
-<!-- Load the following for BootstrapVueIcons support -->
-<script src="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue-icons.min.js"></script>
     <style>
                 *, *:before, *:after {
         -moz-box-sizing: border-box;
@@ -155,6 +147,26 @@
 
         }
 
+
+
+
+              body {
+        padding: 15px;
+      }
+
+      .select-checkbox option::before {
+        content: "\2610";
+        width: 1.3em;
+        text-align: center;
+        display: inline-block;
+      }
+      .select-checkbox option:checked::before {
+        content: "\2611";
+      }
+
+          
+        
+
     </style>
 </head>
 <body>
@@ -219,26 +231,34 @@
               <label for="bio">Biography:</label>
               <textarea id="bio" name="user_bio"></textarea>
               
-<!--               
-              <label for="job">Job role:</label>
-              <label id="Courses" name="user_job">
-                <optgroup type ="checkbox" v-for="Course in Courses">
-                  <option value="Course">{{Course.Course_ID}}, {{Course.Course_Name}}</option>
-                </optgroup>
-              </label> -->
+              
+            
+
+            <label for="job">Select Courses:</label>
+            <label id="Courses" name="user_job" >
+              <select class="form-control select-checkbox" multiple="" size="20">
+              <optgroup  type ="checkbox" v-for="Course in Courses" >
+                <option value="Course_ID">{{Course.Course_ID}}, {{Course.Course_Name}}</option>
+              </optgroup>
+              </select>
+            </label>
+            
+            
+            
+            
+            
 
               <!-- <span id="Courses" v-for="Course in Courses">
                 <input type="checkbox" v-model="checked_courses" id="Course_ID"> {{Course.Course_ID, Course.Course_Name}}
               </span>
               <h1>Dropdown Checkboxes</h1> -->
 
-              <template>
-                <div>
-                  <label for="tags-basic">Type a new tag and press enter</label>
-                  <b-form-tags input-id="tags-basic" v-model="value"></b-form-tags>
-                  <p class="mt-2">Value: {{ value }}</p>
-                </div>
-              </template>
+              
+
+              
+
+              
+            
 
               
                 
@@ -255,7 +275,9 @@
 
     </div>
     <script>
+         
 
+     
 
       const vm = new Vue({
           el: '#Courses',
@@ -270,13 +292,7 @@
                   .catch(error => alert(error));
           }
       });
-      export default {
-        data() {
-          return {
-            value: ['apple', 'orange']
-          }
-        }
-      };
+      
 
     
 
