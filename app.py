@@ -42,6 +42,25 @@ class Skills(db.Model):
     def json(self): #returns json representation of the job role
         return {"Skill_ID": self.Skill_ID, "Skill_Name": self.Skill_Name, "Skill_Desc": self.Skill_Desc}
 
+class Courses(db.Model):
+    __tablename__ = 'Courses'
+    Course_ID= db.Column(db.String(50), primary_key=True)
+    Course_Name= db.Column(db.String(50), nullable=False)
+    Course_Desc= db.Column(db.String(50), nullable=False)
+    Course_Status= db.Column(db.String(50), nullable=False)
+    Course_Type= db.Column(db.String(50), nullable=False)
+    Course_Category= db.Column(db.String(50), nullable=False)
+
+    def __init__(self, Course_ID, Course_Name, Course_Desc, Course_Status, Course_Type, Course_Category):
+        self.Course_ID = Course_ID
+        self.Course_Name = Course_Name
+        self.Course_Desc = Course_Desc
+        self.Course_Status = Course_Status
+        self.Course_Type = Course_Type
+        self.Course_Category = Course_Category
+
+    def json(self): 
+        return { 'Course_ID' : self.Course_ID, 'Course_Name' : self.Course_Name, 'Course_Desc' : self.Course_Desc, 'Course_Status' : self.Course_Status, 'Course_Type' : self.Course_Type, 'Course_Category' : self.Course_Category}
 
 @app.route("/JobRoles")
 def get_all_JobRoles():
@@ -67,6 +86,22 @@ def get_all_Skills():
         return jsonify({
             "message": "Skill not found."
         }), 404
+
+@app.route('/Courses')
+def get_all_Courses():
+    Courzes = Courses.query.all()
+    if len(Courzes):
+        return jsonify ({
+            'code' : 200, 
+            'data' : {
+                'courses' : [course.json() for course in Courzes]
+            }
+        }
+        )
+    return jsonify ( {
+        'code' : 404, 
+        'message' : 'There are no courses.'
+    })
 
 # def JobRole_by_id(JobRole_ID):
 #     JobRole = JobRoles.query.filter_by(JobRole_ID=JobRole_ID).all()
