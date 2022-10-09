@@ -49,15 +49,16 @@ insert into Courses (Course_ID, Course_Name, Course_Desc, Course_Status, Course_
 
 create table JobRoles
 (	JobRole_ID	varchar(50)	primary key,
- 	JobRole_Name varchar(50)	not null
+ 	JobRole_Name varchar(50)	not null,
+	JobRole_Status varchar(50)
 );
 
-insert into JobRoles (JobRole_ID, JobRole_Name) values 
-("DA1", "Data Analyst"),
-("DS2", "Data Scientist"),
-("BA3", "Business Analyst"),
-("SE4", "Software Engineer"),
-("PM5", "Project Manager");
+insert into JobRoles (JobRole_ID, JobRole_Name, JobRole_Status) values 
+("DA1", "Data Analyst", "Active"),
+("DS2", "Data Scientist", "Active"),
+("BA3", "Business Analyst", "Active"),
+("SE4", "Software Engineer", "Active"),
+("PM5", "Project Manager", "Active");
 
 create table Skills
 (	Skill_ID varchar(50)	primary key,

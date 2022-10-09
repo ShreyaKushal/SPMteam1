@@ -17,15 +17,17 @@ class JobRoles(db.Model):
     __tablename__ = 'JobRoles'
     JobRole_ID = db.Column(db.String(50), primary_key=True)
     JobRole_Name = db.Column(db.String(50))
+    JobRole_Status = db.Column(db.String(50))
 
 
-    def __init__(self, JobRole_ID, JobRole_Name): #initialise value of job role record, specify properties of a job role when it is created
+    def __init__(self, JobRole_ID, JobRole_Name, JobeRole_Status): #initialise value of job role record, specify properties of a job role when it is created
         self.JobRole_ID = JobRole_ID
         self.JobRole_Name = JobRole_Name
+        self.JobRole_Status = JobeRole_Status
   
  
     def json(self): #returns json representation of the job role
-        return {"JobRole_ID": self.JobRole_ID, "JobRole_Name": self.JobRole_Name}
+        return {"JobRole_ID": self.JobRole_ID, "JobRole_Name": self.JobRole_Name, "JobRole_Status":self.JobRole_Status}
 #db.create_all()
 
 class Skills(db.Model):
@@ -111,6 +113,42 @@ def get_all_Courses():
 #         return jsonify({
 #             "message": "Job Role not found."
 #         }), 404
+@app.route("/JobRoles/<string:jobrole_id>", methods=['PUT'])
+def update_jobrole(JobRole_ID):
+    try:
+        jobrole = JobRoles.query.filter_by(JobRole_ID=JobRole_ID).first()
+        if not jobrole:
+            return jsonify(
+                {
+                    "code": 404,
+                    "data": {
+                        "JobRole_ID": JobRole_ID
+                    },
+                    "message": "Job role not found."
+                }
+            ), 404
+
+        # update status
+        data = request.get_json()
+        if data['JobRole_Status']:
+            JobRoles.JobRole_Status = data['JobRole_Status']
+            db.session.commit()
+            return jsonify(
+                {
+                    "code": 200,
+                    "data": JobRoles.json()
+                }
+            ), 200
+    except Exception as e:
+        return jsonify(
+            {
+                "code": 500,
+                "data": {
+                    "JobRole_ID": JobRole_ID
+                },
+                "message": "An error occurred while updating the job role. " + str(e)
+            }
+        ), 500
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5001, debug=True)
