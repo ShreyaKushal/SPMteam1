@@ -11,6 +11,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
     <title>Staff Home Page</title>
 
+    <!-- fix the top half because it looks like shit :( -->
     <style>
 
         .topmostPortion {
@@ -37,6 +38,7 @@
             flex-direction: row;
             color:black; 
             margin-top: 0.8rem; 
+            margin-bottom:0.8rem; 
         }
 
         .initialHeading {
@@ -47,6 +49,12 @@
             letter-spacing:-.05rem; 
             margin-top:2rem; 
             font-family: SuisseWorks,Georgia; 
+        }
+
+        .big-h {
+            font-family: SuisseWorks,Georgia;
+            margin-left: auto; 
+            font-size: 2.1rem; 
         }
 
         .naz {
@@ -84,15 +92,18 @@
 <body>
     <div class="container-fluid">
         <div class='topmostPortion container-fluid'>
-            <div class="row">
-                <div class="row upperItemDescription">
-                <div class="col-3">
+            <div class="row upperItemDescription">
+                
+                <div class="col-sm-3">
                     LJPS
                 </div>
-                <div class="col-9">
+                <div class="col-sm-6 big-h">
                     Welcome, {{StaffName}}
                 </div>
+                <div class="col-sm-3">
+                    <button type='button' class='btn btn-primary'>Add Learning Journey</button>
                 </div>
+                
             </div>
         </div>
         <div class='middlePortion container-fluid'>
@@ -110,15 +121,8 @@
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                       <ul class="navbar-nav mr-auto">
                         <li class="nav-item active">
-                          <a class="nav-link" href="#">All Courses<span class="sr-only">(current)</span></a>
+                          <a class="nav-link" href="#">All Learning Journeys</a>
                         </li>
-                        <li class="nav-item">
-                          <a class="nav-link" href="#">My Learning Journeys</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Add Learning Journey</a>
-                          </li>
-                      </ul>
                     </div>
                   </nav>
             </div>
@@ -156,6 +160,8 @@
                         .catch(error => alert(error));
                 }
             });
+
+        
         </script>
 
 </body>
