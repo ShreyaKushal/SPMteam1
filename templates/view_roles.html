@@ -164,6 +164,7 @@
                     <tr>
                         <th>Job Role ID</th>
                         <th>Job Role's Name</th>
+                        <th>Job Role's Status</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -171,6 +172,7 @@
                     <tr v-for="JobRole in JobRoles">
                         <td><strong>{{ JobRole.JobRole_ID }}</strong></td>
                         <td>{{ JobRole.JobRole_Name }}</td>
+                        <td>{{ JobRole.JobRole_Status }}</td>
                         <td>
 							<a class="add" title="Add" data-toggle="tooltip"><i class="material-icons">&#xE03B;</i></a>
                             <a class="edit" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>

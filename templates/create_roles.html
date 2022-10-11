@@ -74,7 +74,8 @@
         padding: 15px;
         width: 100%;
         background-color: #e8eeef;
-        color: #8a97a0;
+        /* color: #8a97a0; */
+        color: black;
         box-shadow: 0 1px 0 rgba(0,0,0,0.03) inset;
         margin-bottom: 30px;
         }
@@ -148,9 +149,7 @@
         }
 
 
-
-
-              body {
+      body {
         padding: 15px;
       }
 
@@ -164,7 +163,8 @@
         content: "\2611";
       }
 
-          
+
+                
         
 
     </style>
@@ -213,18 +213,21 @@
             <h1>Create a Role</h1>
             
             <fieldset>
-              
-              <legend><span class="number">1</span> Your basic info</legend>
 
-              <label for="roleId">Role ID:</label>
+              <label for="roleId"><strong>Role ID:</strong></label>
               <input type="text" id="roleId" name="roleId">
 
-              <label for="name">Name of the Role:</label>
+              <label for="name"><strong>Name of the Role:</strong></label>
               <input type="text" id="name" name="role_name">
+
+              <label for="status"><strong>Role Status:</strong></label>
+              <input type="radio" id="active" name="status" value="active"> Active
+              <br>
+              <input type="radio" id="inactive" name="status" value="inactive"> Inactive
 
             </fieldset>
 
-            <label for="job">Select skills required for the job role:</label>
+            <label for="job"><strong>Select skills required for the job role:</strong></label>
             <label id="Skills" name="skillsRequired" >
               <select class="form-control select-checkbox" multiple="" size="20">
               <optgroup  type ="checkbox" v-for="Skill in Skills" >
