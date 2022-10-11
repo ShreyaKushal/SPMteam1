@@ -77,7 +77,7 @@
             },
             mounted: function() {
                 var jobID =localStorage.getItem("JobroleID");
-                axios.get('http://localhost:5000/StaffViewJobRoles/'+jobID)
+                axios.get('http://localhost:5001/StaffViewJobRoles/'+jobID)
                     .then(response => {
                         this.skills = response.data.data;
                 })
