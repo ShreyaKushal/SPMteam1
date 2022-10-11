@@ -17,7 +17,6 @@ create table Staff
 	Staff_Fname	varchar(50)	,
  	Staff_Lname varchar(50) ,
     Department varchar(50) ,
-	-- Department refers to: Staff, HR, Manager
     Email varchar(50) not null,
 	Role_ID int not null,
 constraint Staff_fk foreign key(Role_ID) references Role(Role_ID)

@@ -204,13 +204,13 @@
         <head>
             <meta charset="utf-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Sign Up Form</title>
+            <title>Create Roles</title>
         </head>
         <body>
     
           <form action="index.html" method="post">
             
-            <h1>Create a skill</h1>
+            <h1>Create a Role</h1>
             
             <fieldset>
               
@@ -224,20 +224,20 @@
 
             </fieldset>
 
-            <label for="job">Select Courses:</label>
-            <label id="Courses" name="user_job" >
+            <label for="job">Select skills required for the job role:</label>
+            <label id="JobRoles" name="user_job" >
               <select class="form-control select-checkbox" multiple="" size="20">
-              <optgroup  type ="checkbox" v-for="Course in Courses" >
-                <option value="Course_ID">{{Course.Course_ID}}, {{Course.Course_Name}}</option>
+              <optgroup  type ="checkbox" v-for="JobRole in JobRoles" >
+                <option value="JobRole_ID">{{JobRole.JobRole_ID}}, {{JobRole.JobRole_Name}}</option>
               </optgroup>
               </select>
             </label>
 
-              <!-- <span id="Courses" v-for="Course in Courses">
+              <!-- <span id="Roles" v-for="Course in Courses">
                 <input type="checkbox" v-model="checked_courses" id="Course_ID"> {{Course.Course_ID, Course.Course_Name}}
               </span>
-              <h1>Dropdown Checkboxes</h1> -->
- 
+              <h1>Dropdown Checkboxes</h1>
+  -->
             </fieldset>
               
             <button id="formbutton" type="submit">Ceate Role</button>
@@ -249,12 +249,12 @@
     </div>
     <script>
       const vm = new Vue({
-          el: '#Courses',
+          el: '#JobRoles',
           data: {
               Courses: []
           },
           mounted: function() {
-              axios.get('http://localhost:5001/Courses')
+              axios.get('http://localhost:5001/JobRoles')
                   .then(response => {
                       this.Courses = response.data.data;
                   })
