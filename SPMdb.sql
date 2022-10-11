@@ -108,6 +108,7 @@ Staff_ID int not null,
  constraint LearningJourney_pk primary key(JobRole_ID, Skill_ID, Course_ID, Staff_ID),
  constraint LearningJourney_fk1 foreign key(JobRole_ID, Skill_ID) references JobRoleWithSkills(JobRole_ID, Skill_ID),
 
+
  constraint LearningJourney_fk2 foreign key(Course_ID) references SkillsRequiredCourses(Course_ID),
  constraint LearningJourney_fk3 foreign key(Staff_ID) references Staff(Staff_ID));
 
