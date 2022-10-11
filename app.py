@@ -99,6 +99,7 @@ def get_all_JobRoles():
             "message": "Job Role not found."
         }), 404
 
+
 @app.route("/LearningJourneys")
 def get_all_LearningJourneys():
     LearningJourneys = LearningJourney.query.all()
@@ -110,6 +111,7 @@ def get_all_LearningJourneys():
         return jsonify({
             "message": "Learning Journey not found."
         }), 404
+
 
 @app.route("/Skills")
 def get_all_Skills():
