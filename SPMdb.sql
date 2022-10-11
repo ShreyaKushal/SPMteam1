@@ -99,19 +99,16 @@ insert into SkillsRequiredCourses (Course_ID, Skill_ID) values
 ("ME4", "ME5");
 
 create table LearningJourney
-(LearningJourney_ID int not null, 
+(LearningJourney_ID int primary key, 
  JobRole_ID varchar(50) not null,
  Skill_ID varchar(50) not null,
  Course_ID varchar(50) not null,
  Staff_ID int not null,
- constraint LearningJourney_pk primary key(JobRole_ID, Skill_ID, Course_ID, Staff_ID),
  constraint LearningJourney_fk1 foreign key(JobRole_ID, Skill_ID) references JobRoleWithSkills(JobRole_ID, Skill_ID),
-
-
  constraint LearningJourney_fk2 foreign key(Course_ID) references SkillsRequiredCourses(Course_ID),
  constraint LearningJourney_fk3 foreign key(Staff_ID) references Staff(Staff_ID));
 
 insert into LearningJourney (LearningJourney_ID, JobRole_ID, Skill_ID, Course_ID, Staff_ID) values
 (1, "DA1", "ST1", "ST5", 2),
-(1, "DA1", "ME5", "ME4", 2);
+(2, "DA1", "ME5", "ME4", 2);
 
