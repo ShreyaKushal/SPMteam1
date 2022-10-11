@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" 
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <title>View Job Roles</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+    <div style="margin-top:48px">
+        
+    </div>
+    <div id="main-container" class="container border border-warning border-4" style="width:70%">
+        
+
+        <h1 class="bg-dark text-white ps-4 py-4" style="margin-top:10px">  View Job Roles </h1>
+
+        
+        <div class="" style="margin-top:48px">
+            <div>
+                    <table class="table table-hover">
+                        <thead class="table-light">
+                            <th scope="col">Role ID</th>
+                            <th scope="col">Role Name</th>
+                            <th scope="col"></th>
+                        </thead>
+                        <tbody>
+                            <tr v-for="jobrole in jobroles" v-bind:key="jobrole.JobRole_ID">
+                                <td>{{ jobrole.JobRole_ID }}</td>
+                                <td class="fw-bold"><a href="staffViewJobRoleWithSkills.html" @click="getID" v-bind:id="jobrole.JobRole_ID" class="text-decoration-none link-dark">{{ jobrole.JobRole_Name }}</a></td>
+                                <td class="col text-center">
+                                    <button type="button" class="btn btn-outline-dark" onclick="">Choose Role</button>
+                                </td>
+                            </tr>
+                        
+                        </tbody>
+                    </table>
+            </div>
+            
+        </div>
+
+        
+        
+    </div>
+    
+    
+
+    <!-- Result Show Below -->
+    <div class="container" id="result" style="width:70%">
+    
+    </div>
+
+
+
+
+
+
+    <script>
+        const vm = new Vue({
+            el: '#main-container',
+            data: {
+                jobroles: [],
+                id: ''
+            },
+            mounted: function() {
+                axios.get('http://localhost:5000/StaffViewJobRoles')
+                        .then(response => {
+                            this.jobroles = response.data.data;
+                        })
+                        .catch(error => alert(error));
+            }, 
+            methods:{
+                getID:function (event) {
+                    var id = event.target.id;
+                    console.log(id);
+                    localStorage.setItem("JobroleID",id)
+                }
+            }
+            });
+    </script>
+    
+</body>
+</html>
+
+

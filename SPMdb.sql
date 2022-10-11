@@ -4,7 +4,7 @@ USE `spm`;
 
 create table Role
 (	Role_ID	int	primary key,
- 	Role_Name	varchar(50) 
+ 	Role_Name	varchar(20) 
 );
 
 insert into Role (Role_ID, Role_Name) values 
@@ -30,7 +30,7 @@ insert into Staff (Staff_ID, Staff_Fname, Staff_Lname, Department, Email, Role_I
 (5, "Samantha", "Tan", "Manager", "samanthatan@gmail.com", "3");
 
 create table Courses
-(	Course_ID	varchar(50)	primary key,
+(	Course_ID	varchar(20)	primary key,
  	Course_Name	varchar(50)	,
  	Course_Desc	varchar(255) not null,
  	Course_Status varchar(15) not null,
@@ -83,7 +83,11 @@ create table JobRoleWithSkills
 insert into JobRoleWithSkills (JobRole_ID, Skill_ID) values
 ("DA1", "ST1"),
 ("DA1", "ME5"),
-("DS2", "ME5");
+("DS2", "ME5"),
+("BA3", "C4"),
+("BA3", "LE2"),
+("BA3", "PY3"),;
+
 
 create table SkillsRequiredCourses
 (Course_ID varchar(50) not null,
