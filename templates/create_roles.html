@@ -225,10 +225,10 @@
             </fieldset>
 
             <label for="job">Select skills required for the job role:</label>
-            <label id="JobRoles" name="user_job" >
+            <label id="Skills" name="skillsRequired" >
               <select class="form-control select-checkbox" multiple="" size="20">
-              <optgroup  type ="checkbox" v-for="JobRole in JobRoles" >
-                <option value="JobRole_ID">{{JobRole.JobRole_ID}}, {{JobRole.JobRole_Name}}</option>
+              <optgroup  type ="checkbox" v-for="Skill in Skills" >
+                <option value="Skill_ID">{{Skill.Skill_ID}}, {{Skill.Skill_Name}}</option>
               </optgroup>
               </select>
             </label>
@@ -249,14 +249,14 @@
     </div>
     <script>
       const vm = new Vue({
-          el: '#JobRoles',
+          el: '#Skills',
           data: {
-              Courses: []
+              Skills: []
           },
           mounted: function() {
-              axios.get('http://localhost:5001/JobRoles')
+              axios.get('http://localhost:5001/Skills')
                   .then(response => {
-                      this.Courses = response.data.data;
+                      this.Skills = response.data.data;
                   })
                   .catch(error => alert(error));
           }
