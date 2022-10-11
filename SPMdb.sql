@@ -86,7 +86,7 @@ insert into JobRoleWithSkills (JobRole_ID, Skill_ID) values
 ("DS2", "ME5"),
 ("BA3", "C4"),
 ("BA3", "LE2"),
-("BA3", "PY3"),;
+("BA3", "PY3");
 
 
 create table SkillsRequiredCourses
