@@ -99,8 +99,7 @@ insert into SkillsRequiredCourses (Course_ID, Skill_ID) values
 ("ME4", "ME5");
 
 create table LearningJourney
-(LearningJourney_ID int not null,
-Staff_ID int not null, 
+(LearningJourney_ID int not null, 
  JobRole_ID varchar(50) not null,
  Skill_ID varchar(50) not null,
  Course_ID varchar(50) not null,
