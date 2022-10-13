@@ -162,10 +162,6 @@
         content: "\2611";
       }
 
-
-                
-        
-
     </style>
 </head>
 <body>
@@ -207,7 +203,7 @@
         </head>
         <body>
     
-          <form action="" method="post">
+          <form action="view_roles.html">
             
             <h1>Create a Role</h1>
             
@@ -242,7 +238,7 @@
   -->
             </fieldset>
               
-            <button @click="addJobRole" class="btn btn-primary" v-on:submit.prevent="onSubmit" id="formbutton" type="submit">Create Role</button>
+            <button @click="addJobRole()" class="btn btn-primary" v-on:submit.prevent="onSubmit" id="formbutton" type="submit">Create Role</button>
             
           </form>
           

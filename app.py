@@ -137,7 +137,7 @@ def get_all_JobRoles():
             "message": "Job Role not found."
         }), 404
 
-# Add a Learning Journey
+# Add a Job Role
 @app.route("/AddJobRole", methods=['POST'])
 def create_book():
     data = request.get_json()
