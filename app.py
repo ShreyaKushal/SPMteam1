@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root' + \
@@ -12,6 +12,7 @@ app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {'pool_size': 100,
 db = SQLAlchemy(app)
 
 CORS(app)
+CORS(app, support_credentials=True)
 
 #many-to-many rlationship db table
 job_role_with_skills = db.Table('jobrolewithskills',
@@ -124,6 +125,8 @@ class LearningJourney(db.Model):
 
     def json(self): 
         return { 'LearningJourney_ID' : self.LearningJourney_ID, 'Staff_ID' : self.Staff_ID, 'JobRole_ID' : self.JobRole_ID, 'Skill_ID' : self.Skill_ID, 'Course_ID' : self.Course_ID}
+
+db.create_all()
 
 @app.route("/JobRoles")
 def get_all_JobRoles():
@@ -269,6 +272,63 @@ def view_JobRoleWithSkills(jobrole_id):
             "message": "Skills have yet to assign"
         }
     ), 404
+
+
+@app.route("/addSkill", methods=['POST'])
+def create_skill():
+    data = request.get_json()
+    if not all(key in data.keys() for
+               key in ('Skill_ID', 'Skill_Name',
+                       'Skill_Desc', 'Skill_Status')):
+        return jsonify({
+            "message": "Incorrect JSON object provided."
+        }), 500
+
+    # (1): Validate doctor
+    # Skill = Skills.query.filter_by(id=data['doctor_id']).first()
+    # if not doctor:
+    #     return jsonify({
+    #         "message": "Doctor not valid."
+    #     }), 500
+
+    # (2): Compute charges
+    # charge = doctor.calculate_charges(data['length'])
+
+    # # (3): Validate patient
+    # patient = Patient.query.filter_by(id=data['patient_id']).first()
+    # if not patient:
+    #     return jsonify({
+    #         "message": "Patient not valid."
+    #     }), 500
+
+    # # (4): Subtract charges from patient's e-wallet
+    # try:
+    #     patient.ewallet_withdraw(charge)
+    # except Exception:
+    #     return jsonify({
+    #         "message": "Patient does not have enough e-wallet funds."
+    #     }), 500
+    
+    # See if skill already exist 
+
+
+    # (4): Create consultation record
+    Skill = Skills(
+        Skill_ID=data['Skill_ID'], Skill_Name=data['Skill_Name'],
+        Skill_Desc=data['Skill_Desc'], Skill_Status="Active"
+    )
+
+    # (5): Commit to DB
+    try:
+        db.session.add(Skill)
+        db.session.commit()
+        return jsonify(Skill.to_dict()), 201
+    except Exception:
+        return jsonify({
+            "message": "Unable to commit to database."
+        }), 500
+    
+    
 
 
 if __name__ == '__main__':

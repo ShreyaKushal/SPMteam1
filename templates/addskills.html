@@ -1,31 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add a Skill</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width">
+
+    <title>Create a Consultation Record</title>
+
+    <link rel="stylesheet" href="">
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <!-- Bootstrap libraries -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
-    integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+        integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
 
-<!-- Latest compiled and minified JavaScript -->
-<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <!-- Latest compiled and minified JavaScript -->
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"
-    integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut"
-    crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"
+        integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut"
+        crossorigin="anonymous"></script>
 
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
-    integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
-    crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-
-<link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap/dist/css/bootstrap.min.css" />
-<link type="text/css" rel="stylesheet" href="https://unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.css" />
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
+        integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
 
 
     <style>
@@ -35,7 +41,7 @@
         box-sizing: border-box;
         }
 
-        #formskill {
+        .formskill {
         font-family: 'Nunito', sans-serif;
         color: #384047;
         }
@@ -149,7 +155,6 @@
 
 
 
-
               body {
         padding: 15px;
       }
@@ -164,11 +169,8 @@
         content: "\2611";
       }
 
-          
-        
-
     </style>
-</head>
+
 <body>
 
     <!--Start of navbar-->
@@ -200,45 +202,38 @@
     <!--end of navbar-->
 
     <!--Start of the form-->
-    <div id = "formskill">
+    <div id="Courses1">
+    <div class = "formskill">
         <head>
             <meta charset="utf-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>Sign Up Form</title>
         </head>
         <body>
-    
-          <form action="index.html" method="post">
+     
+          <form>
             
             <h1>Create a skill</h1>
             
             <fieldset>
-              
-              <legend><span class="number">1</span> Your basic info</legend>
+          
 
-              <label for="skillId">Skill ID:</label>
-              <input type="text" id="skillId" name="skillId">
+              <label for="skillId" >Skill ID:</label>
+              <input v-model:"newSkill_ID" type="text" id="skillId" name="skillId">
 
               <label for="name">Name of the skill:</label>
-              <input type="text" id="name" name="user_name">
+              <input v-model:"newSkill_Name" type="text" id="name" name="user_name">
 
+              <label for="name">Skill Description:</label>
+              <input v-model:"newSkill_Desc" type="text" id="skilldescription" name="skilldescription">
             </fieldset>
-            
-       
-              
-              <legend><span class="number">2</span> Your profile</legend>
-              
-              <label for="bio">Biography:</label>
-              <textarea id="bio" name="user_bio"></textarea>
-              
-              
             
 
             <label for="job">Select Courses:</label>
-            <label id="Courses" name="user_job" >
+            <label name="user_job" >
               <select class="form-control select-checkbox" multiple="" size="20">
               <optgroup  type ="checkbox" v-for="Course in Courses" >
-                <option value="Course_ID">{{Course.Course_ID}}, {{Course.Course_Name}}</option>
+                <option value="Course_ID" v-bind:id="Course.Course_ID" >{{Course.Course_ID}}, {{Course.Course_Name}}</option>
               </optgroup>
               </select>
             </label>
@@ -254,36 +249,48 @@
               <h1>Dropdown Checkboxes</h1> -->
 
               
-
-              
-
-              
-            
-
-              
-                
-              
-            
-              
             </fieldset>
               
-            <button id="formbutton" type="submit">Sign Up</button>
+            <button id="formbutton" type="submit" v-on:click="submitForm">Add Skill</button>
             
           </form>
+  
           
         </body>
 
     </div>
+  </div>
     <script>
          
 
      
 
       const vm = new Vue({
-          el: '#Courses',
+          el: '#Courses1',
           data: {
-              Courses: []
+              Courses: [],
+              Course_ID: '',
+              newSkill_ID: '',
+              newSkill_Name: '',
+              newSkill_Description:''
           },
+          methods: {
+                submitForm: function() {
+                event.preventDefault();
+                axios.post('http://localhost:5001/addSkill', {
+                        Skill_ID: this.Skill_ID,
+                        Skill_Name: this.newSkill_Name,
+                        Skill_Desc: this.newSkill_Desc,
+                        Skill_Status: "Active"
+                     
+                    })
+                .then(response => {
+                        window.location.replace("skills.html");
+                        return false;
+                    })
+                .catch(error => { this.error = error.response.data.message });
+                }
+            },
           mounted: function() {
               axios.get('http://localhost:5001/Courses')
                   .then(response => {
@@ -292,16 +299,12 @@
                   .catch(error => alert(error));
           }
       });
-      
 
-    
-
-   
   </script>
 
 
 
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj" crossorigin="anonymous"></script>      
+    
 </body>
 </html>
