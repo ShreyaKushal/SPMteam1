@@ -137,6 +137,22 @@ def get_all_JobRoles():
             "message": "Job Role not found."
         }), 404
 
+# Add a Learning Journey
+@app.route("/AddJobRole", methods=['POST'])
+def create_book():
+    data = request.get_json()
+    JobRole = JobRoles(**data)
+    try:
+        db.session.add(JobRole)
+        db.session.commit()
+    except:
+        return jsonify(
+            {
+                "code": 500,
+                "message": "An error occurred creating the book."
+            }
+        ), 500
+
 @app.route("/LearningJourneys")
 def get_all_LearningJourneys():
     LearningJourneys = LearningJourney.query.all()
