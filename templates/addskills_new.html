@@ -36,6 +36,32 @@
 </head>
 
 <body>
+    <!--Start of navbar-->
+    <nav class="navbar navbar-expand-lg bg-light nav nav-tabs">
+        <div class="container-fluid">
+          <a class="navbar-brand">LJPS</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link" aria-current="page" href="homepage.html">Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link active" href="skills.html">Skills</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="view_roles.html">Roles</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+    </nav>
+    <!--end of navbar-->
+
+
+
     <div id="main-container" class="container">
         <h1 class="display-4">Add a Skill</h1>
 
@@ -86,13 +112,13 @@
             <small id="length" class="form-text text-muted">Please specify the number of <strong>minutes</strong></small>
           </div> -->
 
-        <button id="addConsultBtn" class="btn btn-primary" v-on:click="submitForm">Create Consultation</button>
+        <button id="addConsultBtn" class="btn btn-primary" v-on:click="submitForm">Create Skill</button>
         <p><label id="error" class="text-danger">{{ error }}</label></p>
         </form>
 
-        <p>
+        <!-- <p>
             <em><strong>Pages:</strong> <a href="view-consultations.html">View Consultation Records</a></em>
-        </p>
+        </p> -->
 
     </div>
     <script>
