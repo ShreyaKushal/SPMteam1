@@ -27,10 +27,10 @@ class JobRoles(db.Model):
     JobRole_Status = db.Column(db.String(50))
 
 
-    def __init__(self, JobRole_ID, JobRole_Name, JobeRole_Status): #initialise value of job role record, specify properties of a job role when it is created
+    def __init__(self, JobRole_ID, JobRole_Name, JobRole_Status): #initialise value of job role record, specify properties of a job role when it is created
         self.JobRole_ID = JobRole_ID
         self.JobRole_Name = JobRole_Name
-        self.JobRole_Status = JobeRole_Status
+        self.JobRole_Status = JobRole_Status
 
 
     def json(self): #returns json representation of the job role
@@ -141,20 +141,29 @@ def get_all_JobRoles():
         }), 404
 
 # Add a Job Role
-@app.route("/AddJobRole", methods=['POST'])
-def create_book():
+@app.route("/addJobRole", methods=['POST'])
+def create_JobRole():
     data = request.get_json()
-    JobRole = JobRoles(**data)
+    if not all(key in data.keys() for
+               key in ('JobRole_ID', 'JobRole_Name',
+                       'JobRole_Status')):
+        return jsonify({
+            "message": "Incorrect JSON object provided."
+        }), 500
+
+    JobRole = JobRoles(
+        JobRole_ID=data['JobRole_ID'], JobRole_Name=data['JobRole_Name'],
+        JobRole_Status="Active"
+    )
+    # Commit to DB
     try:
         db.session.add(JobRole)
         db.session.commit()
-    except:
-        return jsonify(
-            {
-                "code": 500,
-                "message": "An error occurred creating the book."
-            }
-        ), 500
+        return jsonify(JobRole.to_dict()), 201
+    except Exception:
+        return jsonify({
+            "message": "Unable to commit to database."
+        }), 500
 
 @app.route("/LearningJourneys")
 def get_all_LearningJourneys():
