@@ -87,8 +87,8 @@
         
         <h2>Select a Course</h2>
         <div v-for="Course in Courses" class="form-check">
-            <input class="form-check-input" type="checkbox" name="course"  >
-            <label class="form-check-label">
+            <input class="form-check-input" type="checkbox" name="CoursesSelected[]" :value="Course.Course_ID"  v-bind="Courses">
+            <label class="form-check-label" v-bind:for="Course.Course_ID">
                 {{Course.Course_ID}}, {{Course.Course_Name}}
             </label>
         </div>
@@ -112,7 +112,7 @@
             <small id="length" class="form-text text-muted">Please specify the number of <strong>minutes</strong></small>
           </div> -->
 
-        <button id="addConsultBtn" class="btn btn-primary" v-on:click="submitForm">Create Skill</button>
+        <button id="addConsultBtn" class="btn btn-primary" v-on:click="multiple">Create Skill</button>
         <p><label id="error" class="text-danger">{{ error }}</label></p>
         </form>
 
@@ -125,7 +125,7 @@
         const vm = new Vue({
         el: '#main-container',
         data: {
-            Courses: [],
+            Courses: [], 
             Skill_Name: '',
             Skill_ID: '',
             Skill_Desc:'',
@@ -133,6 +133,10 @@
             error: ''
         },
         methods: {
+                multiple:function(){
+                    this.submitForm1()
+                    this.submitForm()
+                },
                 submitForm: function() {
                 event.preventDefault();
                 axios.post('http://localhost:5001/addSkill', {
@@ -143,6 +147,18 @@
                     })
                 .then(response => {
                         window.location.replace("./skills.html");
+                        return false;
+                    })
+                .catch(error => { error => alert(error) });
+                },
+                submitForm1: function() {
+                event.preventDefault();
+                axios.post('http://localhost:5001/addSkillreqCourses', {
+                        Course_ID: this.Courses,
+                        Skill_ID: this.Skill_ID,
+                    })
+                .then(response => {
+                        // window.location.replace("./skills.html");
                         return false;
                     })
                 .catch(error => { error => alert(error) });

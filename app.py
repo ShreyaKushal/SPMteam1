@@ -105,7 +105,18 @@ class Courses(db.Model):
     def json(self): 
         return { 'Course_ID' : self.Course_ID, 'Course_Name' : self.Course_Name, 'Course_Desc' : self.Course_Desc, 'Course_Status' : self.Course_Status, 'Course_Type' : self.Course_Type, 'Course_Category' : self.Course_Category}
 
+class SkillsRequiredCourses(db.Model):
+    __tablename__ = 'SkillsRequiredCourses'
+    Course_ID= db.Column(db.String(50), primary_key=True)
+    Skill_ID =  db.Column(db.String(50), primary_key=True)
 
+
+    def __init__(self, Course_ID, Skill_ID):
+        self.Course_ID = Course_ID
+        self.Skill_ID = Skill_ID      
+
+    def json(self): 
+        return {'Course_ID' : self.Course_ID, 'Skill_ID' : self.Skill_ID}
 
 class LearningJourney(db.Model):
     __tablename__ = 'LearningJourney'
@@ -336,6 +347,30 @@ def create_skill():
         return jsonify({
             "message": "Unable to commit to database."
         }), 500
+
+
+@app.route("/addSkillreqCourses", methods=['POST'])
+def create_skillreqCourses():
+    data = request.get_json()
+    if not all(key in data.keys() for
+            key in ('Course_ID', 'Skill_ID')):
+            return jsonify({
+                "message": "Incorrect JSON object provided."
+            }), 500
+    
+    SkillsRequiredCourses = SkillsRequiredCourses(
+            Skill_ID=data['Skill_ID'], Course_ID=data['Course_ID']
+        )
+
+        # (5): Commit to DB
+    try:
+        db.session.add(SkillsRequiredCourses)
+        db.session.commit()
+        return jsonify(SkillsRequiredCourses.to_dict()), 201
+    except Exception:
+            return jsonify({
+                "message": "Unable to commit to database."
+            }), 500
     
     
 
