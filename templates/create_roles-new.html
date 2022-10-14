@@ -63,30 +63,30 @@
 
 
     <div id="main-container1" class="container">
-        <h1 class="display-4">Add a Role</h1>
-
+        <h2 class="display-4"><strong>Add a Role</strong></h2>
+        <br>
         <form>
-        <h2>Role's ID:</h2>
+        <h4>Role's ID:</h4>
 
         <div class="form-group">
             <input type="text" class="form-control" id="JobRole_ID" v-model="JobRole_ID">
         </div>
 
-        <h2>Role's Name:</h2>
+        <h4>Role's Name:</h4>
 
         <div class="form-group">
             <input type="text" class="form-control" id="JobRole_Name" v-model="JobRole_Name">
         </div>
 
         
-        <h2>Select skills required for the job role:</h2>
+        <h4>Select skills required for the job role:</h4>
         <div v-for="Skill in Skills" class="form-check">
             <input class="form-check-input" type="checkbox" name="Skill"  >
             <label class="form-check-label">
                 {{Skill.Skill_ID}}, {{Skill.Skill_Name}}
             </label>
         </div>
-
+        <br>
         <button id="addConsultBtn" class="btn btn-primary" v-on:click="submitForm">Create Role</button>
         <p><label id="error" class="text-danger">{{ error }}</label></p>
         </form>
