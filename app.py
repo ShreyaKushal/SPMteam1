@@ -1,3 +1,4 @@
+from curses import flash
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS, cross_origin
@@ -371,7 +372,16 @@ def create_skillreqCourses():
             return jsonify({
                 "message": "Unable to commit to database."
             }), 500
-    
+
+@app.route("/JobRoles/<string:jobrole_id>", methods=['DELETE'])
+def delete_jobRole(jobrole_id):
+    jobrole_to_delete=JobRoles.query.get(jobrole_id)
+    try:
+        db.session.delete(jobrole_to_delete)
+        db.session.commit()
+        flash("Job role deleted susccessfully")
+    except:
+        flash("There was no such job role")
     
 
 
