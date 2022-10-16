@@ -373,15 +373,15 @@ def create_skillreqCourses():
                 "message": "Unable to commit to database."
             }), 500
 
-@app.route("/JobRoles/<string:jobrole_id>", methods=['DELETE'])
-def delete_jobRole(jobrole_id):
-    jobrole_to_delete=JobRoles.query.get(jobrole_id)
-    try:
-        db.session.delete(jobrole_to_delete)
-        db.session.commit()
-        flash("Job role deleted susccessfully")
-    except:
-        flash("There was no such job role")
+#@app.route("/JobRoles/<string:jobrole_id>", methods=['DELETE'])
+#def delete_jobRole(jobrole_id):
+#    jobrole_to_delete=JobRoles.query.get(jobrole_id)
+#    try:
+#        db.session.delete(jobrole_to_delete)
+#        db.session.commit()
+#        flash("Job role deleted susccessfully")
+#    except:
+#        flash("There was no such job role")
     
 
 
