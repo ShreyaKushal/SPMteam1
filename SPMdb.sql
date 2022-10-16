@@ -50,6 +50,35 @@ create table Registration
 	constraint Registration_fk2 foreign key(Staff_ID) references Staff(Staff_ID)
 );
 
+LOAD DATA LOCAL INFILE 'C:/wamp64/www/is212/SPMteam1/RawData/courses.csv' INTO TABLE Courses
+FIELDS TERMINATED BY ','
+ENCLOSED BY '"'
+LINES TERMINATED BY '\r\n'
+IGNORE 1 LINES
+(Course_ID, Course_Name, Course_Desc, Course_Status, Course_Type, Course_Category);
+
+LOAD DATA LOCAL INFILE 'C:/wamp64/www/is212/SPMteam1/RawData/registration.csv' INTO TABLE Registration
+FIELDS TERMINATED BY ','
+ENCLOSED BY '"'
+LINES TERMINATED BY '\r\n'
+IGNORE 1 LINES
+(Reg_ID, Course_ID, Staff_ID, Reg_Status, Completion_Status);
+
+LOAD DATA LOCAL INFILE 'C:/wamp64/www/is212/SPMteam1/RawData/role.csv' INTO TABLE Role
+FIELDS TERMINATED BY ','
+ENCLOSED BY '"'
+LINES TERMINATED BY '\r\n'
+IGNORE 1 LINES
+(Role_ID, Role_Name);
+
+LOAD DATA LOCAL INFILE 'C:/wamp64/www/is212/SPMteam1/RawData/staff.csv' INTO TABLE Staff
+FIELDS TERMINATED BY ','
+ENCLOSED BY '"'
+LINES TERMINATED BY '\r\n'
+IGNORE 1 LINES
+(Staff_ID, Staff_FName, Staff_LName, Dept, Email, Role_ID);
+
+
 create table JobRoles
 (	JobRole_ID		varchar(50)		primary key,
 	JobRole_Name 	varchar(50)		not null,
@@ -195,31 +224,3 @@ insert into LearningJourney (LearningJourney_ID, JobRole_ID, Skill_ID, Course_ID
 (1, "DA1", "ST1", "ST5", 2),
 (2, "DA1", "ME5", "ME4", 2);
 */
-
-LOAD DATA LOCAL INFILE 'C:/wamp64/www/is212/SPMteam1/RawData/courses.csv' INTO TABLE Courses
-FIELDS TERMINATED BY ','
-ENCLOSED BY '"'
-LINES TERMINATED BY '\r\n'
-IGNORE 1 LINES
-(Course_ID, Course_Name, Course_Desc, Course_Status, Course_Type, Course_Category);
-
-LOAD DATA LOCAL INFILE 'C:/wamp64/www/is212/SPMteam1/RawData/registration.csv' INTO TABLE Registration
-FIELDS TERMINATED BY ','
-ENCLOSED BY '"'
-LINES TERMINATED BY '\r\n'
-IGNORE 1 LINES
-(Reg_ID, Course_ID, Staff_ID, Reg_Status, Completion_Status);
-
-LOAD DATA LOCAL INFILE 'C:/wamp64/www/is212/SPMteam1/RawData/role.csv' INTO TABLE Role
-FIELDS TERMINATED BY ','
-ENCLOSED BY '"'
-LINES TERMINATED BY '\r\n'
-IGNORE 1 LINES
-(Role_ID, Role_Name);
-
-LOAD DATA LOCAL INFILE 'C:/wamp64/www/is212/SPMteam1/RawData/staff.csv' INTO TABLE Staff
-FIELDS TERMINATED BY ','
-ENCLOSED BY '"'
-LINES TERMINATED BY '\r\n'
-IGNORE 1 LINES
-(Staff_ID, Staff_FName, Staff_LName, Dept, Email, Role_ID);
