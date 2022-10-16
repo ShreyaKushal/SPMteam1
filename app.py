@@ -1,6 +1,7 @@
+from curses import flash
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root' + \
@@ -12,6 +13,7 @@ app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {'pool_size': 100,
 db = SQLAlchemy(app)
 
 CORS(app)
+CORS(app, support_credentials=True)
 
 #many-to-many rlationship db table
 job_role_with_skills = db.Table('jobrolewithskills',
@@ -26,10 +28,10 @@ class JobRoles(db.Model):
     JobRole_Status = db.Column(db.String(50))
 
 
-    def __init__(self, JobRole_ID, JobRole_Name, JobeRole_Status): #initialise value of job role record, specify properties of a job role when it is created
+    def __init__(self, JobRole_ID, JobRole_Name, JobRole_Status): #initialise value of job role record, specify properties of a job role when it is created
         self.JobRole_ID = JobRole_ID
         self.JobRole_Name = JobRole_Name
-        self.JobRole_Status = JobeRole_Status
+        self.JobRole_Status = JobRole_Status
 
 
     def json(self): #returns json representation of the job role
@@ -104,7 +106,18 @@ class Courses(db.Model):
     def json(self): 
         return { 'Course_ID' : self.Course_ID, 'Course_Name' : self.Course_Name, 'Course_Desc' : self.Course_Desc, 'Course_Status' : self.Course_Status, 'Course_Type' : self.Course_Type, 'Course_Category' : self.Course_Category}
 
+class SkillsRequiredCourses(db.Model):
+    __tablename__ = 'SkillsRequiredCourses'
+    Course_ID= db.Column(db.String(50), primary_key=True)
+    Skill_ID =  db.Column(db.String(50), primary_key=True)
 
+
+    def __init__(self, Course_ID, Skill_ID):
+        self.Course_ID = Course_ID
+        self.Skill_ID = Skill_ID      
+
+    def json(self): 
+        return {'Course_ID' : self.Course_ID, 'Skill_ID' : self.Skill_ID}
 
 class LearningJourney(db.Model):
     __tablename__ = 'LearningJourney'
@@ -125,6 +138,8 @@ class LearningJourney(db.Model):
     def json(self): 
         return { 'LearningJourney_ID' : self.LearningJourney_ID, 'Staff_ID' : self.Staff_ID, 'JobRole_ID' : self.JobRole_ID, 'Skill_ID' : self.Skill_ID, 'Course_ID' : self.Course_ID}
 
+db.create_all()
+
 @app.route("/JobRoles")
 def get_all_JobRoles():
     JobRole = JobRoles.query.all()
@@ -137,6 +152,30 @@ def get_all_JobRoles():
             "message": "Job Role not found."
         }), 404
 
+# Add a Job Role
+@app.route("/addJobRole", methods=['POST'])
+def create_JobRole():
+    data = request.get_json()
+    if not all(key in data.keys() for
+               key in ('JobRole_ID', 'JobRole_Name',
+                       'JobRole_Status')):
+        return jsonify({
+            "message": "Incorrect JSON object provided."
+        }), 500
+
+    JobRole = JobRoles(
+        JobRole_ID=data['JobRole_ID'], JobRole_Name=data['JobRole_Name'],
+        JobRole_Status="Active"
+    )
+    # Commit to DB
+    try:
+        db.session.add(JobRole)
+        db.session.commit()
+        return jsonify(JobRole.to_dict()), 201
+    except Exception:
+        return jsonify({
+            "message": "Unable to commit to database."
+        }), 500
 
 @app.route("/LearningJourneys")
 def get_all_LearningJourneys():
@@ -255,6 +294,96 @@ def view_JobRoleWithSkills(jobrole_id):
             "message": "Skills have yet to assign"
         }
     ), 404
+
+
+@app.route("/addSkill", methods=['POST'])
+def create_skill():
+    data = request.get_json()
+    if not all(key in data.keys() for
+               key in ('Skill_ID', 'Skill_Name',
+                       'Skill_Desc', 'Skill_Status')):
+        return jsonify({
+            "message": "Incorrect JSON object provided."
+        }), 500
+
+    # (1): Validate doctor
+    # Skill = Skills.query.filter_by(id=data['doctor_id']).first()
+    # if not doctor:
+    #     return jsonify({
+    #         "message": "Doctor not valid."
+    #     }), 500
+
+    # (2): Compute charges
+    # charge = doctor.calculate_charges(data['length'])
+
+    # # (3): Validate patient
+    # patient = Patient.query.filter_by(id=data['patient_id']).first()
+    # if not patient:
+    #     return jsonify({
+    #         "message": "Patient not valid."
+    #     }), 500
+
+    # # (4): Subtract charges from patient's e-wallet
+    # try:
+    #     patient.ewallet_withdraw(charge)
+    # except Exception:
+    #     return jsonify({
+    #         "message": "Patient does not have enough e-wallet funds."
+    #     }), 500
+    
+    # See if skill already exist 
+
+
+    # (4): Create consultation record
+    Skill = Skills(
+        Skill_ID=data['Skill_ID'], Skill_Name=data['Skill_Name'],
+        Skill_Desc=data['Skill_Desc'], Skill_Status="Active"
+    )
+
+    # (5): Commit to DB
+    try:
+        db.session.add(Skill)
+        db.session.commit()
+        return jsonify(Skill.to_dict()), 201
+    except Exception:
+        return jsonify({
+            "message": "Unable to commit to database."
+        }), 500
+
+
+@app.route("/addSkillreqCourses", methods=['POST'])
+def create_skillreqCourses():
+    data = request.get_json()
+    if not all(key in data.keys() for
+            key in ('Course_ID', 'Skill_ID')):
+            return jsonify({
+                "message": "Incorrect JSON object provided."
+            }), 500
+    
+    SkillsRequiredCourses = SkillsRequiredCourses(
+            Skill_ID=data['Skill_ID'], Course_ID=data['Course_ID']
+        )
+
+        # (5): Commit to DB
+    try:
+        db.session.add(SkillsRequiredCourses)
+        db.session.commit()
+        return jsonify(SkillsRequiredCourses.to_dict()), 201
+    except Exception:
+            return jsonify({
+                "message": "Unable to commit to database."
+            }), 500
+
+#@app.route("/JobRoles/<string:jobrole_id>", methods=['DELETE'])
+#def delete_jobRole(jobrole_id):
+#    jobrole_to_delete=JobRoles.query.get(jobrole_id)
+#    try:
+#        db.session.delete(jobrole_to_delete)
+#        db.session.commit()
+#        flash("Job role deleted susccessfully")
+#    except:
+#        flash("There was no such job role")
+    
 
 
 if __name__ == '__main__':
