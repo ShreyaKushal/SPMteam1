@@ -43,7 +43,7 @@ insert into Courses (Course_ID, Course_Name, Course_Desc, Course_Status, Course_
 create table Registration
 (	Reg_ID			int				primary key,
 	Course_ID		varchar(20)		not null,
-	Staff_ID		varchar(255) 	not null,
+	Staff_ID		int 	not null,
 	Reg_Status 		varchar(20),
     Completion_Status varchar(20),
 	constraint Registration_fk1 foreign key(Course_ID) references Courses(Course_ID),
