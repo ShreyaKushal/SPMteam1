@@ -43,7 +43,7 @@ insert into Courses (Course_ID, Course_Name, Course_Desc, Course_Status, Course_
 create table Registration
 (	Reg_ID			int				primary key,
 	Course_ID		varchar(20)		not null,
-	Staff_ID		int 	not null,
+	Staff_ID		int 		not null,
 	Reg_Status 		varchar(20),
     Completion_Status varchar(20),
 	constraint Registration_fk1 foreign key(Course_ID) references Courses(Course_ID),
@@ -123,7 +123,7 @@ insert into JobRoleWithSkills (JobRole_ID, Skill_ID) values
 
 
 create table SkillsRequiredCourses
-(	Course_ID 			varchar(50) 	not null,
+(	Course_ID 			varchar(20) 	not null,
 	Skill_ID 			varchar(50) 	not null,
 	constraint SkillsRequiredCourses_pk primary key(Course_ID, Skill_ID),
 	constraint SkillsRequiredCourses_fk1 foreign key(Course_ID) references Courses(Course_ID),
@@ -183,7 +183,7 @@ create table LearningJourney
 (	LearningJourney_ID int AUTO_INCREMENT primary key,
 	JobRole_ID 			varchar(50) 	not null,
 	Skill_ID 			varchar(50) 	not null,
-	Course_ID 			varchar(50) 	not null,
+	Course_ID 			varchar(20) 	not null,
 	Staff_ID 			int 			not null,
 	constraint LearningJourney_fk1 foreign key(JobRole_ID) references JobRoles(JobRole_ID),
 	constraint LearningJourney_fk2 foreign key(Skill_ID) references Skills(Skill_ID),
