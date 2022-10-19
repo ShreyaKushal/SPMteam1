@@ -41,7 +41,7 @@
                                 <td>{{ course.Course_Desc }}</td>
                                 <td>{{ course.Course_Type }}</td>
                                 <td>{{ course.Course_Category }}</td>
-                                <td class="col text-center" id="addedBtn">
+                                <td class="col text-center">
                                         <button type="button" class="btn btn-outline-dark" @click="addToLearningJourney" v-bind:id="course.Course_ID">Add to Learning Journey</button>
                                 </td>
                             </tr>
@@ -105,7 +105,6 @@
                         })
                     .then(response => {
                         alert("Successfully added to Learning Journey");
-                        //document.getElementById('addedBtn').innerHTML = "<button type='button' class='btn btn-outline-dark' disabled>Added</button>"
                         return false;
                     })
                     .catch(error => { this.error = error.response.data.message });
