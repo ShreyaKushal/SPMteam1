@@ -105,7 +105,7 @@
                         })
                     .then(response => {
                         alert("Successfully added to Learning Journey");
-                        document.getElementById('addedBtn').innerHTML = "<button type='button' class='btn btn-outline-dark' disabled>Added</button>"
+                        //document.getElementById('addedBtn').innerHTML = "<button type='button' class='btn btn-outline-dark' disabled>Added</button>"
                         return false;
                     })
                     .catch(error => { this.error = error.response.data.message });
