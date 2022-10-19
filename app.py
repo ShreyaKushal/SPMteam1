@@ -15,7 +15,7 @@ db = SQLAlchemy(app)
 CORS(app)
 CORS(app, support_credentials=True)
 
-#many-to-many rlationship db table
+#many-to-many relationship db table
 job_role_with_skills = db.Table('jobrolewithskills',
         db.Column('JobRole_ID', db.String(50), db.ForeignKey('JobRoles.JobRole_ID')),
         db.Column('Skill_ID', db.String(50), db.ForeignKey('Skills.Skill_ID'))
@@ -88,12 +88,12 @@ class Skills(db.Model):
 
 class Courses(db.Model):
     __tablename__ = 'Courses'
-    Course_ID= db.Column(db.String(50), primary_key=True)
+    Course_ID= db.Column(db.String(20), primary_key=True)
     Course_Name= db.Column(db.String(50), nullable=False)
-    Course_Desc= db.Column(db.String(50), nullable=False)
-    Course_Status= db.Column(db.String(50), nullable=False)
-    Course_Type= db.Column(db.String(50), nullable=False)
-    Course_Category= db.Column(db.String(50), nullable=False)
+    Course_Desc= db.Column(db.String(255))
+    Course_Status= db.Column(db.String(15))
+    Course_Type= db.Column(db.String(10))
+    Course_Category= db.Column(db.String(50))
 
     def __init__(self, Course_ID, Course_Name, Course_Desc, Course_Status, Course_Type, Course_Category):
         self.Course_ID = Course_ID
