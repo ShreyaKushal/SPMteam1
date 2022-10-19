@@ -15,25 +15,11 @@ db = SQLAlchemy(app)
 CORS(app)
 CORS(app, support_credentials=True)
 
-#many-to-many relationship db table (Skills & Courses)
+#many-to-many rlationship db table
 job_role_with_skills = db.Table('jobrolewithskills',
         db.Column('JobRole_ID', db.String(50), db.ForeignKey('JobRoles.JobRole_ID')),
         db.Column('Skill_ID', db.String(50), db.ForeignKey('Skills.Skill_ID'))
 )
-
-#Association object
-"""
-class SkillsRequiredCourses(db.Model):
-    __tablename__ = 'SkillsRequiredCourses'
-    Course_ID = db.Column(db.String(20), db.ForeignKey('Courses.Course_ID'), primary_key=True)
-    Skill_ID = db.Column(db.String(50), db.ForeignKey('Skills.Skill_ID'), primary_key=True)
-    CourseStatusInLearningJourney = db.Column(db.String(10))
-    Courses = db.relationship("Courses", back_populates="Skills")
-    Skills = db.relationship("Skills", back_populates="Courses")
-
-    def json(self): 
-        return { 'Course_ID' : self.Course_ID, 'Skill_ID' : self.Skill_ID, 'CourseStatusInLearningJourney' : self.CourseStatusInLearningJourney}
-"""
 
 class JobRoles(db.Model):
     __tablename__ = 'JobRoles'
@@ -102,13 +88,12 @@ class Skills(db.Model):
 
 class Courses(db.Model):
     __tablename__ = 'Courses'
-    Course_ID= db.Column(db.String(20), primary_key=True)
+    Course_ID= db.Column(db.String(50), primary_key=True)
     Course_Name= db.Column(db.String(50), nullable=False)
-    Course_Desc= db.Column(db.String(255))
-    Course_Status= db.Column(db.String(15))
-    Course_Type= db.Column(db.String(50))
-    Course_Category= db.Column(db.String(50))
-    Skills = db.relationship('SkillsRequiredCourses', back_populates="Courses")
+    Course_Desc= db.Column(db.String(50), nullable=False)
+    Course_Status= db.Column(db.String(50), nullable=False)
+    Course_Type= db.Column(db.String(50), nullable=False)
+    Course_Category= db.Column(db.String(50), nullable=False)
 
     def __init__(self, Course_ID, Course_Name, Course_Desc, Course_Status, Course_Type, Course_Category):
         self.Course_ID = Course_ID
@@ -120,53 +105,6 @@ class Courses(db.Model):
 
     def json(self): 
         return { 'Course_ID' : self.Course_ID, 'Course_Name' : self.Course_Name, 'Course_Desc' : self.Course_Desc, 'Course_Status' : self.Course_Status, 'Course_Type' : self.Course_Type, 'Course_Category' : self.Course_Category}
-
-    def to_dict(self):
-        """
-        'to_dict' converts the object into a dictionary,
-        in which the keys correspond to database columns
-        """
-        columns = self.__mapper__.column_attrs.keys()
-        result = {}
-        for column in columns:
-            result[column] = getattr(self, column)
-        return result
-
-class Role(db.Model):
-    __tablename__ = 'Role'
-    Role_ID = db.Column(db.Integer, primary_key=True)
-    Role_Name = db.Column(db.String(20), nullable=False)
-
-    def to_dict(self):
-        """
-        'to_dict' converts the object into a dictionary,
-        in which the keys correspond to database columns
-        """
-        columns = self.__mapper__.column_attrs.keys()
-        result = {}
-        for column in columns:
-            result[column] = getattr(self, column)
-        return result
-
-class Staff(db.Model):
-    __tablename__ = 'Staff'
-    Staff_ID = db.Column(db.Integer, primary_key=True)
-    Staff_Fname = db.Column(db.String(50), nullable=False)
-    Staff_Lname = db.Column(db.String(50), nullable=False)
-    Dept = db.Column(db.String(50), nullable=False)
-    Email = db.Column(db.String(50), nullable=False)
-    Role_ID = db.Column(db.Integer, db.ForeignKey('Role.Role_ID'))
-
-    def to_dict(self):
-        """
-        'to_dict' converts the object into a dictionary,
-        in which the keys correspond to database columns
-        """
-        columns = self.__mapper__.column_attrs.keys()
-        result = {}
-        for column in columns:
-            result[column] = getattr(self, column)
-        return result
 
 class SkillsRequiredCourses(db.Model):
     __tablename__ = 'SkillsRequiredCourses'
@@ -183,31 +121,22 @@ class SkillsRequiredCourses(db.Model):
 
 class LearningJourney(db.Model):
     __tablename__ = 'LearningJourney'
-    LearningJourney_ID = db.Column(db.Integer, primary_key=True)
-    Staff_ID =  db.Column(db.Integer, db.ForeignKey('Staff.Staff_ID'))
-    JobRole_ID = db.Column(db.String(50), db.ForeignKey('JobRoles.JobRole_ID'))
-    Skill_ID = db.Column(db.String(50), db.ForeignKey('Skills.Skill_ID'))
-    Course_ID = db.Column(db.String(20), db.ForeignKey('Courses.Course_ID'))
+    LearningJourney_ID= db.Column(db.String(50), primary_key=True)
+    Staff_ID =  db.Column(db.String(50), nullable=False)
+    JobRole_ID= db.Column(db.String(50), nullable=False)
+    Skill_ID= db.Column(db.String(50), nullable=False)
+    Course_ID= db.Column(db.String(50), nullable=False)
 
-    def __init__(self, Staff_ID, JobRole_ID, Skill_ID, Course_ID):
+    def __init__(self, LearningJourney_ID, Staff_ID, JobRole_ID, Skill_ID, Course_ID):
+        self.LearningJourney_ID = LearningJourney_ID
         self.Staff_ID = Staff_ID
         self.JobRole_ID= JobRole_ID
         self.Skill_ID = Skill_ID
         self.Course_ID = Course_ID
+        
 
     def json(self): 
         return { 'LearningJourney_ID' : self.LearningJourney_ID, 'Staff_ID' : self.Staff_ID, 'JobRole_ID' : self.JobRole_ID, 'Skill_ID' : self.Skill_ID, 'Course_ID' : self.Course_ID}
-
-    def to_dict(self):
-        """
-        'to_dict' converts the object into a dictionary,
-        in which the keys correspond to database columns
-        """
-        columns = self.__mapper__.column_attrs.keys()
-        result = {}
-        for column in columns:
-            result[column] = getattr(self, column)
-        return result
 
 db.create_all()
 
@@ -348,7 +277,7 @@ def update_jobrole(JobRole_ID):
 
 @app.route("/StaffViewJobRoles")
 def jobroles():
-    jobrole_list = JobRoles.query.filter_by(JobRole_Status = "Active").all()
+    jobrole_list = JobRoles.query.all()
     return jsonify(
         {
             "data": [jobrole.to_dict()
@@ -371,81 +300,6 @@ def view_JobRoleWithSkills(jobrole_id):
             "message": "Skills have yet to assign"
         }
     ), 404
-
-# Incomplete
-# SELECT * from courses JOIN skillsrequiredcourses ON courses.Course_ID = skillsrequiredcourses.Course_ID JOIN skills ON skills.Skill_ID = skillsrequiredcourses.Skill_ID where skillsrequiredcourses.Skill_ID = "COR6"
-@app.route("/StaffViewCourses/<string:skill_id>")
-def view_CoursesInSkill(skill_id):
-    #course_list = db.session.query(Courses, SkillsRequiredCourses, Skills).join(SkillsRequiredCourses, Courses.Course_ID == SkillsRequiredCourses.Course_ID).join(Skills, Skills.Skill_ID==SkillsRequiredCourses.Skill_ID).filter(SkillsRequiredCourses.Skill_ID == skill_id).all()
-    course_list = Courses.query.join(SkillsRequiredCourses, Courses.Course_ID == SkillsRequiredCourses.Course_ID).join(Skills, Skills.Skill_ID==SkillsRequiredCourses.Skill_ID).filter(SkillsRequiredCourses.Skill_ID == skill_id).all()
-    #join(SkillsRequiredCourses, Courses.Course_ID == SkillsRequiredCourses.Course_ID).join(Skills, Skills.Skill_ID==SkillsRequiredCourses.Skill_ID).filter(SkillsRequiredCourses.Skill_ID == skill_id).all()
-    if course_list:
-        return jsonify(
-            {
-                
-                "data":[course.to_dict()
-                        for course in course_list]
-            }
-        ), 200
-    return jsonify(
-        {
-            "message": "Courses have yet to assign"
-        }
-    ), 404
-
-@app.route("/StaffLearningJourney", methods=['POST'])
-def create_learningJourney():
-    data = request.get_json()
-    if not all(key in data.keys() for key in ('JobRole_ID', 'Skill_ID', 'Course_ID', 'Staff_ID')):
-        return jsonify({
-            "message": "Incorrect JSON object provided."
-        }), 500
-
-    # (1): Validate jobrole
-    jobrole = JobRoles.query.filter_by(JobRole_ID=data['JobRole_ID']).first()
-    if not jobrole:
-        return jsonify({
-            "message": "Job role not valid."
-        }), 500
-    
-    # (2): Validate skill
-    skill = Skills.query.filter_by(Skill_ID=data['Skill_ID']).first()
-    if not skill:
-        return jsonify({
-            "message": "Skill not valid."
-        }), 500
-
-    # (3): Validate course
-    course = Courses.query.filter_by(Course_ID=data['Course_ID']).first()
-    if not course:
-        return jsonify({
-            "message": "Course not valid."
-        }), 500
-    
-    # (4): Validate staff
-    staff = Staff.query.filter_by(Staff_ID=data['Staff_ID']).first()
-    if not staff:
-        return jsonify({
-            "message": "Staff not valid."
-        }), 500
-    
-    # (5): Create learning journey record
-    learningJourney = LearningJourney(
-        JobRole_ID=data['JobRole_ID'],
-        Skill_ID=data['Skill_ID'],
-        Course_ID=data['Course_ID'],
-        Staff_ID=data['Staff_ID']
-    )
-    
-    # (6): Commit to DB
-    try:
-        db.session.add(learningJourney)
-        db.session.commit()
-        return jsonify(learningJourney.to_dict()), 201
-    except Exception:
-        return jsonify({
-            "message": "Unable to commit to database."
-        }), 500
 
 
 @app.route("/addSkill", methods=['POST'])

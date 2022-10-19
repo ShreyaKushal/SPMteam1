@@ -33,10 +33,13 @@
                             <th scope="col"></th>
                         </thead>
                         <tbody>
-                            <tr v-for="skill in skills" v-bind:key="skill.Skill_ID">
-                                <td class="fw-bold"><a href="staffViewCourses.html" @click="getID" v-bind:id="skill.Skill_ID" class="text-decoration-none link-dark">{{ skill.Skill_ID }}</a></td>
-                                <td class="fw-bold"><a href="staffViewCourses.html" @click="getID" v-bind:id="skill.Skill_ID" class="text-decoration-none link-dark">{{ skill.Skill_Name }}</a></td>
-                                <td>{{ skill.Skill_Desc }}</td>
+                            <tr v-for="skill in skills">
+                                <td>{{ skill.Skill_ID }}</td>
+                                <td class="fw-bold"><a href="#" class="text-decoration-none link-dark">{{ skill.Skill_Name }}</a></td>
+                                <td class="fw-bold"><a href="#" class="text-decoration-none link-dark">{{ skill.Skill_Desc }}</a></td>
+                                <td class="col text-center">
+                                        <button type="button" class="btn btn-outline-dark" onclick="">Add to Learning Journey</button>
+                                </td>
                             </tr>
                             
                         </tbody>
@@ -60,6 +63,12 @@
 
 
 
+
+
+
+    <!-- DO NOT REMOVE
+        REFERENCE TO LOCAL EXTERNAL JAVASCRIPT
+    -->
     <script>
         const vm = new Vue({
             el: '#main-container',
@@ -67,19 +76,12 @@
                 skills: []
             },
             mounted: function() {
-                var jobID = localStorage.getItem("JobroleID");
+                var jobID =localStorage.getItem("JobroleID");
                 axios.get('http://localhost:5001/StaffViewJobRoles/'+jobID)
                     .then(response => {
                         this.skills = response.data.data;
                 })
                     .catch(error => alert(error));
-            },
-            methods:{
-                getID:function (event) {
-                    var id = event.target.id;
-                    console.log(id);
-                    localStorage.setItem("SkillID",id)
-                }
             }
         });
     </script>
