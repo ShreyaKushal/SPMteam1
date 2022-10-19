@@ -18,8 +18,7 @@ CORS(app, support_credentials=True)
 #many-to-many relationship db table (JobRoles & Skills)
 skill_with_courses = db.Table('SkillsRequiredCourses',
         db.Column('Course_ID', db.String(20), db.ForeignKey('Courses.Course_ID')),
-        db.Column('Skill_ID', db.String(50), db.ForeignKey('Skills.Skill_ID')),
-        db.Column('CourseStatusInLearningJourney', db.String(10))
+        db.Column('Skill_ID', db.String(50), db.ForeignKey('Skills.Skill_ID'))
 )
 
 #many-to-many relationship db table (Skills & Courses)
