@@ -156,6 +156,7 @@
                     <div class="col-sm-4" >
                         <!--<button type="button" class="btn btn-info add-new"><i class="fa fa-plus"></i> Add Skill</button>-->
                         <a  href="addJobRole.html" role="button" class="btn btn-info add-new"><i class="fa fa-plus"></i>Add Roles</a>
+
                     </div>
                 </div>
             </div>
@@ -170,13 +171,13 @@
                 </thead>
                 <tbody>
                     <tr v-for="JobRole in JobRoles">
-                        <td><strong>{{ JobRole.JobRole_ID }}</strong></td>
-                        <td>{{ JobRole.JobRole_Name }}</td>
-                        <td>{{ JobRole.JobRole_Status }}</td>
+                        <td v-model="JobRole.JobRole_ID"><strong>{{ JobRole.JobRole_ID }}</strong></td>
+                        <td v-model="JobRole.JobRole_Name">{{ JobRole.JobRole_Name }}</td>
+                        <td v-model="JobRole.JobRole_Status">{{ JobRole.JobRole_Status }}</td>
                         <td>
 							<a class="add" title="Add" data-toggle="tooltip"><i class="material-icons">&#xE03B;</i></a>
                             <a class="edit" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>
-                            <a class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a>
+                            <a class="delete" title="Delete" data-toggle="tooltip" v-on:click="softDelete"><i class="material-icons">&#xE872;</i></a>
                         </td>
                     </tr>
                      
@@ -190,7 +191,20 @@
         const vm = new Vue({
             el: '#JobRolesTable',
             data: {
+                JobRole_ID: "",
                 JobRoles: []
+            },
+            methods: {
+                softDelete: function() {
+                    axios.post('http://localhost:5001/JobRoles/<string:JobRole_ID>', {
+                        JobRole_ID: this.JobRole_ID
+                    })
+                .then(response => {
+                        window.location.replace("./view_roles.html");
+                        return false;
+                    })
+                .catch(error => { error => alert(error) });
+                }
             },
             mounted: function() {
                 axios.get('http://localhost:5001/JobRoles')

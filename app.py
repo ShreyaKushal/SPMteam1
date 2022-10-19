@@ -232,7 +232,7 @@ def get_all_Courses():
 
 
 
-@app.route("/JobRoles/<string:jobrole_id>", methods=['PUT'])
+@app.route("/JobRoles/<string:JobRole_ID>", methods=['GET', 'POST'])
 def update_jobrole(JobRole_ID):
     try:
         jobrole = JobRoles.query.filter_by(JobRole_ID=JobRole_ID).first()
@@ -246,18 +246,25 @@ def update_jobrole(JobRole_ID):
                     "message": "Job role not found."
                 }
             ), 404
-
-        # update status
-        data = request.get_json()
-        if data['JobRole_Status']:
-            JobRoles.JobRole_Status = data['JobRole_Status']
+        if jobrole:
+            db.session.delete(jobrole)
             db.session.commit()
-            return jsonify(
-                {
-                    "code": 200,
-                    "data": JobRoles.json()
-                }
-            ), 200
+            JobRole_ID = request.form['JobRole_ID']
+            JobRole_Name = request.form['JobRole_Name']
+            # JobRole_Status = "Inactive"
+            jobrole = JobRoles(JobRole_ID=JobRole_ID,JobRole_Name=JobRole_Name,JobRole_Status="Inactive")
+            db.session.add(jobrole)
+            db.session.commit()
+        # update status
+        # data = request.get_json()
+        # if data['JobRole_Status']:
+        db.session.commit()
+        return jsonify(
+            {
+                "code": 200,
+                "data": JobRoles.json()
+            }
+        ), 200
     except Exception as e:
         return jsonify(
             {
