@@ -29,15 +29,11 @@
                         <thead class="table-light">
                             <th scope="col">Role ID</th>
                             <th scope="col">Role Name</th>
-                            <th scope="col"></th>
                         </thead>
                         <tbody>
                             <tr v-for="jobrole in jobroles" v-bind:key="jobrole.JobRole_ID">
-                                <td>{{ jobrole.JobRole_ID }}</td>
-                                <td class="fw-bold"><a href="staffViewJobRoleWithSkills.html" @click="getID" v-bind:id="jobrole.JobRole_ID" class="text-decoration-none link-dark">{{ jobrole.JobRole_Name }}</a></td>
-                                <td class="col text-center">
-                                    <button type="button" class="btn btn-outline-dark" onclick="">Choose Role</button>
-                                </td>
+                                <td class="fw-bold"><a href="staffViewSkills.html" @click="getID" v-bind:id="jobrole.JobRole_ID" class="text-decoration-none link-dark">{{ jobrole.JobRole_ID }}</a></td>
+                                <td class="fw-bold"><a href="staffViewSkills.html" @click="getID" v-bind:id="jobrole.JobRole_ID" class="text-decoration-none link-dark">{{ jobrole.JobRole_Name }}</a></td>
                             </tr>
                         
                         </tbody>
