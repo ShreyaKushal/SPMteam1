@@ -7,7 +7,7 @@ create table Role
 	Role_Name		varchar(20) 	not null
 );
 
-INSERT INTO role VALUES
+INSERT INTO Role VALUES
     (1,'Admin'),
     (2,'User'),
     (3,'Manager'),
@@ -176,7 +176,7 @@ create table Courses
     Course_Type 	varchar(10),
     Course_Category varchar(50)
 );
-INSERT INTO course VALUES
+INSERT INTO Courses VALUES
     ('COR001','Systems Thinking and Design','This foundation module aims to introduce students to the fundamental concepts and underlying principles of systems thinking,','Active','Internal','Core'),
     ('COR002','Lean Six Sigma Green Belt Certification','Apply Lean Six Sigma methodology and statistical tools such as Minitab to be used in process analytics','Active','Internal','Core'),
     ('COR004','Service Excellence','The programme provides the learner with the key foundations of what builds customer confidence in the service industr','Pending','Internal','Core'),
@@ -219,7 +219,7 @@ create table Registration
 	constraint Registration_fk2 foreign key(Staff_ID) references Staff(Staff_ID)
 );
 
-INSERT INTO registration VALUES
+INSERT INTO Registration VALUES
     (1,'COR002',130001,'Registered','Completed'),
     (245,'COR001',130001,'Registered','Completed'),
     (2,'COR002',130002,'Registered','Completed'),
