@@ -15,17 +15,6 @@ db = SQLAlchemy(app)
 CORS(app)
 CORS(app, support_credentials=True)
 
-#many-to-many relationship db table (JobRoles & Skills)
-skill_with_courses = db.Table('SkillsRequiredCourses',
-        db.Column('Course_ID', db.String(20), db.ForeignKey('Courses.Course_ID')),
-        db.Column('Skill_ID', db.String(50), db.ForeignKey('Skills.Skill_ID'))
-)
-
-#many-to-many relationship db table (Skills & Courses)
-job_role_with_skills = db.Table('jobrolewithskills',
-        db.Column('JobRole_ID', db.String(50), db.ForeignKey('JobRoles.JobRole_ID')),
-        db.Column('Skill_ID', db.String(50), db.ForeignKey('Skills.Skill_ID'))
-)
 
 class JobRoles(db.Model):
     __tablename__ = 'JobRoles'
@@ -33,16 +22,13 @@ class JobRoles(db.Model):
     JobRole_Name = db.Column(db.String(50))
     JobRole_Status = db.Column(db.String(50))
 
-
     def __init__(self, JobRole_ID, JobRole_Name, JobRole_Status): #initialise value of job role record, specify properties of a job role when it is created
         self.JobRole_ID = JobRole_ID
         self.JobRole_Name = JobRole_Name
         self.JobRole_Status = JobRole_Status
 
-
     def json(self): #returns json representation of the job role
         return {"JobRole_ID": self.JobRole_ID, "JobRole_Name": self.JobRole_Name, "JobRole_Status":self.JobRole_Status}
-
 
     def to_dict(self):
         """
@@ -66,8 +52,6 @@ class Skills(db.Model):
     Skill_Name = db.Column(db.String(50), nullable=False)
     Skill_Desc = db.Column(db.String(255), nullable=False)
     Skill_Status = db.Column(db.String(50), nullable=False)
-    jobroles = db.relationship('JobRoles', secondary=job_role_with_skills,
-        backref=db.backref('Skills'))
 
     def __init__(self, Skill_ID, Skill_Name, Skill_Desc, Skill_Status): #initialise value of job role record, specify properties of a job role when it is created
         self.Skill_ID = Skill_ID
@@ -100,8 +84,6 @@ class Courses(db.Model):
     Course_Status= db.Column(db.String(15))
     Course_Type= db.Column(db.String(10))
     Course_Category= db.Column(db.String(50))
-    skills = db.relationship('Skills', secondary=skill_with_courses,
-        backref=db.backref('Courses'))
 
     def __init__(self, Course_ID, Course_Name, Course_Desc, Course_Status, Course_Type, Course_Category):
         self.Course_ID = Course_ID
@@ -161,21 +143,54 @@ class Staff(db.Model):
             result[column] = getattr(self, column)
         return result
 
-#Edit again tmr:')
-"""
+class JobRoleWithSkills(db.Model):
+    __tablename__ = 'JobRoleWithSkills'
+    JobRoleWithSkills_ID = db.Column(db.Integer, primary_key=True)
+    JobRole_ID = db.Column(db.String(50), db.ForeignKey('Role.Role_ID'))
+    Skill_ID = db.Column(db.String(50), db.ForeignKey('Skills.Skill_ID'))
+
+    def __init__(self, JobRole_ID, Skill_ID):
+        self.JobRole_ID = JobRole_ID
+        self.Skill_ID = Skill_ID      
+
+    def json(self): 
+        return {'JobRoleWithSkills_ID' : self.JobRoleWithSkills_ID, 'JobRole_ID' : self.JobRole_ID, 'Skill_ID' : self.Skill_ID}
+    
+    def to_dict(self):
+        """
+        'to_dict' converts the object into a dictionary,
+        in which the keys correspond to database columns
+        """
+        columns = self.__mapper__.column_attrs.keys()
+        result = {}
+        for column in columns:
+            result[column] = getattr(self, column)
+        return result
+
 class SkillsRequiredCourses(db.Model):
     __tablename__ = 'SkillsRequiredCourses'
-    Course_ID= db.Column(db.String(50), primary_key=True)
-    Skill_ID =  db.Column(db.String(50), primary_key=True)
-
+    SkillsRequiredCourses_ID = db.Column(db.Integer, primary_key=True)
+    Course_ID = db.Column(db.String(50), db.ForeignKey('Courses.Course_ID'))
+    Skill_ID = db.Column(db.String(50), db.ForeignKey('Skills.Skill_ID'))
 
     def __init__(self, Course_ID, Skill_ID):
         self.Course_ID = Course_ID
         self.Skill_ID = Skill_ID      
 
     def json(self): 
-        return {'Course_ID' : self.Course_ID, 'Skill_ID' : self.Skill_ID}
-"""
+        return {'SkillsRequiredCourses_ID' : self.SkillsRequiredCourses_ID, 'Course_ID' : self.Course_ID, 'Skill_ID' : self.Skill_ID}
+    
+    def to_dict(self):
+        """
+        'to_dict' converts the object into a dictionary,
+        in which the keys correspond to database columns
+        """
+        columns = self.__mapper__.column_attrs.keys()
+        result = {}
+        for column in columns:
+            result[column] = getattr(self, column)
+        return result
+
 class LearningJourney(db.Model):
     __tablename__ = 'LearningJourney'
     LearningJourney_ID = db.Column(db.Integer, primary_key=True)
@@ -353,7 +368,7 @@ def jobroles():
 
 @app.route("/StaffViewJobRoles/<string:jobrole_id>")
 def view_JobRoleWithSkills(jobrole_id):
-    skills_list = Skills.query.filter(Skills.jobroles.any(JobRole_ID=jobrole_id)).all()
+    skills_list = Skills.query.join(JobRoleWithSkills, JobRoleWithSkills.Skill_ID==Skills.Skill_ID).join(JobRoles, JobRoles.JobRole_ID==JobRoleWithSkills.JobRole_ID).filter(JobRoles.JobRole_ID==jobrole_id).all()
     if skills_list:
         return jsonify(
             {
@@ -369,7 +384,7 @@ def view_JobRoleWithSkills(jobrole_id):
 
 @app.route("/StaffViewCourses/<string:skill_id>")
 def view_CoursesInSkill(skill_id):
-    course_list = Courses.query.filter(Courses.skills.any(Skill_ID=skill_id)).all()
+    course_list = Courses.query.join(SkillsRequiredCourses, SkillsRequiredCourses.Course_ID==Courses.Course_ID).join(Skills, Skills.Skill_ID==SkillsRequiredCourses.Skill_ID).filter(Skills.Skill_ID==skill_id).all()
     if course_list:
         return jsonify(
             {
@@ -436,6 +451,45 @@ def create_learningJourney():
         return jsonify({
             "message": "Unable to commit to database."
         }), 500
+
+@app.route("/addJobRoleWithSkills", methods=['POST'])
+def create_JobRoleWithSkills():
+    data = request.get_json()
+    if not all(key in data.keys() for
+            key in ('JobRole_ID', 'Skill_ID')):
+            return jsonify({
+                "message": "Incorrect JSON object provided."
+            }), 500
+    
+    # (1): Validate jobrole
+    jobrole = JobRoles.query.filter_by(JobRole_ID=data['JobRole_ID']).first()
+    if not jobrole:
+        return jsonify({
+            "message": "Job role not valid."
+        }), 500
+    
+    # (2): Validate skill
+    skill = Skills.query.filter_by(Skill_ID=data['Skill_ID']).first()
+    if not skill:
+        return jsonify({
+            "message": "Skill not valid."
+        }), 500
+
+    # (3): Create job role with skill record
+    jobRoleWithSkill = JobRoleWithSkills(
+        JobRole_ID=data['JobRole_ID'],
+        Skill_ID=data['Skill_ID']
+    )
+
+    # (4): Commit to DB
+    try:
+        db.session.add(jobRoleWithSkill)
+        db.session.commit()
+        return jsonify(jobRoleWithSkill.to_dict()), 201
+    except Exception:
+            return jsonify({
+                "message": "Unable to commit to database."
+            }), 500
 
 @app.route("/addSkill", methods=['POST'])
 def create_skill():

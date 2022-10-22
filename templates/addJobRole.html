@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html>
 
@@ -80,12 +79,13 @@
 
         
         <h4>Select skills required for the job role:</h4>
-        <div v-for="Skill in Skills" class="form-check">
-            <input class="form-check-input" type="checkbox" name="Skill"  >
+        <div v-for="Skill in Skills" class="form-check" v-bind:key="Skill.Skill_ID">
+            <input class="form-check-input" type="checkbox" v-bind:value="Skill.Skill_ID" v-model="selectedSkillID">
             <label class="form-check-label">
                 {{Skill.Skill_ID}}, {{Skill.Skill_Name}}
             </label>
         </div>
+        <!--  <div>Checked Skills: {{ selectedSkillID }}</div> -->
         <br>
         <button id="addConsultBtn" class="btn btn-primary" v-on:click="submitForm">Create Role</button>
         <p><label id="error" class="text-danger">{{ error }}</label></p>
@@ -96,6 +96,7 @@
         const vm = new Vue({
         el: '#main-container1',
         data: {
+            selectedSkillID: [],
             Skills: [],
             JobRole_ID: '',
             JobRole_Name: '',
@@ -111,10 +112,27 @@
                         JobRole_Status: this.JobRole_Status
                     })
                 .then(response => {
+                        this.addSkills();
+                        alert("Successfully added");
                         window.location.replace("./view_roles.html");
                         return false;
                     })
                 .catch(error => { error => alert(error) });
+                },
+
+                addSkills: function() {
+                    event.preventDefault();
+                    for (let i = 0; i < this.selectedSkillID.length; i++ ){
+                        axios.post('http://localhost:5001/addJobRoleWithSkills', {
+                        JobRole_ID: this.JobRole_ID,
+                        Skill_ID: this.selectedSkillID[i]
+                        })
+                        .then(response => {
+                            return false;
+                        })
+                        .catch(error => { this.error = error.response.data.message });
+                }
+
                 }
             },
         mounted: function() {
