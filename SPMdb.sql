@@ -638,9 +638,9 @@ insert into Skills (Skill_ID, Skill_Name, Skill_Desc, Skill_Status) values
 ("SA10", "Sales Management", "Able to come up with sales strategies", "Active");
 
 create table JobRoleWithSkills
-(	JobRole_ID 		varchar(50) 	not null,
+(	JobRoleWithSkills_ID int AUTO_INCREMENT primary key,
+    JobRole_ID 		varchar(50) 	not null,
 	Skill_ID 		varchar(50) 	not null,
-	constraint JobRoleWithSkills_pk primary key(JobRole_ID, Skill_ID),
 	constraint JobRoleWithSkills_fk1 foreign key(JobRole_ID) references JobRoles(JobRole_ID),
 	constraint JobRoleWithSkills_fk2 foreign key(Skill_ID) references Skills(Skill_ID));
 
@@ -675,9 +675,9 @@ insert into JobRoleWithSkills (JobRole_ID, Skill_ID) values
 
 
 create table SkillsRequiredCourses
-(	Course_ID 			varchar(20) 	not null,
+(	SkillsRequiredCourses_ID int AUTO_INCREMENT primary key,
+    Course_ID 			varchar(20) 	not null,
 	Skill_ID 			varchar(50) 	not null,
-	constraint SkillsRequiredCourses_pk primary key(Course_ID, Skill_ID),
 	constraint SkillsRequiredCourses_fk1 foreign key(Course_ID) references Courses(Course_ID),
 	constraint SkillsRequiredCourses_fk2 foreign key(Skill_ID) references Skills(Skill_ID));
 
@@ -730,7 +730,6 @@ insert into SkillsRequiredCourses (Course_ID, Skill_ID) values
 ("ME4", "ME5");
 */
 
-/* I edited this */
 create table LearningJourney
 (	LearningJourney_ID int AUTO_INCREMENT primary key,
 	JobRole_ID 			varchar(50) 	not null,
