@@ -296,6 +296,15 @@ def get_all_Courses():
 # def get_all_courses(user_id):
   #  relevant_course = 
 
+@app.route('/<int:Staff_ID>')
+def staffLearningJourney(Staff_ID):
+    singularStaffLearningJourney = LearningJourney.query.filter_by(Staff_ID=Staff_ID)
+    if len(singularStaffLearningJourney):
+        return jsonify({
+            'data' : singularStaffLearningJourney.Staff_ID
+        })
+    pass
+
 
 
 @app.route("/JobRoles/<string:JobRole_ID>", methods=['GET', 'POST'])
