@@ -311,14 +311,26 @@ def get_all_Courses():
 # def get_all_courses(user_id):
   #  relevant_course = 
 
+
+# trying to get learning journey by staff
 @app.route('/<int:Staff_ID>')
 def staffLearningJourney(Staff_ID):
-    singularStaffLearningJourney = LearningJourney.query.filter_by(Staff_ID=Staff_ID)
-    if len(singularStaffLearningJourney):
-        return jsonify({
-            'data' : singularStaffLearningJourney.Staff_ID
-        })
-    pass
+    StaffLearningJourneys = LearningJourney.query.filter_by(Staff_ID=Staff_ID).all()
+    if len(StaffLearningJourneys):
+        alllearningjourneys = []
+        for s in StaffLearningJourneys: 
+            specificJobRole = JobRoles.query.filter_by(JobRole_ID = s.JobRole_ID).first()
+            x = {
+                'LearningJourney_ID' : s.LearningJourney_ID, 
+                'JobRole_Name' : specificJobRole.JobRole_Name
+            }
+            alllearningjourneys.append(x)
+        return alllearningjourneys
+    else:
+        return 'No Learning Journeys have been found for this staff ID.'
+
+        # return render_template('staffhomepage.html')
+    
 
 
 
