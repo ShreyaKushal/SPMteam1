@@ -314,47 +314,19 @@ def get_all_Courses():
 
 @app.route("/JobRoles/<string:JobRole_ID>", methods=['GET', 'POST'])
 def update_jobrole(JobRole_ID):
-    try:
-        jobrole = JobRoles.query.filter_by(JobRole_ID=JobRole_ID).first()
-        if not jobrole:
-            return jsonify(
-                {
-                    "code": 404,
-                    "data": {
-                        "JobRole_ID": JobRole_ID
-                    },
-                    "message": "Job role not found."
-                }
-            ), 404
-        if jobrole:
-            db.session.delete(jobrole)
-            db.session.commit()
-            JobRole_ID = request.form['JobRole_ID']
-            JobRole_Name = request.form['JobRole_Name']
-            # JobRole_Status = "Inactive"
-            jobrole = JobRoles(JobRole_ID=JobRole_ID,JobRole_Name=JobRole_Name,JobRole_Status="Inactive")
-            db.session.add(jobrole)
-            db.session.commit()
-        # update status
-        # data = request.get_json()
-        # if data['JobRole_Status']:
-        db.session.commit()
-        return jsonify(
-            {
-                "code": 200,
-                "data": JobRoles.json()
-            }
-        ), 200
-    except Exception as e:
-        return jsonify(
-            {
-                "code": 500,
-                "data": {
-                    "JobRole_ID": JobRole_ID
-                },
-                "message": "An error occurred while updating the job role. " + str(e)
-            }
-        ), 500
+    jobrole = JobRoles.query.filter_by(JobRole_ID = JobRole_ID).first()
+    
+    setattr(jobrole, 'JobRole_Status', "Inactive")
+    db.session.commit()
+
+    jobrole_list = JobRoles.query.all()
+
+    return jsonify(
+        {
+            "data": [jobrole.to_dict()
+                    for jobrole in jobrole_list]
+        }
+    ), 200
 
 @app.route("/StaffViewJobRoles")
 def jobroles():
