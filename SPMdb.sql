@@ -8,6 +8,12 @@ CREATE TABLE Role (
   PRIMARY KEY (`Role_ID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 
+INSERT INTO Role VALUES
+    (1,'Admin'),
+    (2,'User'),
+    (3,'Manager'),
+    (4,'Trainer');
+
 create table Staff
 (	Staff_ID		int				primary key,
 	Staff_Fname		varchar(50)		not null,
@@ -17,34 +23,6 @@ create table Staff
 	Role_ID			int 			not null,
 	constraint Staff_fk foreign key(Role_ID) references Role(Role_ID)
 );
-
-create table Courses
-(	Course_ID		varchar(20)		primary key,
-	Course_Name		varchar(50)		not null,
-	Course_Desc		varchar(255),
-	Course_Status 	varchar(15),
-    Course_Type 	varchar(10),
-    Course_Category varchar(50)
-);
-
-create table Registration
-(	Reg_ID			int				primary key,
-	Course_ID		varchar(20)		not null,
-	Staff_ID		int 		not null,
-	Reg_Status 		varchar(20),
-    Completion_Status varchar(20),
-	constraint Registration_fk1 foreign key(Course_ID) references Courses(Course_ID),
-	constraint Registration_fk2 foreign key(Staff_ID) references Staff(Staff_ID)
-);
-
-
-
-INSERT INTO Role VALUES
-    (1,'Admin'),
-    (2,'User'),
-    (3,'Manager'),
-    (4,'Trainer');
-
 
 INSERT INTO Staff VALUES
     (130001,'John','Sim','Chariman','jack.sim@allinone.com.sg',1),
@@ -191,7 +169,14 @@ INSERT INTO Staff VALUES
     (170866,'Susan','Lim','Finance','Susan.Lim@allinone.com.sg',2),
     (171008,'Janice','Heng','Finance','Janice.Heng@allinone.com.sg',2);
 
-
+create table Courses
+(	Course_ID		varchar(20)		primary key,
+	Course_Name		varchar(50)		not null,
+	Course_Desc		varchar(255),
+	Course_Status 	varchar(15),
+    Course_Type 	varchar(10),
+    Course_Category varchar(50)
+);
 INSERT INTO Courses VALUES
     ('COR001','Systems Thinking and Design','This foundation module aims to introduce students to the fundamental concepts and underlying principles of systems thinking,','Active','Internal','Core'),
     ('COR002','Lean Six Sigma Green Belt Certification','Apply Lean Six Sigma methodology and statistical tools such as Minitab to be used in process analytics','Active','Internal','Core'),
@@ -225,7 +210,16 @@ INSERT INTO Courses VALUES
     ('tch018','Professional Project Management','solid foundation in the project management processes from initiating a project, through planning, execution, control,','Active','Internal','Technical'),
     ('tch019','Innovation and Change Management ','the organization that constantly reinvents itself to be relevant has a better chance of making progress','Active','External','Technical');
 
- 
+create table Registration
+(	Reg_ID			int				primary key,
+	Course_ID		varchar(20)		not null,
+	Staff_ID		int 		not null,
+	Reg_Status 		varchar(20),
+    Completion_Status varchar(20),
+	constraint Registration_fk1 foreign key(Course_ID) references Courses(Course_ID),
+	constraint Registration_fk2 foreign key(Staff_ID) references Staff(Staff_ID)
+);
+
 INSERT INTO Registration VALUES
     (1,'COR002',130001,'Registered','Completed'),
     (245,'COR001',130001,'Registered','Completed'),
@@ -645,9 +639,9 @@ insert into Skills (Skill_ID, Skill_Name, Skill_Desc, Skill_Status) values
 ("SA10", "Sales Management", "Able to come up with sales strategies", "Active");
 
 create table JobRoleWithSkills
-(	JobRole_ID 		varchar(50) 	not null,
+(	JobRoleWithSkills_ID int AUTO_INCREMENT primary key,
+    JobRole_ID 		varchar(50) 	not null,
 	Skill_ID 		varchar(50) 	not null,
-	constraint JobRoleWithSkills_pk primary key(JobRole_ID, Skill_ID),
 	constraint JobRoleWithSkills_fk1 foreign key(JobRole_ID) references JobRoles(JobRole_ID),
 	constraint JobRoleWithSkills_fk2 foreign key(Skill_ID) references Skills(Skill_ID));
 
@@ -682,9 +676,9 @@ insert into JobRoleWithSkills (JobRole_ID, Skill_ID) values
 
 
 create table SkillsRequiredCourses
-(	Course_ID 			varchar(20) 	not null,
+(	SkillsRequiredCourses_ID int AUTO_INCREMENT primary key,
+    Course_ID 			varchar(20) 	not null,
 	Skill_ID 			varchar(50) 	not null,
-	constraint SkillsRequiredCourses_pk primary key(Course_ID, Skill_ID),
 	constraint SkillsRequiredCourses_fk1 foreign key(Course_ID) references Courses(Course_ID),
 	constraint SkillsRequiredCourses_fk2 foreign key(Skill_ID) references Skills(Skill_ID));
 
@@ -737,7 +731,6 @@ insert into SkillsRequiredCourses (Course_ID, Skill_ID) values
 ("ME4", "ME5");
 */
 
-/* I edited this */
 create table LearningJourney
 (	LearningJourney_ID int AUTO_INCREMENT primary key,
 	JobRole_ID 			varchar(50) 	not null,

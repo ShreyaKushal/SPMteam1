@@ -81,10 +81,10 @@
         <h4>Role's Status:</h4>
 
         <div class="form-group">
-            <input type="radio" class="form-control" id="inactive" name="JobRole_Status" value="inactive">
+            <input type="radio" id="inactive" name="JobRole_Status" value="inactive">
             <label for="inactive">Inactive</label><br>
 
-            <input type="radio" class="form-control" id="active" name="JobRole_Status" value="active">
+            <input type="radio" id="active" name="JobRole_Status" value="active">
             <label for="inactive">Active</label><br>
         </div>
 
@@ -97,7 +97,7 @@
             </label>
         </div>
         <br>
-        <button id="addConsultBtn" class="btn btn-primary" v-on:click="submitForm">Create Role</button>
+        <button id="addConsultBtn" class="btn btn-primary" v-on:click="submitForm">Update Role</button>
         <p><label id="error" class="text-danger">{{ error }}</label></p>
         </form>
 
