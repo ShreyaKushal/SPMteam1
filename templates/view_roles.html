@@ -170,17 +170,16 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="JobRole in JobRoles">
-                        <td v-model="JobRole.JobRole_ID"><strong>{{ JobRole.JobRole_ID }}</strong></td>
-                        <td v-model="JobRole.JobRole_Name">{{ JobRole.JobRole_Name }}</td>
-                        <td v-model="JobRole.JobRole_Status">{{ JobRole.JobRole_Status }}</td>
+                    <tr v-for="JobRole in JobRoles" v-bind:key="JobRole.JobRole_ID">
+                        <td><strong>{{ JobRole.JobRole_ID }}</strong></td>
+                        <td>{{ JobRole.JobRole_Name }}</td>
+                        <td>{{ JobRole.JobRole_Status }}</td>
                         <td>
 							<a class="add" title="Add" data-toggle="tooltip"><i class="material-icons">&#xE03B;</i></a>
                             <a class="edit" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>
-                            <a class="delete" title="Delete" data-toggle="tooltip" v-on:click="softDelete"><i class="material-icons">&#xE872;</i></a>
+                            <i class="material-icons"><a class="delete" title="Delete" data-toggle="tooltip" @click="softDelete" v-bind:id="JobRole.JobRole_ID">&#xE872;</a></i>
                         </td>
                     </tr>
-                     
                 </tbody>
             </table>
         </div>
@@ -191,14 +190,13 @@
         const vm = new Vue({
             el: '#JobRolesTable',
             data: {
-                JobRole_ID: "",
+                id: "",
                 JobRoles: []
             },
             methods: {
-                softDelete: function() {
-                    axios.post('http://localhost:5001/JobRoles/<string:JobRole_ID>', {
-                        JobRole_ID: this.JobRole_ID
-                    })
+                softDelete: function(event) {
+                    var id = event.target.id;
+                    axios.post('http://localhost:5001/JobRoles/' + id)
                 .then(response => {
                         window.location.replace("./view_roles.html");
                         return false;
