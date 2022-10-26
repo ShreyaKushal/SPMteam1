@@ -1,5 +1,5 @@
 # from curses import flash
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS, cross_origin
 
@@ -312,10 +312,12 @@ def get_all_Courses():
   #  relevant_course = 
 
 
-# trying to get learning journey by staff
+# trying to get learning journey by staff_id
 @app.route('/<int:Staff_ID>')
 def staffLearningJourney(Staff_ID):
     StaffLearningJourneys = LearningJourney.query.filter_by(Staff_ID=Staff_ID).all()
+    # specificstaffmember = Staff.query.filter_by(Staff_ID=Staff_ID).first()
+    # staffFirstName = specificstaffmember.filter_by(Staff_FName = specificstaffmember.Staff_FName).first()
     if len(StaffLearningJourneys):
         alllearningjourneys = []
         for s in StaffLearningJourneys: 
@@ -326,10 +328,11 @@ def staffLearningJourney(Staff_ID):
             }
             alllearningjourneys.append(x)
         return alllearningjourneys
+        # return render_template('staffhomepage.html', data = alllearningjourneys, name = staffFirstName)
     else:
         return 'No Learning Journeys have been found for this staff ID.'
 
-        # return render_template('staffhomepage.html')
+        # return render_template('staffhomepage.html', data = alllearningjourneys, name = staffFirstName)
     
 
 

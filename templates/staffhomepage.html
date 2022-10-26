@@ -127,7 +127,7 @@
                   </nav>
             </div>
         </div>
-        <div class="row bottomPortion" id='addingCourses'>
+        <div class="row bottomPortion" id='learningJourneys'>
             <div class="col single-course-card" v-for='course in Courses'>
                 <div class="internal-course-content">
                     <div class="col">
@@ -146,20 +146,12 @@
     <script>
         // figure out how to properly use flask again such that when you pass a string in via app, the reflected courses and names appear
         // need to somehow be able to differentiate whether user has any learning journeys or not -> user DB? look at db later on
-        
-            const courseDetails = new Vue({
-                el: '#addingCourses',
-                data: {
-                    Courses: []
-                },
-                mounted: function() {
-                    axios.get('http://localhost:5001/Courses')
-                        .then(response => {
-                            this.Courses = response.data.data;
-                        })
-                        .catch(error => alert(error));
-                }
-            });
+
+        export default {
+            components : {
+                
+            }
+        }
 
         
         </script>
