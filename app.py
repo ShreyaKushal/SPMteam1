@@ -316,8 +316,7 @@ def get_all_Courses():
 @app.route('/<int:Staff_ID>')
 def staffLearningJourney(Staff_ID):
     StaffLearningJourneys = LearningJourney.query.filter_by(Staff_ID=Staff_ID).all()
-    # specificstaffmember = Staff.query.filter_by(Staff_ID=Staff_ID).first()
-    # staffFirstName = specificstaffmember.filter_by(Staff_FName = specificstaffmember.Staff_FName).first()
+    staffmembername = Staff.query.filter_by(Staff_ID=Staff_ID).first().Staff_Fname	
     if len(StaffLearningJourneys):
         alllearningjourneys = []
         for s in StaffLearningJourneys: 
@@ -328,7 +327,7 @@ def staffLearningJourney(Staff_ID):
             }
             alllearningjourneys.append(x)
         # return alllearningjourneys
-        return render_template('staffhomepage.html', learningjourneys = alllearningjourneys)
+        return render_template('staffhomepage.html', learningjourneys = alllearningjourneys, name = staffmembername)
     else:
         return 'No Learning Journeys have been found for this staff ID.'
 

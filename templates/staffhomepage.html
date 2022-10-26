@@ -98,7 +98,7 @@
                     LJPS
                 </div>
                 <div class="col-sm-6 big-h">
-                    Welcome, {{StaffName}}
+                    Welcome, {{name}}
                 </div>
                 <div class="col-sm-3">
                     <button type='button' class='btn btn-primary'>Add Learning Journey</button>
@@ -131,10 +131,15 @@
             <div class="col single-course-card">
                 <div id="#">
                     {% for dict_item in learningjourneys %}
+                    <div class='card' style='width:18rem'>
+                        <img class='card-img-top' src='learning.jpg' alt='Card image cap'>
+                        <div class='card-body'>
                     {% for key, value in dict_item.items() %}
-                    <div>{{key}}</div>>
-                    <div>{{value}}</div>
+                    <h5>{{key}} : {{value}} </h5>
                     {% endfor %}
+                    <a href='#' class='btn btn-primary'>Access Learning Journey</a>
+                </div>
+            </div>
                     {% endfor %}
                     
                 </div>
