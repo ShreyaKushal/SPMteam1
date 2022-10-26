@@ -127,34 +127,24 @@
                   </nav>
             </div>
         </div>
-        <div class="row bottomPortion" id='learningJourneys'>
-            <div class="col single-course-card" v-for='course in Courses'>
-                <div class="internal-course-content">
-                    <div class="col">
-                    {{course.Course_ID}} / {{course.Course_Name}}</div>
-                    <div class="col">{{course.Course_Desc}}</div>
-                    <div class="col">{{course.Course_Type}}</div>
-                    <div class="col">{{course.Course_Category}}</div>
+        <div class="row bottomPortion">
+            <div class="col single-course-card">
+                <div id="#">
+                    {% for dict_item in learningjourneys %}
+                    {% for key, value in dict_item.items() %}
+                    <div>{{key}}</div>>
+                    <div>{{value}}</div>
+                    {% endfor %}
+                    {% endfor %}
+                    
                 </div>
+                <!-- unordered list -->
         </div>
         </div>
     </div>
 
     <!-- need to figure out how to configure the padding for the grid when the screen size decreases-->
     <!-- how do I make stuff appear in the hamburger menu as the sizing decreases?-->
-
-    <script>
-        // figure out how to properly use flask again such that when you pass a string in via app, the reflected courses and names appear
-        // need to somehow be able to differentiate whether user has any learning journeys or not -> user DB? look at db later on
-
-        export default {
-            components : {
-                
-            }
-        }
-
-        
-        </script>
 
 </body>
 </html>

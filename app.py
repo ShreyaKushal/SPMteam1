@@ -327,12 +327,12 @@ def staffLearningJourney(Staff_ID):
                 'JobRole_Name' : specificJobRole.JobRole_Name
             }
             alllearningjourneys.append(x)
-        return alllearningjourneys
-        # return render_template('staffhomepage.html', data = alllearningjourneys, name = staffFirstName)
+        # return alllearningjourneys
+        return render_template('staffhomepage.html', learningjourneys = alllearningjourneys)
     else:
         return 'No Learning Journeys have been found for this staff ID.'
 
-        # return render_template('staffhomepage.html', data = alllearningjourneys, name = staffFirstName)
+ 
     
 
 
