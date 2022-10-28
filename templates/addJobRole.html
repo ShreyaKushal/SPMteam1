@@ -107,20 +107,21 @@
         methods: {
                 submitForm: function() {
                 event.preventDefault();
-                if (this.JobRole_ID !== '' && this.JobRole_Name !== '' && this.selectedSkillID !== '') {
-                axios.post('http://localhost:5001/addJobRole', {
-                        JobRole_ID: this.JobRole_ID,
-                        JobRole_Name: this.JobRole_Name,
-                        JobRole_Status: this.JobRole_Status
-                    })
-                .then(response => {
-                        this.addSkills();
-                        alert("You have successfully created a new job role");
-                        window.location.replace("./view_roles.html");
-                        return false;
-                    })
-                .catch(error => { error => alert(error) });
-                } else {
+                    if (this.JobRole_ID !== '' && this.JobRole_Name !== '' && this.selectedSkillID !== '') {
+                        axios.post('http://localhost:5001/addJobRole', {
+                                JobRole_ID: this.JobRole_ID,
+                                JobRole_Name: this.JobRole_Name,
+                                JobRole_Status: this.JobRole_Status
+                            })
+                        .then(response => {
+                                this.addSkills();
+                                alert("You have successfully created a new job role");
+                                window.location.replace("./view_roles.html");
+                                return false;
+                            })
+                        .catch(error => { error => alert(error) });
+                    } 
+                    else {
                     if (this.JobRole_ID == '') {
                         this.error_messages += "Role ID must be filled\n" 
                     } 
@@ -130,10 +131,10 @@
                     if (this.selectedSkillID == '') {
                         this.error_messages += "Skills required must be selected\n"
                     }
-                    alert(this.error_messages) 
+                    alert(this.error_messages)
+                    this.error_messages = ''
                 }
                 },
-
                 addSkills: function() {
                     event.preventDefault();
                     for (let i = 0; i < this.selectedSkillID.length; i++ ){
@@ -145,8 +146,8 @@
                             return false;
                         })
                         .catch(error => { this.error = error.response.data.message });
-                }
-
+                        
+                        } 
                 }
             },
         mounted: function() {
