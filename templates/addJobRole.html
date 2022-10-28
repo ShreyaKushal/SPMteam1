@@ -101,11 +101,13 @@
             JobRole_ID: '',
             JobRole_Name: '',
             JobRole_Status:'',
+            error_messages: '',
             error: ''
         },
         methods: {
                 submitForm: function() {
                 event.preventDefault();
+                if (this.JobRole_ID !== '' && this.JobRole_Name !== '' && this.selectedSkillID !== '') {
                 axios.post('http://localhost:5001/addJobRole', {
                         JobRole_ID: this.JobRole_ID,
                         JobRole_Name: this.JobRole_Name,
@@ -118,6 +120,18 @@
                         return false;
                     })
                 .catch(error => { error => alert(error) });
+                } else {
+                    if (this.JobRole_ID == '') {
+                        this.error_messages += "Role ID must be filled\n" 
+                    } 
+                    if (this.JobRole_Name == '') {
+                        this.error_messages += "Job Role must be filled\n"
+                    }
+                    if (this.selectedSkillID == '') {
+                        this.error_messages += "Skills required must be selected\n"
+                    }
+                    alert(this.error_messages) 
+                }
                 },
 
                 addSkills: function() {
