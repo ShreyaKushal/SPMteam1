@@ -208,6 +208,9 @@ class LearningJourney(db.Model):
     def json(self): 
         return { 'LearningJourney_ID' : self.LearningJourney_ID, 'Staff_ID' : self.Staff_ID, 'JobRole_ID' : self.JobRole_ID, 'Skill_ID' : self.Skill_ID, 'Course_ID' : self.Course_ID}
 
+    def getID(self):
+        return self.Course_ID
+    
     def to_dict(self):
         """
         'to_dict' converts the object into a dictionary,
@@ -423,6 +426,16 @@ def create_learningJourney():
         return jsonify({
             "message": "Unable to commit to database."
         }), 500
+
+@app.route("/StaffLearningJourneyButton/<string:staff_id>")
+def view_StaffAddedCourses(staff_id):
+    course_list = LearningJourney.query.filter(LearningJourney.Staff_ID==staff_id).all()
+    return jsonify(
+        {
+            "data":[course.getID()
+                    for course in course_list]
+            }
+        )
 
 @app.route("/addJobRoleWithSkills", methods=['POST'])
 def create_JobRoleWithSkills():
