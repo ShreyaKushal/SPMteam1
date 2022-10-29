@@ -200,7 +200,6 @@
         axios.get('http://localhost:5001/StaffViewJobRoles/' + this.id)
             .then(response => {
                 this.skills = response.data.data;
-                console.log(this.skills)
             });
     },
 });
