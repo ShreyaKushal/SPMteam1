@@ -102,16 +102,16 @@
             JobRole_Name: '',
             JobRole_Status:'',
             error_messages: '',
-            error: ''
+            error: '',
+            existingJobRoles: []
         },
         methods: {
                 submitForm: function() {
 
                 event.preventDefault();
-                    // console.log(this.selectedSkillID.length)
-                    // console.log(this.JobRole_ID)
-                    // console.log(this.JobRole_Name)
-                    if (this.JobRole_ID !== '' && this.JobRole_Name !== '' && this.selectedSkillID.length !== 0) {
+                    // console.log(this.existingJobRoles.some(e => e.JobRole_ID=== this.JobRole_ID))
+                    if (this.JobRole_ID !== '' && this.JobRole_Name !== '' && this.selectedSkillID.length !== 0
+                    && !this.existingJobRoles.some(e => e.JobRole_ID=== this.JobRole_ID)){
                         axios.post('http://localhost:5001/addJobRole', {
                                 JobRole_ID: this.JobRole_ID,
                                 JobRole_Name: this.JobRole_Name,
@@ -134,6 +134,9 @@
                     }                  
                     if (this.selectedSkillID.length == 0) {
                         this.error_messages += "Skills required must be selected\n"
+                    }
+                    if (this.existingJobRoles.some(e => e.JobRole_ID=== this.JobRole_ID)) {
+                        this.error_messages += `A role with Role ID ${this.JobRole_ID} already exists\n`
                     }
                     alert(this.error_messages)
                     this.error_messages = ''
@@ -160,6 +163,11 @@
                     this.Skills = response.data.data;
                 })
                 .catch(error => alert(error));
+            axios.get('http://localhost:5001/JobRoles')
+            .then(response => {
+                this.existingJobRoles = response.data.data;
+            })
+            .catch(error => alert(error));
         }
     });
     </script>
