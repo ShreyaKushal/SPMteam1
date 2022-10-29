@@ -66,17 +66,17 @@
         <h1 class="display-4">Add a Skill</h1>
 
         <form>
+        <h2>Enter Skill ID</h2>
+        <div class="form-group">
+            <input type="text" class="form-control" id="Skill_ID" v-model="Skill_ID">
+        </div>
+
         <h2>Enter Skill Name</h2>
 
         <div class="form-group">
             <input type="text" class="form-control" id="Skill_Name" v-model="Skill_Name">
         </div>
 
-        <h2>Enter Skill ID</h2>
-
-        <div class="form-group">
-            <input type="text" class="form-control" id="Skill_ID" v-model="Skill_ID">
-        </div>
 
         <h2>Enter Skill Description</h2>
 
@@ -85,7 +85,7 @@
         </div>
 
         
-        <h2>Select a Course</h2>
+        <h2>Select Course(s) to assign the skill to:</h2>
         <div v-for="Course in Courses" class="form-check">
             <input class="form-check-input" type="checkbox" name="CoursesSelected[]" :value="Course.Course_ID"  v-bind="Courses">
             <label class="form-check-label" v-bind:for="Course.Course_ID">
@@ -130,7 +130,9 @@
             Skill_ID: '',
             Skill_Desc:'',
             Skill_Status:'',
-            error: ''
+            error: '',
+            error_messages: '',
+            existing_skills: []
         },
         methods: {
                 multiple:function(){
@@ -139,18 +141,41 @@
                 },
                 submitForm: function() {
                 event.preventDefault();
-                axios.post('http://localhost:5001/addSkill', {
-                        Skill_ID: this.Skill_ID,
-                        Skill_Name: this.Skill_Name,
-                        Skill_Desc: this.Skill_Desc,
-                        Skill_Status: this.Skill_Status
-                    })
-                .then(response => {
-                        alert("You have successfully created a new skill");
-                        window.location.replace("./skills.html");
-                        return false;
-                    })
-                .catch(error => { error => alert(error) });
+                if (this.Skill_ID !== '' && this.Skill_Name !== '' && this.Skill_Desc !== '' 
+                && !this.existing_skills.some(e => e.Skill_ID.toUpperCase() === this.Skill_ID.toUpperCase() ) 
+                && !this.existing_skills.some(e => e.Skill_Name.toUpperCase() === this.Skill_Name.toUpperCase()) ) {
+                    axios.post('http://localhost:5001/addSkill', {
+                            Skill_ID: this.Skill_ID,
+                            Skill_Name: this.Skill_Name,
+                            Skill_Desc: this.Skill_Desc,
+                            Skill_Status: this.Skill_Status
+                        })
+                    .then(response => {
+                            alert("You have successfully created a new skill");
+                            window.location.replace("./skills.html");
+                            return false;
+                        })
+                    .catch(error => { error => alert(error) });
+                } else {
+                    if (this.Skill_ID == '') {
+                        this.error_messages += "Skill ID must be filled\n" 
+                    } 
+                    if (this.Skill_Name == '') {
+                        this.error_messages += "Skill Name must be filled\n"
+                    }    
+                    if (this.Skill_Desc == '') {
+                        this.error_messages += "Skill Description must be filled\n"
+                    }    
+                    if (this.existing_skills.some(e => e.Skill_ID.toUpperCase()=== this.Skill_ID.toUpperCase())) {
+                        this.error_messages += `A skill with Skill ID ${this.Skill_ID} already exists\n`
+                    }
+                    if (this.existing_skills.some(e => e.Skill_Name.toUpperCase() === this.Skill_Name.toUpperCase())) {
+                        this.error_messages += `A skill with Skill Name ${this.Skill_Name} already exists\n`
+                    }              
+                   
+                    alert(this.error_messages)
+                    this.error_messages = ''    
+                }
                 },
                 submitForm1: function() {
                 event.preventDefault();
@@ -169,6 +194,11 @@
             axios.get('http://localhost:5001/Courses')
                 .then(response => {
                     this.Courses = response.data.data;
+                })
+                .catch(error => alert(error));
+            axios.get('http://localhost:5001/Skills')
+                .then(response => {
+                    this.existing_skills = response.data.data;
                 })
                 .catch(error => alert(error));
         }

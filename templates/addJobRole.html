@@ -111,7 +111,8 @@
                 event.preventDefault();
                     // console.log(this.existingJobRoles.some(e => e.JobRole_ID=== this.JobRole_ID))
                     if (this.JobRole_ID !== '' && this.JobRole_Name !== '' && this.selectedSkillID.length !== 0
-                    && !this.existingJobRoles.some(e => e.JobRole_ID=== this.JobRole_ID)){
+                    && !this.existingJobRoles.some(e => e.JobRole_ID.toUpperCase()=== this.JobRole_ID.toUpperCase()) 
+                    && !this.existingJobRoles.some(e => e.JobRole_Name.toUpperCase()=== this.JobRole_Name.toUpperCase()) ){
                         axios.post('http://localhost:5001/addJobRole', {
                                 JobRole_ID: this.JobRole_ID,
                                 JobRole_Name: this.JobRole_Name,
@@ -130,13 +131,16 @@
                         this.error_messages += "Role ID must be filled\n" 
                     } 
                     if (this.JobRole_Name == '') {
-                        this.error_messages += "Job Role must be filled\n"
+                        this.error_messages += "Role Name must be filled\n"
                     }                  
                     if (this.selectedSkillID.length == 0) {
                         this.error_messages += "Skills required must be selected\n"
                     }
-                    if (this.existingJobRoles.some(e => e.JobRole_ID=== this.JobRole_ID)) {
+                    if (this.existingJobRoles.some(e => e.JobRole_ID.toUpperCase()=== this.JobRole_ID.toUpperCase() )) {
                         this.error_messages += `A role with Role ID ${this.JobRole_ID} already exists\n`
+                    }
+                    if (this.existingJobRoles.some(e => e.JobRole_Name.toUpperCase() === this.JobRole_Name.toUpperCase())) {
+                        this.error_messages += `A role with Role Name ${this.JobRole_Name} already exists\n`
                     }
                     alert(this.error_messages)
                     this.error_messages = ''
