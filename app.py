@@ -223,7 +223,7 @@ class LearningJourney(db.Model):
         return result
 
 db.create_all()
-
+"""
 @app.route("/JobRoles")
 def get_all_JobRoles():
     JobRole = JobRoles.query.all()
@@ -235,6 +235,26 @@ def get_all_JobRoles():
         return jsonify({
             "message": "Job Role not found."
         }), 404
+"""
+
+@app.route("/ActiveJobRoles")
+def get_all_ActiveJobRoles():
+    JobRole = JobRoles.query.filter_by(JobRole_Status = 'Active').all()
+    if len(JobRole):
+        return jsonify({
+            "data": [JobRoles.json() for JobRoles in JobRole]
+        }), 200
+    else:
+        return jsonify({
+            "message": "Job Role not found."
+        }), 404
+
+@app.route("/InactiveJobRoles")
+def get_all_InactiveJobRoles():
+    JobRole = JobRoles.query.filter_by(JobRole_Status = 'Inactive').all()
+    return jsonify({
+        "data": [JobRoles.json() for JobRoles in JobRole]
+    }), 200
 
 # Add a Job Role
 @app.route("/addJobRole", methods=['POST'])
