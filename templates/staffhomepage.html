@@ -136,14 +136,16 @@
                         <div class='card-body'>
                     {% for key, value in dict_item.items() %}
                     <h5>{{key}} : {{value}} </h5>
+                    {% set learningjourneyid = dict_item['LearningJourney_ID'] %}
                     {% endfor %}
-                    <a href='#' class='btn btn-primary'>Access Learning Journey</a>
+                    <!--- figure out how to incorporate localhost and the url together-->
+                    <a href="'http://localhost:5001/{{learningjourneyid}}" class='btn btn-primary'>Access Learning Journey</a>
                 </div>
             </div>
                     {% endfor %}
                     
                 </div>
-                <!-- unordered list -->
+        
         </div>
         </div>
     </div>

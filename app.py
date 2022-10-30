@@ -333,7 +333,11 @@ def staffLearningJourney(Staff_ID):
 
  
     
+# viewing specific learning journey
 
+@ app.route('/<int:LearningJourney_ID>')
+def specificLearningJourney(LearningJourney_ID):
+    pass
 
 
 @app.route("/JobRoles/<string:JobRole_ID>", methods=['GET', 'POST'])
