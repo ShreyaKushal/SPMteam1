@@ -297,22 +297,6 @@ def get_all_Courses():
             "message": "Course not found."
         }), 404
 
-# def JobRole_by_id(JobRole_ID):
-#     JobRole = JobRoles.query.filter_by(JobRole_ID=JobRole_ID).all()
-#     if JobRole:
-#         return jsonify({
-#             "data": [JobRoles.json() for JobRoles in JobRole]
-#         }), 200
-#     else:
-#         return jsonify({
-#             "message": "Job Role not found."
-#         }), 404
-
-
-# @app.route('/allcourses/<string:user_id>')
-# def get_all_courses(user_id):
-  #  relevant_course = 
-
 
 
 @app.route("/JobRoles/<string:JobRole_ID>", methods=['GET', 'POST'])
@@ -486,35 +470,6 @@ def create_skill():
             "message": "Incorrect JSON object provided."
         }), 500
 
-    # (1): Validate doctor
-    # Skill = Skills.query.filter_by(id=data['doctor_id']).first()
-    # if not doctor:
-    #     return jsonify({
-    #         "message": "Doctor not valid."
-    #     }), 500
-
-    # (2): Compute charges
-    # charge = doctor.calculate_charges(data['length'])
-
-    # # (3): Validate patient
-    # patient = Patient.query.filter_by(id=data['patient_id']).first()
-    # if not patient:
-    #     return jsonify({
-    #         "message": "Patient not valid."
-    #     }), 500
-
-    # # (4): Subtract charges from patient's e-wallet
-    # try:
-    #     patient.ewallet_withdraw(charge)
-    # except Exception:
-    #     return jsonify({
-    #         "message": "Patient does not have enough e-wallet funds."
-    #     }), 500
-    
-    # See if skill already exist 
-
-
-    # (4): Create consultation record
     Skill = Skills(
         Skill_ID=data['Skill_ID'], Skill_Name=data['Skill_Name'],
         Skill_Desc=data['Skill_Desc'], Skill_Status="Active"
@@ -553,17 +508,6 @@ def create_skillreqCourses():
             return jsonify({
                 "message": "Unable to commit to database."
             }), 500
-
-#@app.route("/JobRoles/<string:jobrole_id>", methods=['DELETE'])
-#def delete_jobRole(jobrole_id):
-#    jobrole_to_delete=JobRoles.query.get(jobrole_id)
-#    try:
-#        db.session.delete(jobrole_to_delete)
-#        db.session.commit()
-#        flash("Job role deleted susccessfully")
-#    except:
-#        flash("There was no such job role")
-    
 
 
 if __name__ == '__main__':
