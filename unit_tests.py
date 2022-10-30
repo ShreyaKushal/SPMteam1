@@ -2,6 +2,17 @@ import unittest
 
 from app import JobRoles, Skills
 
+class TestSkillsRoute(unittest.TestCase):
+    def test_skills_route_status_code(self):
+        route = "/Skills"
+        rv = self.get(route)
+        assert rv.status_code == 200
+
+class TestCoursesRoute(unittest.TestCase):
+    def test_courses_route_status_code(self):
+        route = "/Courses"
+        rv = self.get(route)
+        assert rv.status_code == 200
 
 class TestJobRoles(unittest.TestCase):
     def test_to_dict(self):
