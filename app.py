@@ -411,6 +411,58 @@ def create_learningJourney():
             "message": "Unable to commit to database."
         }), 500
 
+@app.route("/StaffLearningJourney/<string:staff_id>/<string:course_id>", methods=['DELETE'])
+def delete_coursesFromStaffLearningJourney(staff_id, course_id):
+    learningJourney = LearningJourney.query.filter_by(Staff_ID=staff_id).filter_by(Course_ID=course_id).first()
+    if learningJourney:
+        db.session.delete(learningJourney)
+        db.session.commit()
+        return jsonify(
+            {
+                "code": 200,
+                "data": {
+                    "Staff_ID": staff_id,
+                    "Course_ID": course_id
+                }
+            }
+        )
+    return jsonify(
+        {
+            "code": 404,
+            "data": {
+                "Staff_ID": staff_id,
+                "Course_ID": course_id
+            },
+            "message": "Course not found in Learning Journey."
+        }
+    ), 404
+
+@app.route("/StaffLearningJourney/<string:staff_id>/<string:jobrole_id>", methods=['DELETE'])
+def delete_entireStaffLearningJourneyBasedOnJobRole(staff_id, jobrole_id):
+    learningJourney = LearningJourney.query.filter_by(Staff_ID=staff_id).filter_by(JobRole_ID=jobrole_id).first()
+    if learningJourney:
+        db.session.delete(learningJourney)
+        db.session.commit()
+        return jsonify(
+            {
+                "code": 200,
+                "data": {
+                    "Staff_ID": staff_id,
+                    "JobRole_ID": jobrole_id
+                }
+            }
+        )
+    return jsonify(
+        {
+            "code": 404,
+            "data": {
+                "Staff_ID": staff_id,
+                "JobRole_ID": jobrole_id
+            },
+            "message": "Learning Journey not found."
+        }
+    ), 404
+
 @app.route("/StaffLearningJourneyButton/<string:staff_id>")
 def view_StaffAddedCourses(staff_id):
     course_list = LearningJourney.query.filter(LearningJourney.Staff_ID==staff_id).all()
