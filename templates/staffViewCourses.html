@@ -42,7 +42,12 @@
                                 <td>{{ course.Course_Type }}</td>
                                 <td>{{ course.Course_Category }}</td>
                                 <td class="col text-center">
-                                        <button type="button" class="btn btn-outline-dark" @click="addToLearningJourney" v-bind:id="course.Course_ID">Add to Learning Journey</button>
+                                    <template v-if="courseAdded_list.includes(course.Course_ID)">
+                                        <button type="button" class="btn btn-outline-danger" @click="" v-bind:id="course.Course_ID">Remove from Learning Journey</button>
+                                    </template>
+                                    <template v-else>
+                                        <button type="button" class="btn btn-outline-success" @click="addToLearningJourney" v-bind:id="course.Course_ID">Add to Learning Journey</button>
+                                    </template>
                                 </td>
                             </tr>
                             
@@ -60,7 +65,7 @@
 
     <!-- Result Show Below -->
     <div class="container" id="result" style="width:70%">
-    
+        
     </div>
 
 
@@ -77,26 +82,30 @@
         const vm = new Vue({
             el: '#main-container',
             data: {
-                courses: []
+                courses: [],
+                courseAdded_list: []
             },
             mounted: function() {
+                var staffID = 130001; // NEED TO CHANGE TO localStorage.getItem("StaffID")
                 var skillID = localStorage.getItem("SkillID");
-                axios.get('http://localhost:5001/StaffViewCourses/'+skillID)
-                    .then(response => {
-                        this.courses = response.data.data;
-                })
-                    .catch(error => alert(error));
-            },
+
+                axios.all([
+                    axios.get('http://localhost:5001/StaffViewCourses/'+skillID),
+                    axios.get('http://localhost:5001/StaffLearningJourneyButton/'+staffID)
+                ])
+                .then(axios.spread((response1, response2) => {
+                    this.courses = response1.data.data;
+                    this.courseAdded_list = response2.data.data;
+                }))
+                .catch(error => alert(error));
+            }, 
             methods:{
                 addToLearningJourney:function (event) {
                     var jobroleID = localStorage.getItem("JobroleID");
                     var skillID = localStorage.getItem("SkillID");
                     var courseID = event.target.id;
                     var staffID = 130001; /* HAVE TO CHANGE THIS LATER ON */
-                    console.log(jobroleID)
-                    console.log(skillID)
-                    console.log(courseID)
-                    console.log(staffID)
+
                     axios.post('http://localhost:5001/StaffLearningJourney', {
                             JobRole_ID: jobroleID,
                             Skill_ID: skillID,
@@ -105,15 +114,15 @@
                         })
                     .then(response => {
                         alert("Successfully added to Learning Journey");
+                        window.location.replace("./staffViewCourses.html");
                         return false;
                     })
                     .catch(error => { this.error = error.response.data.message });
                 }
+                
             }
         });
     </script>
     
 </body>
 </html>
-
-

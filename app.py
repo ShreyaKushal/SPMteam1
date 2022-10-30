@@ -208,6 +208,9 @@ class LearningJourney(db.Model):
     def json(self): 
         return { 'LearningJourney_ID' : self.LearningJourney_ID, 'Staff_ID' : self.Staff_ID, 'JobRole_ID' : self.JobRole_ID, 'Skill_ID' : self.Skill_ID, 'Course_ID' : self.Course_ID}
 
+    def getID(self):
+        return self.Course_ID
+    
     def to_dict(self):
         """
         'to_dict' converts the object into a dictionary,
@@ -294,22 +297,6 @@ def get_all_Courses():
         return jsonify({
             "message": "Course not found."
         }), 404
-
-# def JobRole_by_id(JobRole_ID):
-#     JobRole = JobRoles.query.filter_by(JobRole_ID=JobRole_ID).all()
-#     if JobRole:
-#         return jsonify({
-#             "data": [JobRoles.json() for JobRoles in JobRole]
-#         }), 200
-#     else:
-#         return jsonify({
-#             "message": "Job Role not found."
-#         }), 404
-
-
-# @app.route('/allcourses/<string:user_id>')
-# def get_all_courses(user_id):
-  #  relevant_course = 
 
 
 # trying to get learning journey by staff_id
@@ -452,6 +439,16 @@ def create_learningJourney():
             "message": "Unable to commit to database."
         }), 500
 
+@app.route("/StaffLearningJourneyButton/<string:staff_id>")
+def view_StaffAddedCourses(staff_id):
+    course_list = LearningJourney.query.filter(LearningJourney.Staff_ID==staff_id).all()
+    return jsonify(
+        {
+            "data":[course.getID()
+                    for course in course_list]
+            }
+        )
+
 @app.route("/addJobRoleWithSkills", methods=['POST'])
 def create_JobRoleWithSkills():
     data = request.get_json()
@@ -501,35 +498,6 @@ def create_skill():
             "message": "Incorrect JSON object provided."
         }), 500
 
-    # (1): Validate doctor
-    # Skill = Skills.query.filter_by(id=data['doctor_id']).first()
-    # if not doctor:
-    #     return jsonify({
-    #         "message": "Doctor not valid."
-    #     }), 500
-
-    # (2): Compute charges
-    # charge = doctor.calculate_charges(data['length'])
-
-    # # (3): Validate patient
-    # patient = Patient.query.filter_by(id=data['patient_id']).first()
-    # if not patient:
-    #     return jsonify({
-    #         "message": "Patient not valid."
-    #     }), 500
-
-    # # (4): Subtract charges from patient's e-wallet
-    # try:
-    #     patient.ewallet_withdraw(charge)
-    # except Exception:
-    #     return jsonify({
-    #         "message": "Patient does not have enough e-wallet funds."
-    #     }), 500
-    
-    # See if skill already exist 
-
-
-    # (4): Create consultation record
     Skill = Skills(
         Skill_ID=data['Skill_ID'], Skill_Name=data['Skill_Name'],
         Skill_Desc=data['Skill_Desc'], Skill_Status="Active"
@@ -568,17 +536,6 @@ def create_skillreqCourses():
             return jsonify({
                 "message": "Unable to commit to database."
             }), 500
-
-#@app.route("/JobRoles/<string:jobrole_id>", methods=['DELETE'])
-#def delete_jobRole(jobrole_id):
-#    jobrole_to_delete=JobRoles.query.get(jobrole_id)
-#    try:
-#        db.session.delete(jobrole_to_delete)
-#        db.session.commit()
-#        flash("Job role deleted susccessfully")
-#    except:
-#        flash("There was no such job role")
-    
 
 
 if __name__ == '__main__':

@@ -166,6 +166,7 @@
                         <th>Job Role ID</th>
                         <th>Job Role's Name</th>
                         <th>Job Role's Status</th>
+                        <th>Skills Required</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -174,6 +175,7 @@
                         <td><strong>{{ JobRole.JobRole_ID }}</strong></td>
                         <td>{{ JobRole.JobRole_Name }}</td>
                         <td>{{ JobRole.JobRole_Status }}</td>
+                        <td><skills-comp :id="JobRole.JobRole_ID"></skills-comp></td>
                         <td>
 							<a class="add" title="Add" data-toggle="tooltip"><i class="material-icons">&#xE03B;</i></a>
                             <a class="edit" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>
@@ -186,6 +188,21 @@
     </div>     
 
     <script>
+        Vue.component('skills-comp', {
+    props: ['id'],
+    template: '<ul><li v-for="skill in skills">{{skill.Skill_Name}}</li></ul>',
+    data: function () {
+        return {
+            skills: []
+        };
+    },
+    created: function () {
+        axios.get('http://localhost:5001/StaffViewJobRoles/' + this.id)
+            .then(response => {
+                this.skills = response.data.data;
+            });
+    },
+});
 
         const vm = new Vue({
             el: '#JobRolesTable',
