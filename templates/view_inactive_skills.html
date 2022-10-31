@@ -152,24 +152,29 @@
         <div class="table-wrapper">
             <div class="table-title">
                 <div class="row">
-                    <div class="col-sm-8"><h2>Manage <b>Skills</b></h2></div>
+                    <div class="col-sm-8"><h2>Manage <b>Roles</b></h2></div>
                     <div class="col-sm-4" >
                         <!--<button type="button" class="btn btn-info add-new"><i class="fa fa-plus"></i> Add Skill</button>-->
-                        <a  href="addskills_new.html" role="button" class="btn btn-info add-new"><i class="fa fa-plus"></i>Add Skills</a>
+                        <a  href="addskills_new.html" role="button" class="btn btn-info add-new"><i class="fa fa-plus"></i>Add Roles</a>
+
+                    </div>
+                </div>
+
+                <br>
+                
+                <div class="row">
+                    <div class="col-sm-12">
+                        <ul class="nav nav-pills nav-justified">
+                            <li class="nav-item">
+                                <a class="nav-link" href="skills.html">Active Skills</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link active" aria-current="page">Inactive Skills</a>
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-sm-12">
-                    <ul class="nav nav-pills nav-justified">
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page">Active Skills</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="view_inactive_skills.html">Inactive Skills</a>
-                        </li>
-                    </ul>
-                </div>
             <table id ="SkillsTable" class="table table-bordered">
                 <thead>
                     <tr>
@@ -181,7 +186,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="Skill in ActiveSkills" v-bind:key="Skill.Skill_ID">
+                    <tr v-for="Skill in InactiveSkills" v-bind:key="Skill.Skill_ID">
                         <td><strong>{{ Skill.Skill_ID }}</strong></td>
                         <td>{{ Skill.Skill_Name }}</td>
                         <td>{{ Skill.Skill_Desc }}</td>
@@ -189,44 +194,46 @@
                         <td>
 							<a class="add" title="Add" data-toggle="tooltip"><i class="material-icons">&#xE03B;</i></a>
                             <a class="edit" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>
-                            <a class="delete" title="Delete" data-toggle="tooltip" @click="softDelete" v-bind:id="Skill.Skill_ID" v-bind:name="Skill.Skill_Name"><i class="material-icons">&#xE872;</i></a>
                         </td>
                     </tr>
-                     
                 </tbody>
             </table>
         </div>
     </div>     
+
     <script>
+        Vue.component('skills-comp', {
+    props: ['id'],
+    template: '<ul><li v-for="skill in skills">{{skill.Skill_Name}}</li></ul>',
+    data: function () {
+        return {
+            Courses: []
+        };
+    },
+    created: function () {
+        axios.get('http://localhost:5001/StaffViewJobRoles/' + this.id)
+            .then(response => {
+                this.skills = response.data.data;
+            });
+    },
+});
 
         const vm = new Vue({
             el: '#SkillsTable',
             data: {
                 id: "",
-                ActiveSkills: []
-            },
-            methods: {
-                softDelete: function(event) {
-                    var id = event.target.id;
-                    axios.post('http://localhost:5001/Skills/' + id)
-                .then(response => {
-                    var skill_name = event.target.name;
-                    alert(skill_name + " has successfully deleted")
-                    window.location.replace("./skills.html");
-                    return false;
-                })
-                .catch(error => { error => alert(error) });
-                }
+                InactiveSkills: []
             },
             mounted: function() {
-                axios.get('http://localhost:5001/ActiveSkills')
-                    .then(response => {
-                        this.ActiveSkills = response.data.data;
-                    })
-                    .catch(error => alert(error));
+                axios.get('http://localhost:5001/InactiveSkills')
+                .then(response => {
+                    this.InactiveSkills = response.data.data;
+                })
+                .catch(error => alert(error));
             }
         });
     </script>
+
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj" crossorigin="anonymous"></script>      
   

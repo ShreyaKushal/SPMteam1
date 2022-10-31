@@ -256,6 +256,26 @@ def get_all_InactiveJobRoles():
         "data": [JobRoles.json() for JobRoles in JobRole]
     }), 200
 
+
+@app.route("/ActiveSkills")
+def get_all_ActiveSkills():
+    Skill = Skills.query.filter_by(Skill_Status = 'Active').all()
+    if len(Skill):
+        return jsonify({
+            "data": [Skills.json() for Skills in Skill]
+        }), 200
+    else:
+        return jsonify({
+            "message": "Skill not found."
+        }), 404
+
+@app.route("/InactiveSkills")
+def get_all_InactiveSkills():
+    Skill = Skills.query.filter_by(Skill_Status = 'Inactive').all()
+    return jsonify({
+        "data": [Skills.json() for Skills in Skill]
+    }), 200
+
 # Add a Job Role
 @app.route("/addJobRole", methods=['POST'])
 def create_JobRole():
@@ -293,17 +313,17 @@ def get_all_LearningJourneys():
             "message": "Learning Journey not found."
         }), 404
 
-@app.route("/Skills")
-def get_all_Skills():
-    Skill = Skills.query.all()
-    if len(Skill):
-        return jsonify({
-            "data": [Skills.json() for Skills in Skill]
-        }), 200
-    else:
-        return jsonify({
-            "message": "Skill not found."
-        }), 404
+# @app.route("/Skills")
+# def get_all_Skills():
+#     Skill = Skills.query.all()
+#     if len(Skill):
+#         return jsonify({
+#             "data": [Skills.json() for Skills in Skill]
+#         }), 200
+#     else:
+#         return jsonify({
+#             "message": "Skill not found."
+#         }), 404
 
 @app.route("/Courses")
 def get_all_Courses():
@@ -332,6 +352,22 @@ def update_jobrole(JobRole_ID):
         {
             "data": [jobrole.to_dict()
                     for jobrole in jobrole_list]
+        }
+    ), 200
+
+@app.route("/Skills/<string:Skill_ID>", methods=['GET', 'POST'])
+def update_skill(Skill_ID):
+    skill = Skills.query.filter_by(Skill_ID = Skill_ID).first()
+    
+    setattr(skill, 'Skill_Status', "Inactive")
+    db.session.commit()
+
+    skill_list = Skills.query.all()
+
+    return jsonify(
+        {
+            "data": [skill.to_dict()
+                    for skill in skill_list]
         }
     ), 200
 
