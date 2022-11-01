@@ -192,9 +192,7 @@
                         <td>{{ JobRole.JobRole_Status }}</td>
                         <td><skills-comp :id="JobRole.JobRole_ID"></skills-comp></td>
                         <td>
-							<a class="add" title="Add" data-toggle="tooltip"><i class="material-icons">&#xE03B;</i></a>
-                            <a class="edit" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>
-                            <i class="material-icons"><a class="delete" title="Delete" data-toggle="tooltip" @click="softDelete" v-bind:id="JobRole.JobRole_ID">&#xE872;</a></i>
+                            <button>Re-Activate</button>
                         </td>
                     </tr>
                 </tbody>

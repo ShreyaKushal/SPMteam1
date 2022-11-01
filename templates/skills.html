@@ -170,12 +170,13 @@
                         </li>
                     </ul>
                 </div>
-            <table id ="SkillsTable" class="table table-bordered">
+            <table style="width:100%" id ="SkillsTable" class="table table-bordered">           
                 <thead>
                     <tr>
-                        <th>Skill ID</th>
-                        <th>Skill Name</th>
-                        <th>Skill Description</th>
+                        <th style="width:9%">Skill ID</th>
+                        <th style="width:18%">Skill Name</th>
+                        <th style="width:18%">Skill Description</th>
+                        <th style="width:27%">Courses assigned:</th>
                         <th>Skill Status</th>
                         <th>Actions</th>
                     </tr>
@@ -185,6 +186,7 @@
                         <td><strong>{{ Skill.Skill_ID }}</strong></td>
                         <td>{{ Skill.Skill_Name }}</td>
                         <td>{{ Skill.Skill_Desc }}</td>
+                        <td><courses-comp :id="Skill.Skill_ID"></courses-comp></td>
                         <td>{{ Skill.Skill_Status }}</td>
                         <td>
 							<a class="add" title="Add" data-toggle="tooltip"><i class="material-icons">&#xE03B;</i></a>
@@ -198,6 +200,21 @@
         </div>
     </div>     
     <script>
+    Vue.component('courses-comp', {
+    props: ['id'],
+    template: '<ul><li v-for="course in courses">{{course.Course_Name}}</li></ul>',
+    data: function () {
+        return {
+            courses: []
+        };
+    },
+    created: function () {
+        axios.get('http://localhost:5001/StaffViewCourses/' + this.id)
+            .then(response => {
+                this.courses = response.data.data;
+            });
+    },
+    });
 
         const vm = new Vue({
             el: '#SkillsTable',
