@@ -295,7 +295,7 @@ def create_JobRole():
     try:
         db.session.add(JobRole)
         db.session.commit()
-        return jsonify(JobRole.to_dict()), 201
+        return jsonify({"data": JobRole.to_dict()}), 201
     except Exception:
         return jsonify({
             "message": "Unable to commit to database."
@@ -313,17 +313,17 @@ def get_all_LearningJourneys():
             "message": "Learning Journey not found."
         }), 404
 
-# @app.route("/Skills")
-# def get_all_Skills():
-#     Skill = Skills.query.all()
-#     if len(Skill):
-#         return jsonify({
-#             "data": [Skills.json() for Skills in Skill]
-#         }), 200
-#     else:
-#         return jsonify({
-#             "message": "Skill not found."
-#         }), 404
+@app.route("/Skills")
+def get_all_Skills():
+    Skill = Skills.query.all()
+    if len(Skill):
+        return jsonify({
+            "data": [Skills.json() for Skills in Skill]
+        }), 200
+    else:
+        return jsonify({
+            "message": "Skill not found."
+        }), 404
 
 @app.route("/Courses")
 def get_all_Courses():
