@@ -193,7 +193,8 @@
                         <td><skills-comp :id="JobRole.JobRole_ID"></skills-comp></td>
                         <td>
 							<a class="add" title="Add" data-toggle="tooltip"><i class="material-icons">&#xE03B;</i></a>
-                            <a class="edit" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>
+                            <!-- <i class="material-icons"><a class="edit" title="Edit" data-toggle="tooltip"href="UpdateJobRole.html" @click="getID" v-bind:id="JobRole.JobRole_ID">&#xE254;</a></i> -->
+                            <i class="material-icons"><a class="edit" title="Edit" data-toggle="tooltip" @click="getID" href ="UpdateJobRole.html"  v-bind:id="JobRole.JobRole_ID">&#xE254;</a></i>
                             <i class="material-icons"><a class="delete" title="Delete" data-toggle="tooltip" @click="softDelete" v-bind:id="JobRole.JobRole_ID" v-bind:name="JobRole.JobRole_Name">&#xE872;</a></i>
                         </td>
                     </tr>
@@ -237,6 +238,11 @@
                     return false;
                 })
                 .catch(error => { error => alert(error) });
+                },
+                getID:function (event) {
+                    var id_1 = event.target.id;
+                    console.log(id);
+                    localStorage.setItem("JobRole_ID",id_1)
                 }
             },
             mounted: function() {
