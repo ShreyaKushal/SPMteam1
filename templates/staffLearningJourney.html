@@ -123,9 +123,12 @@
         <div class="table-wrapper" v-for="LearningJourneyBasedOnJobRole in uniqueJobRoleIDList" v-bind:key="LearningJourneyBasedOnJobRole">
             <div class="table-title">
                 <div class="row">
-                    <div class="col-sm-8"><h5>Role: <b><jobrolename-comp :id="LearningJourneyBasedOnJobRole"></jobrolename-comp></b></h5></div>
-                    <div class="col-sm-4" >
-                        <a  href="#" role="button" class="btn btn-info add-new"><i class="fa fa-plus"></i>Add More Courses</a>
+                    <div class="col-sm-6">
+                        <h5>Role: <b><jobrolename-comp :id="LearningJourneyBasedOnJobRole"></jobrolename-comp></b></h5>
+                    </div>
+                    <div class="col-sm-6" >
+                        <a @click="addMoreCourseToLearningJourney" :id="LearningJourneyBasedOnJobRole" role="button" class="btn btn-outline-info add-new"><i class="fa fa-plus"></i>Add More Courses</a>
+                        <a @click="deleteLearningJourney" :id="LearningJourneyBasedOnJobRole" role="button" class="btn btn-outline-danger add-new"><i class="fa fa-plus"></i>Delete Learning Journey</a>
                     </div>
                 </div>
                 <br>
@@ -245,19 +248,24 @@
                 uniqueJobRoleIDList: []
             },
             methods: {
-                /*
-                getlearningJouney() {
+                deleteLearningJourney: function(event){
                     var staffID = 130001; // NEED TO CHANGE TO localStorage.getItem("StaffID")
-                    for (let i = 0; i < this.uniqueJobRoleList.length; i++) {
+                    var jobroleID = event.target.id;
 
-                    }
-                    axios.get('http://localhost:5001/StaffLearningJourney/'+staffID+'/'+jobrole_id)
-                        .then(response => {
-                            this.jobroles = response.data.data;
-                        })
-                        .catch(error => alert(error));
+                    axios.delete('http://localhost:5001/StaffDeleteLearningJourney/'+staffID+ '/' +jobroleID)
+                    .then(response => {
+                        alert("Successfully delete from Learning Journey");
+                        window.location.replace("./staffLearningJourney.html");
+                        return false;
+                    })
+                    .catch(error => { this.error = error.response.data.message });
+                },
+                addMoreCourseToLearningJourney: function(event){
+                    var jobroleID = event.target.id;
+
+                    localStorage.setItem("JobroleID", jobroleID)
+                    window.location.replace("./staffViewSkills.html");
                 }
-                */
             },
             mounted: function() {
                 var staffID = 130001; // NEED TO CHANGE TO localStorage.getItem("StaffID")
