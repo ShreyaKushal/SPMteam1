@@ -159,24 +159,39 @@
                     </div>
                 </div>
             </div>
-            <table id ="SkillsTable" class="table table-bordered">
+            <div class="row">
+                <div class="col-sm-12">
+                    <ul class="nav nav-pills nav-justified">
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page">Active Skills</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="view_inactive_skills.html">Inactive Skills</a>
+                        </li>
+                    </ul>
+                </div>
+            <table style="width:100%" id ="SkillsTable" class="table table-bordered">           
                 <thead>
                     <tr>
-                        <th>Skill ID</th>
-                        <th>Skill Name</th>
-                        <th>Skill Description</th>
+                        <th style="width:9%">Skill ID</th>
+                        <th style="width:18%">Skill Name</th>
+                        <th style="width:18%">Skill Description</th>
+                        <th style="width:27%">Courses assigned:</th>
+                        <th>Skill Status</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="Skill in Skills">
-                        <td>{{ Skill.Skill_ID }}</td>
+                    <tr v-for="Skill in ActiveSkills" v-bind:key="Skill.Skill_ID">
+                        <td><strong>{{ Skill.Skill_ID }}</strong></td>
                         <td>{{ Skill.Skill_Name }}</td>
                         <td>{{ Skill.Skill_Desc }}</td>
+                        <td><courses-comp :id="Skill.Skill_ID"></courses-comp></td>
+                        <td>{{ Skill.Skill_Status }}</td>
                         <td>
 							<a class="add" title="Add" data-toggle="tooltip"><i class="material-icons">&#xE03B;</i></a>
                             <a class="edit" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>
-                            <a class="delete" title="Delete" data-toggle="tooltip"><i class="material-icons">&#xE872;</i></a>
+                            <i class="material-icons"><a class="delete" title="Delete" data-toggle="tooltip" @click="softDelete" v-bind:id="Skill.Skill_ID" v-bind:name="Skill.Skill_Name">&#xE872;</a></i>
                         </td>
                     </tr>
                      
@@ -185,16 +200,45 @@
         </div>
     </div>     
     <script>
+    Vue.component('courses-comp', {
+    props: ['id'],
+    template: '<ul><li v-for="course in courses">{{course.Course_Name}}</li></ul>',
+    data: function () {
+        return {
+            courses: []
+        };
+    },
+    created: function () {
+        axios.get('http://localhost:5001/StaffViewCourses/' + this.id)
+            .then(response => {
+                this.courses = response.data.data;
+            });
+    },
+    });
 
         const vm = new Vue({
             el: '#SkillsTable',
             data: {
-                Skills: []
+                id: "",
+                ActiveSkills: []
+            },
+            methods: {
+                softDelete: function(event) {
+                    var id = event.target.id;
+                    axios.post('http://localhost:5001/Skills/' + id)
+                .then(response => {
+                    var skill_name = event.target.name;
+                    alert(skill_name + " has successfully deleted")
+                    window.location.replace("./skills.html");
+                    return false;
+                })
+                .catch(error => { error => alert(error) });
+                }
             },
             mounted: function() {
-                axios.get('http://localhost:5001/Skills')
+                axios.get('http://localhost:5001/ActiveSkills')
                     .then(response => {
-                        this.Skills = response.data.data;
+                        this.ActiveSkills = response.data.data;
                     })
                     .catch(error => alert(error));
             }

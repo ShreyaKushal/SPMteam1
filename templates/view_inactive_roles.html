@@ -166,10 +166,10 @@
                     <div class="col-sm-12">
                         <ul class="nav nav-pills nav-justified">
                             <li class="nav-item">
-                                <a class="nav-link active" aria-current="page">Active Job Roles</a>
+                                <a class="nav-link" href="view_roles.html">Active Job Roles</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="view_inactive_roles.html">Inactive Job Roles</a>
+                                <a class="nav-link active" aria-current="page">Inactive Job Roles</a>
                             </li>
                         </ul>
                     </div>
@@ -186,16 +186,13 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="JobRole in ActiveJobRoles" v-bind:key="JobRole.JobRole_ID">
+                    <tr v-for="JobRole in InactiveJobRoles" v-bind:key="JobRole.JobRole_ID">
                         <td><strong>{{ JobRole.JobRole_ID }}</strong></td>
                         <td>{{ JobRole.JobRole_Name }}</td>
                         <td>{{ JobRole.JobRole_Status }}</td>
                         <td><skills-comp :id="JobRole.JobRole_ID"></skills-comp></td>
                         <td>
-							<a class="add" title="Add" data-toggle="tooltip"><i class="material-icons">&#xE03B;</i></a>
-                            <!-- <i class="material-icons"><a class="edit" title="Edit" data-toggle="tooltip"href="UpdateJobRole.html" @click="getID" v-bind:id="JobRole.JobRole_ID">&#xE254;</a></i> -->
-                            <i class="material-icons"><a class="edit" title="Edit" data-toggle="tooltip" @click="getID" href ="UpdateJobRole.html"  v-bind:id="JobRole.JobRole_ID">&#xE254;</a></i>
-                            <i class="material-icons"><a class="delete" title="Delete" data-toggle="tooltip" @click="softDelete" v-bind:id="JobRole.JobRole_ID" v-bind:name="JobRole.JobRole_Name">&#xE872;</a></i>
+                            <button>Re-Activate</button>
                         </td>
                     </tr>
                 </tbody>
@@ -224,31 +221,23 @@
             el: '#JobRolesTable',
             data: {
                 id: "",
-                ActiveJobRoles: []
+                InactiveJobRoles: []
             },
             methods: {
                 softDelete: function(event) {
                     var id = event.target.id;
                     axios.post('http://localhost:5001/JobRoles/' + id)
                 .then(response => {
-                    var role_name = event.target.name;
-                    console.log(role_name)
-                    alert(role_name + " has successfully deleted")
-                    window.location.replace("./view_roles.html");
-                    return false;
-                })
+                        window.location.replace("./view_roles.html");
+                        return false;
+                    })
                 .catch(error => { error => alert(error) });
-                },
-                getID:function (event) {
-                    var id_1 = event.target.id;
-                    console.log(id);
-                    localStorage.setItem("JobRole_ID",id_1)
                 }
             },
             mounted: function() {
-                axios.get('http://localhost:5001/ActiveJobRoles')
+                axios.get('http://localhost:5001/InactiveJobRoles')
                 .then(response => {
-                    this.ActiveJobRoles = response.data.data;
+                    this.InactiveJobRoles = response.data.data;
                 })
                 .catch(error => alert(error));
             }

@@ -43,7 +43,7 @@
                                 <td>{{ course.Course_Category }}</td>
                                 <td class="col text-center">
                                     <template v-if="courseAdded_list.includes(course.Course_ID)">
-                                        <button type="button" class="btn btn-outline-danger" @click="" v-bind:id="course.Course_ID">Remove from Learning Journey</button>
+                                        <button type="button" class="btn btn-outline-danger" @click="removeFromLearningJourney" v-bind:id="course.Course_ID">Remove from Learning Journey</button>
                                     </template>
                                     <template v-else>
                                         <button type="button" class="btn btn-outline-success" @click="addToLearningJourney" v-bind:id="course.Course_ID">Add to Learning Journey</button>
@@ -114,6 +114,18 @@
                         })
                     .then(response => {
                         alert("Successfully added to Learning Journey");
+                        window.location.replace("./staffViewCourses.html");
+                        return false;
+                    })
+                    .catch(error => { this.error = error.response.data.message });
+                },
+                removeFromLearningJourney: function(event){
+                    var staffID = 130001; // NEED TO CHANGE TO localStorage.getItem("StaffID")
+                    var courseID = event.target.id;
+
+                    axios.delete('http://localhost:5001/StaffLearningJourney/'+staffID+ '/' +courseID)
+                    .then(response => {
+                        alert("Successfully removed from Learning Journey");
                         window.location.replace("./staffViewCourses.html");
                         return false;
                     })

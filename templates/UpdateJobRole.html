@@ -162,6 +162,13 @@
                 }
             },
         mounted: function() {
+            var JobRole_ID = localStorage.getItem("JobRole_ID");
+            console.log(JobRole_ID)
+                axios.get('http://localhost:5001/GetJobRoles/'+JobRole_ID)
+                    .then(response => {
+                        this.skills = response.data.data;
+                })
+                .catch(error => alert(error));
             axios.get('http://localhost:5001/Skills')
                 .then(response => {
                     this.Skills = response.data.data;

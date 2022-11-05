@@ -131,10 +131,10 @@
                 <a class="nav-link" aria-current="page" href="homepage.html">Home</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link " href="skills.html">Skills</a>
+                <a class="nav-link active" href="skills.html">Skills</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link active" href="view_roles.html">Roles</a>
+                <a class="nav-link" href="view_roles.html">Roles</a>
               </li>
             </ul>
             <!--Have just left this here in case we do implement, if not remove!-->
@@ -155,7 +155,7 @@
                     <div class="col-sm-8"><h2>Manage <b>Roles</b></h2></div>
                     <div class="col-sm-4" >
                         <!--<button type="button" class="btn btn-info add-new"><i class="fa fa-plus"></i> Add Skill</button>-->
-                        <a  href="addJobRole.html" role="button" class="btn btn-info add-new"><i class="fa fa-plus"></i>Add Roles</a>
+                        <a  href="addskills_new.html" role="button" class="btn btn-info add-new"><i class="fa fa-plus"></i>Add Roles</a>
 
                     </div>
                 </div>
@@ -166,36 +166,35 @@
                     <div class="col-sm-12">
                         <ul class="nav nav-pills nav-justified">
                             <li class="nav-item">
-                                <a class="nav-link active" aria-current="page">Active Job Roles</a>
+                                <a class="nav-link" href="skills.html">Active Skills</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="view_inactive_roles.html">Inactive Job Roles</a>
+                                <a class="nav-link active" aria-current="page">Inactive Skills</a>
                             </li>
                         </ul>
                     </div>
                 </div>
             </div>
-            <table id ="JobRolesTable" class="table table-bordered">
+            <table style="width:100%" id ="SkillsTable" class="table table-bordered">
                 <thead>
                     <tr>
-                        <th>Job Role ID</th>
-                        <th>Job Role's Name</th>
-                        <th>Job Role's Status</th>
-                        <th>Skills Required</th>
+                        <th style="width:9%">Skill ID</th>
+                        <th style="width:18%">Skill Name</th>
+                        <th style="width:18%">Skill Description</th>
+                        <th style="width:27%">Courses assigned:</th>
+                        <th>Skill Status</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="JobRole in ActiveJobRoles" v-bind:key="JobRole.JobRole_ID">
-                        <td><strong>{{ JobRole.JobRole_ID }}</strong></td>
-                        <td>{{ JobRole.JobRole_Name }}</td>
-                        <td>{{ JobRole.JobRole_Status }}</td>
-                        <td><skills-comp :id="JobRole.JobRole_ID"></skills-comp></td>
+                    <tr v-for="Skill in InactiveSkills" v-bind:key="Skill.Skill_ID">
+                        <td><strong>{{ Skill.Skill_ID }}</strong></td>
+                        <td>{{ Skill.Skill_Name }}</td>
+                        <td>{{ Skill.Skill_Desc }}</td>
+                        <td><courses-comp :id="Skill.Skill_ID"></courses-comp></td>
+                        <td>{{ Skill.Skill_Status }}</td>
                         <td>
-							<a class="add" title="Add" data-toggle="tooltip"><i class="material-icons">&#xE03B;</i></a>
-                            <!-- <i class="material-icons"><a class="edit" title="Edit" data-toggle="tooltip"href="UpdateJobRole.html" @click="getID" v-bind:id="JobRole.JobRole_ID">&#xE254;</a></i> -->
-                            <i class="material-icons"><a class="edit" title="Edit" data-toggle="tooltip" @click="getID" href ="UpdateJobRole.html"  v-bind:id="JobRole.JobRole_ID">&#xE254;</a></i>
-                            <i class="material-icons"><a class="delete" title="Delete" data-toggle="tooltip" @click="softDelete" v-bind:id="JobRole.JobRole_ID" v-bind:name="JobRole.JobRole_Name">&#xE872;</a></i>
+							<button>Re-Activate</button>
                         </td>
                     </tr>
                 </tbody>
@@ -204,51 +203,32 @@
     </div>     
 
     <script>
-        Vue.component('skills-comp', {
+    Vue.component('courses-comp', {
     props: ['id'],
-    template: '<ul><li v-for="skill in skills">{{skill.Skill_Name}}</li></ul>',
+    template: '<ul><li v-for="course in courses">{{course.Course_Name}}</li></ul>',
     data: function () {
         return {
-            skills: []
+            courses: []
         };
     },
     created: function () {
-        axios.get('http://localhost:5001/StaffViewJobRoles/' + this.id)
+        axios.get('http://localhost:5001/StaffViewCourses/' + this.id)
             .then(response => {
-                this.skills = response.data.data;
+                this.courses = response.data.data;
             });
     },
-});
+    });
 
         const vm = new Vue({
-            el: '#JobRolesTable',
+            el: '#SkillsTable',
             data: {
                 id: "",
-                ActiveJobRoles: []
-            },
-            methods: {
-                softDelete: function(event) {
-                    var id = event.target.id;
-                    axios.post('http://localhost:5001/JobRoles/' + id)
-                .then(response => {
-                    var role_name = event.target.name;
-                    console.log(role_name)
-                    alert(role_name + " has successfully deleted")
-                    window.location.replace("./view_roles.html");
-                    return false;
-                })
-                .catch(error => { error => alert(error) });
-                },
-                getID:function (event) {
-                    var id_1 = event.target.id;
-                    console.log(id);
-                    localStorage.setItem("JobRole_ID",id_1)
-                }
+                InactiveSkills: []
             },
             mounted: function() {
-                axios.get('http://localhost:5001/ActiveJobRoles')
+                axios.get('http://localhost:5001/InactiveSkills')
                 .then(response => {
-                    this.ActiveJobRoles = response.data.data;
+                    this.InactiveSkills = response.data.data;
                 })
                 .catch(error => alert(error));
             }
