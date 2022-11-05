@@ -690,7 +690,7 @@ def delete_JobRoleWithSkills(jobrole_id):
             "data": {
                 "JobRole_ID": jobrole_id
             },
-            "message": "Learning Journey not found."
+            "message": "JobRole not found."
         }
     ), 404
 
