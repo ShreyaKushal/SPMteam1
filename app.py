@@ -1,5 +1,4 @@
-# from curses import flash
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS, cross_origin
 
@@ -29,6 +28,9 @@ class JobRoles(db.Model):
 
     def json(self): #returns json representation of the job role
         return {"JobRole_ID": self.JobRole_ID, "JobRole_Name": self.JobRole_Name, "JobRole_Status":self.JobRole_Status}
+    
+    def getName(self):
+        return {"JobRole_Name":self.JobRole_Name}
 
     def to_dict(self):
         """
@@ -61,6 +63,9 @@ class Skills(db.Model):
 
     def json(self): #returns json representation of the job role
         return {"Skill_ID": self.Skill_ID, "Skill_Name": self.Skill_Name, "Skill_Desc": self.Skill_Desc, "Skill_Status": self.Skill_Status}
+    
+    def getName(self):
+        return {"Skill_Name":self.Skill_Name}
     
     def to_dict(self):
         """
@@ -96,6 +101,9 @@ class Courses(db.Model):
     def json(self): 
         return { 'Course_ID' : self.Course_ID, 'Course_Name' : self.Course_Name, 'Course_Desc' : self.Course_Desc, 'Course_Status' : self.Course_Status, 'Course_Type' : self.Course_Type, 'Course_Category' : self.Course_Category}
 
+    def getName(self):
+        return {"Course_Name":self.Course_Name}
+    
     def to_dict(self):
         """
         'to_dict' converts the object into a dictionary,
@@ -156,6 +164,9 @@ class JobRoleWithSkills(db.Model):
     def json(self): 
         return {'JobRoleWithSkills_ID' : self.JobRoleWithSkills_ID, 'JobRole_ID' : self.JobRole_ID, 'Skill_ID' : self.Skill_ID}
     
+    def getSkillID(self):
+        return self.Skill_ID
+    
     def to_dict(self):
         """
         'to_dict' converts the object into a dictionary,
@@ -208,8 +219,11 @@ class LearningJourney(db.Model):
     def json(self): 
         return { 'LearningJourney_ID' : self.LearningJourney_ID, 'Staff_ID' : self.Staff_ID, 'JobRole_ID' : self.JobRole_ID, 'Skill_ID' : self.Skill_ID, 'Course_ID' : self.Course_ID}
 
-    def getID(self):
+    def getCourseID(self):
         return self.Course_ID
+
+    def getJobRoleID(self):
+        return self.JobRole_ID
     
     def to_dict(self):
         """
@@ -223,20 +237,8 @@ class LearningJourney(db.Model):
         return result
 
 db.create_all()
-"""
-@app.route("/JobRoles")
-def get_all_JobRoles():
-    JobRole = JobRoles.query.all()
-    if len(JobRole):
-        return jsonify({
-            "data": [JobRoles.json() for JobRoles in JobRole]
-        }), 200
-    else:
-        return jsonify({
-            "message": "Job Role not found."
-        }), 404
-"""
 
+# Retrieve all active jobroles
 @app.route("/ActiveJobRoles")
 def get_all_ActiveJobRoles():
     JobRole = JobRoles.query.filter_by(JobRole_Status = 'Active').all()
@@ -249,6 +251,7 @@ def get_all_ActiveJobRoles():
             "message": "Job Role not found."
         }), 404
 
+# Retrieve all inactive jobroles
 @app.route("/InactiveJobRoles")
 def get_all_InactiveJobRoles():
     JobRole = JobRoles.query.filter_by(JobRole_Status = 'Inactive').all()
@@ -256,7 +259,7 @@ def get_all_InactiveJobRoles():
         "data": [JobRoles.json() for JobRoles in JobRole]
     }), 200
 
-
+# Retrieve all active skills
 @app.route("/ActiveSkills")
 def get_all_ActiveSkills():
     Skill = Skills.query.filter_by(Skill_Status = 'Active').all()
@@ -269,6 +272,7 @@ def get_all_ActiveSkills():
             "message": "Skill not found."
         }), 404
 
+# Retrieve all inactive skills
 @app.route("/InactiveSkills")
 def get_all_InactiveSkills():
     Skill = Skills.query.filter_by(Skill_Status = 'Inactive').all()
@@ -276,7 +280,7 @@ def get_all_InactiveSkills():
         "data": [Skills.json() for Skills in Skill]
     }), 200
 
-# Add a Job Role
+# Create a Job Role
 @app.route("/addJobRole", methods=['POST'])
 def create_JobRole():
     data = request.get_json()
@@ -301,31 +305,7 @@ def create_JobRole():
             "message": "Unable to commit to database."
         }), 500
 
-@app.route("/LearningJourneys")
-def get_all_LearningJourneys():
-    LearningJourneys = LearningJourney.query.all()
-    if len(LearningJourneys):
-        return jsonify({
-            "data": [LearningJourney.json() for LearningJourney in LearningJourneys]
-        }), 200
-    else:
-        return jsonify({
-            "message": "Learning Journey not found."
-        }), 404
-
-
-@app.route("/Skills")
-def get_all_Skills():
-    Skill = Skills.query.all()
-    if len(Skill):
-        return jsonify({
-            "data": [Skills.json() for Skills in Skill]
-        }), 200
-    else:
-        return jsonify({
-            "message": "Skill not found."
-        }), 404
-
+# Retrieve all courses
 @app.route("/Courses")
 def get_all_Courses():
     Course = Courses.query.all()
@@ -338,35 +318,54 @@ def get_all_Courses():
             "message": "Course not found."
         }), 404
 
-
-# trying to get learning journey by staff_id
-@app.route('/<int:Staff_ID>')
-def staffLearningJourney(Staff_ID):
-    StaffLearningJourneys = LearningJourney.query.filter_by(Staff_ID=Staff_ID).all()
-    staffmembername = Staff.query.filter_by(Staff_ID=Staff_ID).first().Staff_Fname	
-    if len(StaffLearningJourneys):
-        alllearningjourneys = []
-        for s in StaffLearningJourneys: 
-            specificJobRole = JobRoles.query.filter_by(JobRole_ID = s.JobRole_ID).first()
-            x = {
-                'LearningJourney_ID' : s.LearningJourney_ID, 
-                'JobRole_Name' : specificJobRole.JobRole_Name
-            }
-            alllearningjourneys.append(x)
-        # return alllearningjourneys
-        return render_template('staffhomepage.html', learningjourneys = alllearningjourneys, name = staffmembername)
+# Retrieve jobrole details based on Jobrole_ID
+@app.route("/JobRolesDetails/<string:jobrole_id>")
+def get_JobRoleDetails(jobrole_id):
+    jobrole = JobRoles.query.filter_by(JobRole_ID=jobrole_id).first()
+    if jobrole:
+        return jsonify({
+            "data": jobrole.json()
+        }), 200
     else:
-        return 'No Learning Journeys have been found for this staff ID.'
+        return jsonify({
+            "message": "JobRole not found."
+        }), 404
 
- 
+# Retrieve list of skill_ID assign on that Jobrole (Jobole_ID)
+@app.route("/SkillsOnJobRole/<string:jobrole_id>")
+def get_SkillsOnJobRole(jobrole_id):
+    skill_list = JobRoleWithSkills.query.filter_by(JobRole_ID=jobrole_id).all()
+    return jsonify(
+        {
+            "data": [skill.getSkillID() 
+                for skill in skill_list]
+        }
+    ), 200
+
+# Update jobrole based on JobRole_ID
+@app.route("/JobRolesDetails/<string:JobRole_ID>/<string:new_JobRole_ID>/<string:new_JobRole_Name>", methods=['GET', 'POST'])
+def update_jobroleDetails(JobRole_ID, new_JobRole_ID, new_JobRole_Name):
+
+    jobrole = JobRoles.query.filter_by(JobRole_ID = JobRole_ID).first()
     
-# viewing specific learning journey
+    setattr(jobrole, 'JobRole_ID', new_JobRole_ID)
+    setattr(jobrole, 'JobRole_Name', new_JobRole_Name)
 
-@ app.route('/<int:LearningJourney_ID>')
-def specificLearningJourney(LearningJourney_ID):
-    pass
+    try:
+        db.session.commit()
+        jobrole_list = JobRoles.query.all()
+        return jsonify(
+            {
+                "data": [jobrole.to_dict()
+                        for jobrole in jobrole_list]
+            }
+        ), 200
+    except Exception:
+        return jsonify({
+            "message": "Unable to commit to database."
+        }), 500
 
-
+# Soft delete jobrole based on JobRole_ID
 @app.route("/JobRoles/<string:JobRole_ID>", methods=['GET', 'POST'])
 def update_jobrole(JobRole_ID):
     jobrole = JobRoles.query.filter_by(JobRole_ID = JobRole_ID).first()
@@ -383,6 +382,24 @@ def update_jobrole(JobRole_ID):
         }
     ), 200
 
+# Re-activate jobrole based on JobRole_ID
+@app.route("/ReactivateJobRoles/<string:JobRole_ID>", methods=['GET', 'POST'])
+def reactivate_jobrole(JobRole_ID):
+    jobrole = JobRoles.query.filter_by(JobRole_ID = JobRole_ID).first()
+    
+    setattr(jobrole, 'JobRole_Status', "Active")
+    db.session.commit()
+
+    jobrole_list = JobRoles.query.all()
+
+    return jsonify(
+        {
+            "data": [jobrole.to_dict()
+                    for jobrole in jobrole_list]
+        }
+    ), 200
+
+# Soft delete skill based on Skill_ID
 @app.route("/Skills/<string:Skill_ID>", methods=['GET', 'POST'])
 def update_skill(Skill_ID):
     skill = Skills.query.filter_by(Skill_ID = Skill_ID).first()
@@ -399,17 +416,38 @@ def update_skill(Skill_ID):
         }
     ), 200
 
-@app.route("/StaffViewJobRoles")
-def jobroles():
-    jobrole_list = JobRoles.query.filter_by(JobRole_Status = "Active").all()
+# Retrieve jobrole_Name based on jobrole_ID
+@app.route("/StaffViewJobRoles/<string:jobrole_id>")
+def get_jobrole(jobrole_id):
+    jobrole = JobRoles.query.filter_by(JobRole_ID=jobrole_id).first()
     return jsonify(
         {
-            "data": [jobrole.to_dict()
-                    for jobrole in jobrole_list]
+            "data": [jobrole.getName()]
         }
     ), 200
 
-@app.route("/StaffViewJobRoles/<string:jobrole_id>")
+# Retrieve skill_Name based on skill_ID
+@app.route("/StaffGetSkillName/<string:skill_id>")
+def get_skillName(skill_id):
+    skill = Skills.query.filter_by(Skill_ID=skill_id).first()
+    return jsonify(
+        {
+            "data": [skill.getName()]
+        }
+    ), 200
+
+# Retrieve course_Name based on course_ID
+@app.route("/StaffGetCourseName/<string:course_id>")
+def get_courseName(course_id):
+    course = Courses.query.filter_by(Course_ID=course_id).first()
+    return jsonify(
+        {
+            "data": [course.getName()]
+        }
+    ), 200
+
+# Retrieve required skills based on jobrole_ID
+@app.route("/StaffViewJobRolesWithSkills/<string:jobrole_id>")
 def view_JobRoleWithSkills(jobrole_id):
     skills_list = Skills.query.join(JobRoleWithSkills, JobRoleWithSkills.Skill_ID==Skills.Skill_ID).join(JobRoles, JobRoles.JobRole_ID==JobRoleWithSkills.JobRole_ID).filter(JobRoles.JobRole_ID==jobrole_id).all()
     if skills_list:
@@ -425,6 +463,7 @@ def view_JobRoleWithSkills(jobrole_id):
         }
     ), 404
 
+# Retrieve required courses based on skill_ID
 @app.route("/StaffViewCourses/<string:skill_id>")
 def view_CoursesInSkill(skill_id):
     course_list = Courses.query.join(SkillsRequiredCourses, SkillsRequiredCourses.Course_ID==Courses.Course_ID).join(Skills, Skills.Skill_ID==SkillsRequiredCourses.Skill_ID).filter(Skills.Skill_ID==skill_id).all()
@@ -441,6 +480,7 @@ def view_CoursesInSkill(skill_id):
         }
     ), 404
 
+# Create Staff Learning Journey
 @app.route("/StaffLearningJourney", methods=['POST'])
 def create_learningJourney():
     data = request.get_json()
@@ -495,6 +535,34 @@ def create_learningJourney():
             "message": "Unable to commit to database."
         }), 500
 
+# Retrieve Learning journey Based on staffid and jobroleid
+@app.route("/StaffLearningJourney/<int:staff_id>/<string:jobrole_id>")
+def get_StaffLearningJourneysBasedOnJobRole(staff_id, jobrole_id):
+    learningjourney_list = LearningJourney.query.filter_by(Staff_ID=staff_id).filter_by(JobRole_ID=jobrole_id).all()
+    if learningjourney_list:
+        return jsonify({
+            "data": [LearningJourney.json() for LearningJourney in learningjourney_list]
+        }), 200
+    else:
+        return jsonify({
+            "message": "Learning Journey not found."
+        }), 404
+
+# Retrieve the list of jobroleid added by staff (staffid) to the learning journey
+@app.route("/StaffLearningJourney/<int:staff_id>")
+def get_StaffLearningJourneys(staff_id):
+    jobrole_list = LearningJourney.query.filter_by(Staff_ID=staff_id).all()
+    if jobrole_list:
+        return jsonify({
+            "data": [jobrole.getJobRoleID() 
+                    for jobrole in jobrole_list]
+        }), 200
+    else:
+        return jsonify({
+            "message": "Learning Journey not found."
+        }), 404
+
+# Delete course in Staff Learning Journey
 @app.route("/StaffLearningJourney/<string:staff_id>/<string:course_id>", methods=['DELETE'])
 def delete_coursesFromStaffLearningJourney(staff_id, course_id):
     learningJourney = LearningJourney.query.filter_by(Staff_ID=staff_id).filter_by(Course_ID=course_id).first()
@@ -521,11 +589,13 @@ def delete_coursesFromStaffLearningJourney(staff_id, course_id):
         }
     ), 404
 
-@app.route("/StaffLearningJourney/<string:staff_id>/<string:jobrole_id>", methods=['DELETE'])
+# Delete the entire Staff Learning Journey
+@app.route("/StaffDeleteLearningJourney/<string:staff_id>/<string:jobrole_id>", methods=['DELETE'])
 def delete_entireStaffLearningJourneyBasedOnJobRole(staff_id, jobrole_id):
-    learningJourney = LearningJourney.query.filter_by(Staff_ID=staff_id).filter_by(JobRole_ID=jobrole_id).first()
+    learningJourney = LearningJourney.query.filter_by(Staff_ID=staff_id).filter_by(JobRole_ID=jobrole_id).all()
     if learningJourney:
-        db.session.delete(learningJourney)
+        for course in learningJourney:
+            db.session.delete(course)
         db.session.commit()
         return jsonify(
             {
@@ -547,16 +617,18 @@ def delete_entireStaffLearningJourneyBasedOnJobRole(staff_id, jobrole_id):
         }
     ), 404
 
+# Retrieve the list of course the staff has added to his/her learning journey
 @app.route("/StaffLearningJourneyButton/<string:staff_id>")
 def view_StaffAddedCourses(staff_id):
     course_list = LearningJourney.query.filter(LearningJourney.Staff_ID==staff_id).all()
     return jsonify(
         {
-            "data":[course.getID()
+            "data":[course.getCourseID()
                     for course in course_list]
             }
         )
 
+# Assign jobrole with required skill
 @app.route("/addJobRoleWithSkills", methods=['POST'])
 def create_JobRoleWithSkills():
     data = request.get_json()
@@ -596,6 +668,33 @@ def create_JobRoleWithSkills():
                 "message": "Unable to commit to database."
             }), 500
 
+# Delete jobrole with required skills
+@app.route("/deleteJobRoleWithSkills/<string:jobrole_id>", methods=['DELETE'])
+def delete_JobRoleWithSkills(jobrole_id):
+    jobRoleWithSkills = JobRoleWithSkills.query.filter_by(JobRole_ID = jobrole_id).all()
+    if jobRoleWithSkills:
+        for skill in jobRoleWithSkills:
+            db.session.delete(skill)
+        db.session.commit()
+        return jsonify(
+            {
+                "code": 200,
+                "data": {
+                    "JobRole_ID": jobrole_id
+                }
+            }
+        )
+    return jsonify(
+        {
+            "code": 404,
+            "data": {
+                "JobRole_ID": jobrole_id
+            },
+            "message": "JobRole not found."
+        }
+    ), 404
+
+# Create Skill
 @app.route("/addSkill", methods=['POST'])
 def create_skill():
     data = request.get_json()
@@ -621,7 +720,7 @@ def create_skill():
             "message": "Unable to commit to database."
         }), 500
 
-
+# Assign skill with required course
 @app.route("/addSkillreqCourses", methods=['POST'])
 def create_skillreqCourses():
     data = request.get_json()

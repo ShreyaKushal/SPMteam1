@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Learning Journey Planning System</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="Free HTML Templates" name="keywords">
+    <meta content="Free HTML Templates" name="description">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" 
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <title>My Learning Journey</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+    <!-- Favicon -->
+    <link href="img/favicon.ico" rel="icon">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Handlee&family=Nunito&display=swap" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+
+    <!-- Flaticon Font -->
+    <link href="lib/flaticon/font/flaticon.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+    <link href="lib/lightbox/css/lightbox.min.css" rel="stylesheet">
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="css/style.css" rel="stylesheet">
+</head>
+<body>    
+    <!-- Navbar Start -->
+    <div class="container-fluid bg-light position-relative shadow">
+        <nav class="navbar navbar-expand-lg bg-light navbar-light py-3 py-lg-0 px-0 px-lg-5">
+            <a href="" class="navbar-brand font-weight-bold text-secondary" style="font-size: 50px;">
+                <i class="flaticon-043-teddy-bear"></i>
+                <span class="text-primary">LJPS</span>
+            </a>
+            <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
+                <div class="navbar-nav font-weight-bold mx-auto py-0">
+                    <a href="#" class="nav-item nav-link">Home</a>
+                    <a href="staffViewRoles.html" class="nav-item nav-link">Job Role</a>
+                    <a href="staffLearningJourney.html" class="nav-item nav-link active">My Learning Journey</a>
+                </div>
+                <a href="#" class="btn btn-primary px-4">Login</a>
+            </div>
+        </nav>
+    </div>
+    <!-- Navbar End -->
+
+
+    <!-- Header Start -->
+    <div class="container-fluid bg-primary mb-5">
+        <div class="d-flex flex-column align-items-center justify-content-center" style="min-height: 250px">
+            <h3 class="display-3 font-weight-bold text-white">View Learning Journey</h3>
+            <div class="d-inline-flex text-white">
+                <p class="m-0"><a class="text-white" href="#">Home</a></p>
+                <p class="m-0 px-2">/</p>
+                <p class="m-0">View Learning Journey</p>
+            </div>
+        </div>
+    </div>
+    <!-- Header End -->
+
+
+    <!-- Content Start -->>
+    <div id ="LearningJourneyTable" class="container">
+        <div class="table-wrapper" v-for="LearningJourneyBasedOnJobRole in uniqueJobRoleIDList" v-bind:key="LearningJourneyBasedOnJobRole">
+            <div class="table-title">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <h5>Role: <b><jobrolename-comp :id="LearningJourneyBasedOnJobRole"></jobrolename-comp></b></h5>
+                    </div>
+                    <div class="col-sm-6 d-grid gap-2 d-md-flex justify-content-md-end">
+                        <button class="btn btn-outline-info add-new" @click="addMoreCourseToLearningJourney" :id="LearningJourneyBasedOnJobRole" role="button">Add More Courses</button>
+                        <button class="btn btn-outline-danger add-new" @click="deleteLearningJourney" :id="LearningJourneyBasedOnJobRole" role="button">Delete Learning Journey</button>
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <courses-comp :id="LearningJourneyBasedOnJobRole"></courses-comp></td>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <br>
+            <br>
+            <br>
+        </div>
+    </div>
+    <!-- Content End -->>
+
+
+    <!-- Footer Start -->
+    <div class="container-fluid bg-secondary text-white mt-5 py-5 px-sm-3 px-md-5">
+        <p class="m-0 text-center text-white">
+            &copy; <a class="text-primary font-weight-bold" href="#">Learning Journey Planning System</a>. All Rights Reserved. Designed
+            by
+            <a class="text-primary font-weight-bold" href="https://htmlcodex.com">HTML Codex</a>
+        </p>
+    </div>
+    <!-- Footer End -->
+
+
+    <!-- Back to Top -->
+    <a href="#" class="btn btn-primary p-3 back-to-top"><i class="fa fa-angle-double-up"></i></a>
+
+
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
+    <script src="lib/easing/easing.min.js"></script>
+    <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+    <script src="lib/isotope/isotope.pkgd.min.js"></script>
+    <script src="lib/lightbox/js/lightbox.min.js"></script>
+
+    <!-- Contact Javascript File -->
+    <script src="mail/jqBootstrapValidation.min.js"></script>
+    <script src="mail/contact.js"></script>
+
+    <!-- Template Javascript -->
+    <script src="js/main.js"></script>
+
+
+    <!--Vue-->>
+    <script>
+    Vue.component('jobrolename-comp', {
+        props: ['id'],
+        template: '<b><span v-for="name in name_list">{{ name.JobRole_Name }}</span></b>',
+        data: function () {
+            return {
+                name_list: []
+            };
+        },
+        created: function () {
+            axios.get('http://localhost:5001/StaffViewJobRoles/' + this.id)
+            .then(response => {
+                this.name_list = response.data.data;
+            });
+        },
+    });
+
+    Vue.component('courses-comp', {
+        props: ['id'],
+        template:  `
+        <table class="table table-hover">
+            <thead class="bg-info text-white">
+                <tr>
+                    <th class="col-md-4">Skill Name</th>
+                    <th class="col-md-4">Course Name</th>
+                    <th class="col-md-4"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="course in coursesAddedInJobRole">
+                    <td><skillname-comp :id="course.Skill_ID"></skillname-comp></td>
+                    <td><coursename-comp :id="course.Course_ID"></coursename-comp></td>
+                    <td class="col text-end"><button type="button" class="btn btn-outline-danger" @click="removeFromLearningJourney" v-bind:id="course.Course_ID">Remove</button></td>
+                </tr>
+            </tbody>
+        </table>
+            `,
+        data: function () {
+            return {
+                coursesAddedInJobRole: []
+            };
+        },
+        created: function () {
+            var staffID = 130001; // NEED TO CHANGE TO localStorage.getItem("StaffID")
+            axios.get('http://localhost:5001/StaffLearningJourney/'+ staffID + '/' + this.id)
+            .then(response => {
+                this.coursesAddedInJobRole = response.data.data;
+            });
+        },
+        methods:{
+            removeFromLearningJourney: function(event){
+                    var staffID = 130001; // NEED TO CHANGE TO localStorage.getItem("StaffID")
+                    var courseID = event.target.id;
+
+                    axios.delete('http://localhost:5001/StaffLearningJourney/'+staffID+ '/' +courseID)
+                    .then(response => {
+                        alert("Successfully removed from Learning Journey");
+                        window.location.replace("./staffLearningJourney.html");
+                        return false;
+                    })
+                    .catch(error => { this.error = error.response.data.message });
+                }
+        }
+    });
+
+    Vue.component('skillname-comp', {
+    props: ['id'],
+    template: '<span><span v-for="name in skillname">{{ name.Skill_Name }}</span></span>',
+    data: function () {
+        return {
+            skillname: []
+        };
+    },
+    created: function () {
+        axios.get('http://localhost:5001/StaffGetSkillName/' + this.id)
+            .then(response => {
+                this.skillname = response.data.data;
+            });
+    },
+    });
+
+    Vue.component('coursename-comp', {
+    props: ['id'],
+    template: '<span><span v-for="name in coursename">{{ name.Course_Name }}</span></span>',
+    data: function () {
+        return {
+            coursename: []
+        };
+    },
+    created: function () {
+        axios.get('http://localhost:5001/StaffGetCourseName/' + this.id)
+            .then(response => {
+                this.coursename = response.data.data;
+            });
+    },
+    });
+
+
+        const vm = new Vue({
+            el: '#LearningJourneyTable',
+            data: {
+                id: "",
+                jobRoleList: [],
+                uniqueJobRoleIDList: []
+            },
+            methods: {
+                deleteLearningJourney: function(event){
+                    var staffID = 130001; // NEED TO CHANGE TO localStorage.getItem("StaffID")
+                    var jobroleID = event.target.id;
+
+                    axios.delete('http://localhost:5001/StaffDeleteLearningJourney/'+staffID+ '/' +jobroleID)
+                    .then(response => {
+                        alert("Successfully delete from Learning Journey");
+                        window.location.replace("./staffLearningJourney.html");
+                        return false;
+                    })
+                    .catch(error => { this.error = error.response.data.message });
+                },
+                addMoreCourseToLearningJourney: function(event){
+                    var jobroleID = event.target.id;
+
+                    localStorage.setItem("JobroleID", jobroleID)
+                    window.location.replace("./staffViewSkills.html");
+                }
+            },
+            mounted: function() {
+                var staffID = 130001; // NEED TO CHANGE TO localStorage.getItem("StaffID")
+                axios.get('http://localhost:5001/StaffLearningJourney/'+ staffID)
+                .then(response => {
+                    this.jobRoleList = response.data.data;
+                    for (let i = 0; i < this.jobRoleList.length; i++) {
+                        if (!this.uniqueJobRoleIDList.includes(this.jobRoleList[i])){
+                            this.uniqueJobRoleIDList.push(this.jobRoleList[i]);
+                        }
+                    }
+                })
+                .catch(error => alert(error));
+            }
+        });
+    </script>
+
+</body>
+</html>

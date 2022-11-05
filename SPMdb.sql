@@ -2,11 +2,10 @@ DROP DATABASE IF EXISTS `spm`;
 CREATE DATABASE IF NOT EXISTS `spm`;
 USE `spm`;
 
-CREATE TABLE Role (
-  `Role_ID` int NOT NULL AUTO_INCREMENT,
-  `Role_Name` varchar(20) NOT NULL,
-  PRIMARY KEY (`Role_ID`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+create table Role
+(	Role_ID			int				primary key,
+	Role_Name		varchar(20) 	not null
+);
 
 INSERT INTO Role VALUES
     (1,'Admin'),

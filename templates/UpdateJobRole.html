@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width">
 
-    <title>Create a Role</title>
+    <title>Update a Role</title>
 
     <link rel="stylesheet" href="">
     <!--[if lt IE 9]>
@@ -62,7 +62,7 @@
 
 
     <div id="main-container1" class="container">
-        <h2 class="display-4"><strong>Add a Role</strong></h2>
+        <h2 class="display-4"><strong>Update a Role</strong></h2>
         <br>
         <form>
         <h4>Role's ID:</h4>
@@ -80,14 +80,23 @@
         
         <h4>Select skills required for the job role:</h4>
         <div v-for="Skill in Skills" class="form-check" v-bind:key="Skill.Skill_ID">
-            <input class="form-check-input" type="checkbox" v-bind:value="Skill.Skill_ID" v-model="selectedSkillID">
-            <label class="form-check-label">
+            <template v-if="retrieveSkillList.includes(Skill.Skill_ID)">
+                <input class="form-check-input" type="checkbox" v-bind:value="Skill.Skill_ID" v-model="selectedSkillID" checked>
+                <label class="form-check-label">
                 {{Skill.Skill_ID}}, {{Skill.Skill_Name}}
-            </label>
+                </label>
+            </template>
+            <template v-else>
+                <input class="form-check-input" type="checkbox" v-bind:value="Skill.Skill_ID" v-model="selectedSkillID">
+                <label class="form-check-label">
+                {{Skill.Skill_ID}}, {{Skill.Skill_Name}}
+                </label>
+            </template>
         </div>
-        <!--  <div>Checked Skills: {{ selectedSkillID }}</div> -->
+        <!--<div>Checked Skills: {{ selectedSkillID }}</div>
+        <div>retrieveSkillList: {{ retrieveSkillList }}</div>-->
         <br>
-        <button id="addConsultBtn" class="btn btn-primary" v-on:click="submitForm">Create Role</button>
+        <button class="btn btn-primary" v-on:click="submitForm">Update Role</button>
         <p><label id="error" class="text-danger">{{ error }}</label></p>
         </form>
 
@@ -96,6 +105,8 @@
         const vm = new Vue({
         el: '#main-container1',
         data: {
+            retrieveJobRoleDetails: [],
+            retrieveSkillList: [],
             selectedSkillID: [],
             Skills: [],
             JobRole_ID: '',
@@ -107,25 +118,21 @@
         },
         methods: {
                 submitForm: function() {
-
-                event.preventDefault();
-                    // console.log(this.existingJobRoles.some(e => e.JobRole_ID=== this.JobRole_ID))
+                    event.preventDefault();
+                    //change to update jobrole//
+                    var jobID = localStorage.getItem("JobRoleID");
                     if (this.JobRole_ID !== '' && this.JobRole_Name !== '' && this.selectedSkillID.length !== 0
                     && !this.existingJobRoles.some(e => e.JobRole_ID.toUpperCase()=== this.JobRole_ID.toUpperCase()) 
                     && !this.existingJobRoles.some(e => e.JobRole_Name.toUpperCase()=== this.JobRole_Name.toUpperCase()) ){
-                        axios.post('http://localhost:5001/addJobRole', {
-                                JobRole_ID: this.JobRole_ID,
-                                JobRole_Name: this.JobRole_Name,
-                                JobRole_Status: this.JobRole_Status
-                            })
+                        axios.post('http://localhost:5001/JobRolesDetails/'+jobID+'/'+this.JobRole_ID+'/'+this.JobRole_Name)
                         .then(response => {
-                                this.addSkills();
-                                alert("You have successfully created " + this.JobRole_Name);
-                                window.location.replace("./view_roles.html");
-                                return false;
-                            })
+                            this.updateSkills();
+                            alert("You have successfully updated " + this.JobRole_Name);
+                            window.location.replace("./view_roles.html");
+                            return false;
+                        })
                         .catch(error => { error => alert(error) });
-                    } 
+                    }
                     else {
                     if (this.JobRole_ID == '') {
                         this.error_messages += "Role ID must be filled\n" 
@@ -144,11 +151,18 @@
                     }
                     alert(this.error_messages)
                     this.error_messages = ''
-                }
+                    }
                 },
-                addSkills: function() {
+                updateSkills: function() {
                     event.preventDefault();
-                    for (let i = 0; i < this.selectedSkillID.length; i++ ){
+                    var jobID = localStorage.getItem("JobRoleID")
+                    axios.delete('http://localhost:5001/deleteJobRoleWithSkills/'+jobID)
+                    .then(response => {
+                        return false;
+                    })
+                    .catch(error => { this.error = error.response.data.message });
+
+                    for (let i = 0; i < this.selectedSkillID.length; i++){
                         axios.post('http://localhost:5001/addJobRoleWithSkills', {
                         JobRole_ID: this.JobRole_ID,
                         Skill_ID: this.selectedSkillID[i]
@@ -157,28 +171,31 @@
                             return false;
                         })
                         .catch(error => { this.error = error.response.data.message });
-                        
                         } 
+                    
                 }
             },
         mounted: function() {
-            var JobRole_ID = localStorage.getItem("JobRole_ID");
-            console.log(JobRole_ID)
-                axios.get('http://localhost:5001/GetJobRoles/'+JobRole_ID)
-                    .then(response => {
-                        this.skills = response.data.data;
-                })
-                .catch(error => alert(error));
-            axios.get('http://localhost:5001/Skills')
+            
+            axios.get('http://localhost:5001/ActiveSkills')
                 .then(response => {
                     this.Skills = response.data.data;
                 })
+                .catch(error => alert(error));;
+
+            var jobID = localStorage.getItem("JobRoleID");
+            axios.all([
+                    axios.get('http://localhost:5001/JobRolesDetails/'+jobID),
+                    axios.get('http://localhost:5001/SkillsOnJobRole/'+jobID)
+                ])
+                .then(axios.spread((response1, response2) => {
+                    this.retrieveJobRoleDetails = response1.data.data;
+                    this.retrieveSkillList = response2.data.data;
+                    this.JobRole_ID = this.retrieveJobRoleDetails.JobRole_ID
+                    this.JobRole_Name = this.retrieveJobRoleDetails.JobRole_Name
+                    this.selectedSkillID = this.retrieveSkillList
+                }))
                 .catch(error => alert(error));
-            axios.get('http://localhost:5001/ActiveJobRoles')
-            .then(response => {
-                this.existingJobRoles = response.data.data;
-            })
-            .catch(error => alert(error));
         }
     });
     </script>

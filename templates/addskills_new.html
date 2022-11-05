@@ -196,7 +196,7 @@
                     this.Courses = response.data.data;
                 })
                 .catch(error => alert(error));
-            axios.get('http://localhost:5001/Skills')
+            axios.get('http://localhost:5001/ActiveSkills')
                 .then(response => {
                     this.existing_skills = response.data.data;
                 })
