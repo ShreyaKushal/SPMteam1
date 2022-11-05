@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View all Skills</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round|Open+Sans">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+    integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+
+<!-- Latest compiled and minified JavaScript -->
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"
+    integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut"
+    crossorigin="anonymous"></script>
+
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
+    integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
+    crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <style>
+            body {
+            color: #404E67;
+            background: #F5F7FA;
+            font-family: 'Open Sans', sans-serif;
+        }
+        .table-wrapper {
+            width: 700px;
+            margin: 30px auto;
+            background: #fff;
+            padding: 20px;	
+            box-shadow: 0 1px 1px rgba(0,0,0,.05);
+        }
+        .table-title {
+            padding-bottom: 10px;
+            margin: 0 0 10px;
+        }
+        .table-title h2 {
+            margin: 6px 0 0;
+            font-size: 22px;
+        }
+        .table-title .add-new {
+            float: right;
+            height: 30px;
+            font-weight: bold;
+            font-size: 12px;
+            text-shadow: none;
+            min-width: 100px;
+            border-radius: 50px;
+            line-height: 13px;
+        }
+        .table-title .add-new i {
+            margin-right: 4px;
+        }
+        table.table {
+            table-layout: fixed;
+        }
+        table.table tr th, table.table tr td {
+            border-color: #e9e9e9;
+        }
+        table.table th i {
+            font-size: 13px;
+            margin: 0 5px;
+            cursor: pointer;
+        }
+        table.table th:last-child {
+            width: 100px;
+        }
+        table.table td a {
+            cursor: pointer;
+            display: inline-block;
+            margin: 0 5px;
+            min-width: 24px;
+        }    
+        table.table td a.add {
+            color: #27C46B;
+        }
+        table.table td a.edit {
+            color: #FFC107;
+        }
+        table.table td a.delete {
+            color: #E34724;
+        }
+        table.table td i {
+            font-size: 19px;
+        }
+        table.table td a.add i {
+            font-size: 24px;
+            margin-right: -1px;
+            position: relative;
+            top: 3px;
+        }    
+        table.table .form-control {
+            height: 32px;
+            line-height: 32px;
+            box-shadow: none;
+            border-radius: 2px;
+        }
+        table.table .form-control.error {
+            border-color: #f50000;
+        }
+        table.table td .add {
+            display: none;
+        }
+
+    </style>
+    
+    
+
+</head>
+<body>    
+    <!--Start of table to view learning journey-->
+    <div class="container" id ="LearningJourneyTable">
+        <div class="table-wrapper" v-for="LearningJourneyBasedOnJobRole in uniqueJobRoleIDList" v-bind:key="LearningJourneyBasedOnJobRole">
+            <div class="table-title">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <h5>Role: <b><jobrolename-comp :id="LearningJourneyBasedOnJobRole"></jobrolename-comp></b></h5>
+                    </div>
+                    <div class="col-sm-6" >
+                        <a @click="addMoreCourseToLearningJourney" :id="LearningJourneyBasedOnJobRole" role="button" class="btn btn-outline-info add-new"><i class="fa fa-plus"></i>Add More Courses</a>
+                        <a @click="deleteLearningJourney" :id="LearningJourneyBasedOnJobRole" role="button" class="btn btn-outline-danger add-new"><i class="fa fa-plus"></i>Delete Learning Journey</a>
+                    </div>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <courses-comp :id="LearningJourneyBasedOnJobRole"></skills-comp></td>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>     
+
+    <script>
+    Vue.component('jobrolename-comp', {
+        props: ['id'],
+        template: '<b><span v-for="name in name_list">{{ name.JobRole_Name }}</span></b>',
+        data: function () {
+            return {
+                name_list: []
+            };
+        },
+        created: function () {
+            axios.get('http://localhost:5001/StaffViewJobRoles/' + this.id)
+            .then(response => {
+                this.name_list = response.data.data;
+            });
+        },
+    });
+
+    Vue.component('courses-comp', {
+        props: ['id'],
+        template:  `
+        <table class="table table-hover">
+            <thead class="table-light">
+                <tr>
+                    <th>Skill Name</th>
+                    <th>Course Name</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="course in coursesAddedInJobRole">
+                    <td><skillname-comp :id="course.Skill_ID"></skillname-comp></td>
+                    <td><coursename-comp :id="course.Course_ID"></coursename-comp></td>
+                    <td class="col text-center"><button type="button" class="btn btn-outline-danger" @click="removeFromLearningJourney" v-bind:id="course.Course_ID">Remove</button></td>
+                </tr>
+            </tbody>
+        </table>
+            `,
+        data: function () {
+            return {
+                coursesAddedInJobRole: []
+            };
+        },
+        created: function () {
+            var staffID = 130001; // NEED TO CHANGE TO localStorage.getItem("StaffID")
+            axios.get('http://localhost:5001/StaffLearningJourney/'+ staffID + '/' + this.id)
+            .then(response => {
+                this.coursesAddedInJobRole = response.data.data;
+            });
+        },
+        methods:{
+            removeFromLearningJourney: function(event){
+                    var staffID = 130001; // NEED TO CHANGE TO localStorage.getItem("StaffID")
+                    var courseID = event.target.id;
+
+                    axios.delete('http://localhost:5001/StaffLearningJourney/'+staffID+ '/' +courseID)
+                    .then(response => {
+                        alert("Successfully removed from Learning Journey");
+                        window.location.replace("./staffLearningJourney.html");
+                        return false;
+                    })
+                    .catch(error => { this.error = error.response.data.message });
+                }
+        }
+    });
+
+    Vue.component('skillname-comp', {
+    props: ['id'],
+    template: '<span><span v-for="name in skillname">{{ name.Skill_Name }}</span></span>',
+    data: function () {
+        return {
+            skillname: []
+        };
+    },
+    created: function () {
+        axios.get('http://localhost:5001/StaffGetSkillName/' + this.id)
+            .then(response => {
+                this.skillname = response.data.data;
+            });
+    },
+    });
+
+    Vue.component('coursename-comp', {
+    props: ['id'],
+    template: '<span><span v-for="name in coursename">{{ name.Course_Name }}</span></span>',
+    data: function () {
+        return {
+            coursename: []
+        };
+    },
+    created: function () {
+        axios.get('http://localhost:5001/StaffGetCourseName/' + this.id)
+            .then(response => {
+                this.coursename = response.data.data;
+            });
+    },
+    });
+
+
+        const vm = new Vue({
+            el: '#LearningJourneyTable',
+            data: {
+                id: "",
+                jobRoleList: [],
+                uniqueJobRoleIDList: []
+            },
+            methods: {
+                deleteLearningJourney: function(event){
+                    var staffID = 130001; // NEED TO CHANGE TO localStorage.getItem("StaffID")
+                    var jobroleID = event.target.id;
+
+                    axios.delete('http://localhost:5001/StaffDeleteLearningJourney/'+staffID+ '/' +jobroleID)
+                    .then(response => {
+                        alert("Successfully delete from Learning Journey");
+                        window.location.replace("./staffLearningJourney.html");
+                        return false;
+                    })
+                    .catch(error => { this.error = error.response.data.message });
+                },
+                addMoreCourseToLearningJourney: function(event){
+                    var jobroleID = event.target.id;
+
+                    localStorage.setItem("JobroleID", jobroleID)
+                    window.location.replace("./staffViewSkills.html");
+                }
+            },
+            mounted: function() {
+                var staffID = 130001; // NEED TO CHANGE TO localStorage.getItem("StaffID")
+                axios.get('http://localhost:5001/StaffLearningJourney/'+ staffID)
+                .then(response => {
+                    this.jobRoleList = response.data.data;
+                    for (let i = 0; i < this.jobRoleList.length; i++) {
+                        if (!this.uniqueJobRoleIDList.includes(this.jobRoleList[i])){
+                            this.uniqueJobRoleIDList.push(this.jobRoleList[i]);
+                        }
+                    }
+                })
+                .catch(error => alert(error));
+            }
+        });
+    </script>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj" crossorigin="anonymous"></script>      
+  
+
+</body>
+</html>
