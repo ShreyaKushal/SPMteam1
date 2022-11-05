@@ -1,6 +1,12 @@
-import pytest
+
 import json
 from app import app
+from app import JobRoles
+import unittest 
+import flask_testing
+from flask_sqlalchemy import SQLAlchemy
+import sqlalchemy
+
 
 def test_get_all_ActiveJobRoles():
     response = app.test_client().get('/ActiveJobRoles')
@@ -50,6 +56,80 @@ def test_staff_viewCoursesInSkill():
     assert res[0]['Course_Desc'] == 'Data is meaningless unless insights and analysis can be drawn to provide useful information for business decision-making. It is imperative that data quality, integrity and security '
     assert res[0]['Course_Type'] == 'External'
     assert res[0]['Course_Category'] == 'Finance'
-
     assert type(res) is list
     assert response.status_code == 200
+
+def test_addJobRole():
+    mimetype = 'application/json'
+    headers = {
+        'Content-Type': mimetype,
+        'Accept': mimetype
+    }
+    data = {
+        "JobRole_ID": "TestingPurffposes12345",
+        "JobRole_Name": "For Testing Purposes Only",
+        "JobRole_Status": "Active"
+    }
+    url = '/addJobRole'
+    response = app.test_client().post(url, data=json.dumps(data), headers=headers)
+    assert response.content_type == mimetype
+    assert response.status_code == 201
+
+def test_addSkill():
+
+    mimetype = 'application/json'
+    headers = {
+        'Content-Type': mimetype,
+        'Accept': mimetype
+    }
+    data = {
+        "Skill_ID": "TestingPurposes12345",
+        "Skill_Name": "For Testing Purposes Only",
+        "Skill_Desc": "For Testing Purposes Only!!",
+        "Skill_Status": "Active"
+    }
+    url = '/addSkill'
+
+    response = app.test_client().post(url, data=json.dumps(data), headers=headers)
+    assert response.content_type == mimetype
+    assert response.status_code == 201
+
+def test_addSkillReqCourses():
+
+    mimetype = 'application/json'
+    headers = {
+        'Content-Type': mimetype,
+        'Accept': mimetype
+    }
+    data = {
+        "Skill_ID": "ME5",
+        "Course_ID": "tch015",
+
+    }
+    url = '/addSkillreqCourses'
+
+    response = app.test_client().post(url, data=json.dumps(data), headers=headers)
+    assert response.content_type == mimetype
+    assert response.status_code == 201
+
+def test_addJobRoleWithSkills():
+
+    mimetype = 'application/json'
+    headers = {
+        'Content-Type': mimetype,
+        'Accept': mimetype
+    }
+    data = {
+        "JobRole_ID": "DA1",
+        "Skill_ID": "HT9",
+
+    }
+    url = '/addJobRoleWithSkills'
+
+    response = app.test_client().post(url, data=json.dumps(data), headers=headers)
+    assert response.content_type == mimetype
+    assert response.status_code == 201
+
+
+
+    
