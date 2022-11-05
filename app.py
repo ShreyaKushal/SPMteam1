@@ -354,7 +354,7 @@ def staffLearningJourney(Staff_ID):
             }
             alllearningjourneys.append(x)
         # return alllearningjourneys
-        return render_template('staffhomepage.html', learningjourneys = alllearningjourneys, name = staffmembername)
+        return render_template('/website_template/x/index.html', learningjourneys = alllearningjourneys, name = staffmembername)
     else:
         return 'No Learning Journeys have been found for this staff ID.'
 
