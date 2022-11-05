@@ -191,8 +191,8 @@
                         <td>{{ JobRole.JobRole_Name }}</td>
                         <td>{{ JobRole.JobRole_Status }}</td>
                         <td><skills-comp :id="JobRole.JobRole_ID"></skills-comp></td>
-                        <td class="col text-center">
-                            <button type="button" class="btn btn-outline-primary" @click="reactivateJobRole" v-bind:id="JobRole.JobRole_ID" v-bind:name="JobRole.JobRole_Name">Re-Activate</button>
+                        <td>
+                            <button>Re-Activate</button>
                         </td>
                     </tr>
                 </tbody>
@@ -210,7 +210,7 @@
         };
     },
     created: function () {
-        axios.get('http://localhost:5001/StaffViewJobRolesWithSkills/' + this.id)
+        axios.get('http://localhost:5001/StaffViewJobRoles/' + this.id)
             .then(response => {
                 this.skills = response.data.data;
             });
@@ -224,12 +224,10 @@
                 InactiveJobRoles: []
             },
             methods: {
-                reactivateJobRole: function(event) {
+                softDelete: function(event) {
                     var id = event.target.id;
-                    axios.post('http://localhost:5001/ReactivateJobRoles/' + id)
+                    axios.post('http://localhost:5001/JobRoles/' + id)
                 .then(response => {
-                        var role_name = event.target.name;
-                        alert(role_name + " has successfully re-activated")
                         window.location.replace("./view_roles.html");
                         return false;
                     })

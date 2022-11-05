@@ -66,7 +66,7 @@
                 id: ''
             },
             mounted: function() {
-                axios.get('http://localhost:5001/ActiveJobRoles')
+                axios.get('http://localhost:5001/StaffViewJobRoles')
                         .then(response => {
                             this.jobroles = response.data.data;
                         })
