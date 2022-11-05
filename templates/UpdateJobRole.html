@@ -127,7 +127,7 @@
                         axios.post('http://localhost:5001/JobRolesDetails/'+jobID+'/'+this.JobRole_ID+'/'+this.JobRole_Name)
                         .then(response => {
                             this.updateSkills();
-                            alert("You have successfully updated " + this.JobRole_Name);
+                            alert("Your updates have been successfully saved!");
                             window.location.replace("./view_roles.html");
                             return false;
                         })

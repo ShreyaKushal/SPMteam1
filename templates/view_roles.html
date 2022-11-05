@@ -232,7 +232,7 @@
                     .then(response => {
                         var role_name = event.target.name;
                         console.log(role_name)
-                        alert(role_name + " has successfully deleted")
+                        alert("You have successfully deleted " +role_name)
                         window.location.replace("./view_inactive_roles.html");
                         return false;
                     })
