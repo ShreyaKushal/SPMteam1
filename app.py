@@ -591,7 +591,7 @@ def delete_coursesFromStaffLearningJourney(staff_id, course_id):
     ), 404
 
 # Delete the entire Staff Learning Journey
-@app.route("/StaffLearningJourney/<string:staff_id>/<string:jobrole_id>", methods=['DELETE'])
+@app.route("/StaffDeleteLearningJourney/<string:staff_id>/<string:jobrole_id>", methods=['DELETE'])
 def delete_entireStaffLearningJourneyBasedOnJobRole(staff_id, jobrole_id):
     learningJourney = LearningJourney.query.filter_by(Staff_ID=staff_id).filter_by(JobRole_ID=jobrole_id).all()
     if learningJourney:
