@@ -210,7 +210,7 @@
         };
     },
     created: function () {
-        axios.get('http://localhost:5001/StaffViewJobRoles/' + this.id)
+        axios.get('http://localhost:5001/StaffViewJobRolesWithSkills/' + this.id)
             .then(response => {
                 this.skills = response.data.data;
             });
