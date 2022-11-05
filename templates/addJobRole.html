@@ -162,7 +162,7 @@
                 }
             },
         mounted: function() {
-            axios.get('http://localhost:5001/Skills')
+            axios.get('http://localhost:5001/ActiveSkills')
                 .then(response => {
                     this.Skills = response.data.data;
                 })

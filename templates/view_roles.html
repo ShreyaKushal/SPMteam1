@@ -193,8 +193,7 @@
                         <td><skills-comp :id="JobRole.JobRole_ID"></skills-comp></td>
                         <td>
 							<a class="add" title="Add" data-toggle="tooltip"><i class="material-icons">&#xE03B;</i></a>
-                            <!-- <i class="material-icons"><a class="edit" title="Edit" data-toggle="tooltip"href="UpdateJobRole.html" @click="getID" v-bind:id="JobRole.JobRole_ID">&#xE254;</a></i> -->
-                            <i class="material-icons"><a class="edit" title="Edit" data-toggle="tooltip" @click="getID" href ="UpdateJobRole.html"  v-bind:id="JobRole.JobRole_ID">&#xE254;</a></i>
+                            <i class="material-icons"><a href ="updateJobRole.html" class="edit" title="Edit" data-toggle="tooltip" @click="getID" v-bind:id="JobRole.JobRole_ID">&#xE254;</a></i>
                             <i class="material-icons"><a class="delete" title="Delete" data-toggle="tooltip" @click="softDelete" v-bind:id="JobRole.JobRole_ID" v-bind:name="JobRole.JobRole_Name">&#xE872;</a></i>
                         </td>
                     </tr>
@@ -213,7 +212,7 @@
         };
     },
     created: function () {
-        axios.get('http://localhost:5001/StaffViewJobRoles/' + this.id)
+        axios.get('http://localhost:5001/StaffViewJobRolesWithSkills/' + this.id)
             .then(response => {
                 this.skills = response.data.data;
             });
@@ -230,19 +229,19 @@
                 softDelete: function(event) {
                     var id = event.target.id;
                     axios.post('http://localhost:5001/JobRoles/' + id)
-                .then(response => {
-                    var role_name = event.target.name;
-                    console.log(role_name)
-                    alert(role_name + " has successfully deleted")
-                    window.location.replace("./view_roles.html");
-                    return false;
-                })
-                .catch(error => { error => alert(error) });
+                    .then(response => {
+                        var role_name = event.target.name;
+                        console.log(role_name)
+                        alert(role_name + " has successfully deleted")
+                        window.location.replace("./view_roles.html");
+                        return false;
+                    })
+                    .catch(error => { error => alert(error) });
                 },
-                getID:function (event) {
-                    var id_1 = event.target.id;
-                    console.log(id);
-                    localStorage.setItem("JobRole_ID",id_1)
+                getID: function(event) {
+                    var id = event.target.id;
+                    console.log(id)
+                    localStorage.setItem("JobRoleID",id)
                 }
             },
             mounted: function() {
