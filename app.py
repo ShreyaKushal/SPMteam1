@@ -383,6 +383,23 @@ def update_jobrole(JobRole_ID):
         }
     ), 200
 
+# Re-activate jobrole based on JobRole_ID
+@app.route("/ReactivateJobRoles/<string:JobRole_ID>", methods=['GET', 'POST'])
+def reactivate_jobrole(JobRole_ID):
+    jobrole = JobRoles.query.filter_by(JobRole_ID = JobRole_ID).first()
+    
+    setattr(jobrole, 'JobRole_Status', "Active")
+    db.session.commit()
+
+    jobrole_list = JobRoles.query.all()
+
+    return jsonify(
+        {
+            "data": [jobrole.to_dict()
+                    for jobrole in jobrole_list]
+        }
+    ), 200
+
 # Soft delete skill based on Skill_ID
 @app.route("/Skills/<string:Skill_ID>", methods=['GET', 'POST'])
 def update_skill(Skill_ID):
