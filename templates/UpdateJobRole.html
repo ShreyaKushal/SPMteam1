@@ -119,7 +119,7 @@
         methods: {
                 submitForm: function() {
                     event.preventDefault();
-                    //change to update jobrole//
+
                     var jobID = localStorage.getItem("JobRoleID");
                     if (this.JobRole_ID !== '' && this.JobRole_Name !== '' && this.selectedSkillID.length !== 0
                     && !this.existingJobRoles.some(e => e.JobRole_ID.toUpperCase()=== this.JobRole_ID.toUpperCase()) 

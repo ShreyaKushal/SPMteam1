@@ -166,10 +166,10 @@
                     <div class="col-sm-12">
                         <ul class="nav nav-pills nav-justified">
                             <li class="nav-item">
-                                <a class="nav-link active" aria-current="page">Active Job Roles</a>
+                                <a class="nav-link bg-info text-white active" aria-current="page">Active Job Roles</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="view_inactive_roles.html">Inactive Job Roles</a>
+                                <a class="nav-link text-info" href="view_inactive_roles.html">Inactive Job Roles</a>
                             </li>
                         </ul>
                     </div>
@@ -216,7 +216,7 @@
             .then(response => {
                 this.skills = response.data.data;
             });
-    },
+    }
 });
 
         const vm = new Vue({
@@ -232,7 +232,7 @@
                     .then(response => {
                         var role_name = event.target.name;
                         console.log(role_name)
-                        alert("You have successfully deleted " +role_name)
+                        alert("You have successfully deleted " +role_namess)
                         window.location.replace("./view_inactive_roles.html");
                         return false;
                     })

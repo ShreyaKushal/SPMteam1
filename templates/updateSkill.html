@@ -1,0 +1,212 @@
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width">
+
+    <title>Update a Skill</title>
+
+    <link rel="stylesheet" href="">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <!-- Bootstrap libraries -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+        integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"
+        integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut"
+        crossorigin="anonymous"></script>
+
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
+        integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+
+<body>
+    <!--Start of navbar-->
+    <nav class="navbar navbar-expand-lg bg-light nav nav-tabs">
+        <div class="container-fluid">
+          <a class="navbar-brand">LJPS</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link" aria-current="page" href="homepage.html">Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link active" href="skills.html">Skills</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="view_roles.html">Roles</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+    </nav>
+    <!--end of navbar-->
+
+
+
+    <div id="main-container" class="container">
+        <h2 class="display-4"><strong>Update a Skill</strong></h2>
+        <br>
+        <form>
+        <h2>Skill's ID</h2>
+        <div class="form-group">
+            <input type="text" class="form-control" id="Skill_ID" v-model="Skill_ID">
+        </div>
+
+        <h2>Skill's Name</h2>
+
+        <div class="form-group">
+            <input type="text" class="form-control" id="Skill_Name" v-model="Skill_Name">
+        </div>
+
+
+        <h2>Skill's Description</h2>
+
+        <div class="form-group">
+            <input type="text" class="form-control" id="Skill_Desc" v-model="Skill_Desc">
+        </div>
+
+        
+        <h2>Select Course(s) to assign the skill to:</h2>
+        <div v-for="Course in Courses" class="form-check" v-bind:key="Course.Course_ID">
+            <template v-if="retrieveCourseList.includes(Course.Course_ID)">
+                <input class="form-check-input" type="checkbox" v-bind:value="Course.Course_ID" v-model="selectedCourseID" checked>
+                <label class="form-check-label">
+                {{Course.Course_ID}}, {{Course.Course_Name}}
+                </label>
+            </template>
+            <template v-else>
+                <input class="form-check-input" type="checkbox" v-bind:value="Course.Course_ID" v-model="selectedCourseID">
+                <label class="form-check-label">
+                {{Course.Course_ID}}, {{Course.Course_Name}}
+                </label>
+            </template>
+        </div>
+        <!--<div>Checked Courses: {{ selectedCourseID }}</div>
+        <div>retrieveCourseList: {{ retrieveCourseList }}</div>-->
+        <br>
+        <button class="btn btn-primary" v-on:click="submitForm">Update Skill</button>
+        <p><label id="error" class="text-danger">{{ error }}</label></p>
+        </form>
+
+    </div>
+    <script>
+        const vm = new Vue({
+        el: '#main-container',
+        data: {
+            retrieveSkillDetails:[],
+            retrieveCourseList: [],
+            selectedCourseID: [],
+            Courses: [], 
+            Skill_Name: '',
+            Skill_ID: '',
+            Skill_Desc:'',
+            Skill_Status:'',
+            error: '',
+            error_messages: '',
+            existing_skills: []
+        },
+        methods: {
+                submitForm: function() {
+                    event.preventDefault();
+
+                    var skillID = localStorage.getItem("SkillID");
+                    if (this.Skill_ID !== '' && this.Skill_Name !== '' && this.Skill_Desc !== '' 
+                    && !this.existing_skills.some(e => e.Skill_ID.toUpperCase() === this.Skill_ID.toUpperCase() ) 
+                    && !this.existing_skills.some(e => e.Skill_Name.toUpperCase() === this.Skill_Name.toUpperCase()) ) {
+                        axios.post('http://localhost:5001/SkillDetails/'+skillID+'/'+this.Skill_ID+'/'+this.Skill_Name+'/'+this.Skill_Desc)
+                        .then(response => {
+                            this.updateCourses();
+                            alert("You have successfully updated " + this.Skill_Name);
+                            window.location.replace("./skills.html");
+                            return false;
+                        })
+                        .catch(error => { error => alert(error) });
+                    }
+                    else {
+                    if (this.Skill_ID == '') {
+                        this.error_messages += "Skill ID must be filled\n" 
+                    } 
+                    if (this.Skill_Name == '') {
+                        this.error_messages += "Skill Name must be filled\n"
+                    }    
+                    if (this.Skill_Desc == '') {
+                        this.error_messages += "Skill Description must be filled\n"
+                    }    
+                    if (this.existing_skills.some(e => e.Skill_ID.toUpperCase()=== this.Skill_ID.toUpperCase())) {
+                        this.error_messages += `A skill with Skill ID ${this.Skill_ID} already exists\n`
+                    }
+                    if (this.existing_skills.some(e => e.Skill_Name.toUpperCase() === this.Skill_Name.toUpperCase())) {
+                        this.error_messages += `A skill with Skill Name ${this.Skill_Name} already exists\n`
+                    }              
+                    alert(this.error_messages)
+                    this.error_messages = ''    
+                }
+                },
+                updateCourses: function() {
+                    event.preventDefault();
+                    var skillID = localStorage.getItem("SkillID");
+                    axios.delete('http://localhost:5001/deleteSkillsRequiredCourses/'+skillID)
+                    .then(response => {
+                        return false;
+                    })
+                    .catch(error => { this.error = error.response.data.message });
+
+                    for (let i = 0; i < this.selectedCourseID.length; i++){
+                        axios.post('http://localhost:5001/addSkillreqCourses', {
+                        Course_ID: this.selectedCourseID[i],
+                        Skill_ID: this.Skill_ID
+                        })
+                        .then(response => {
+                            return false;
+                        })
+                        .catch(error => { this.error = error.response.data.message });
+                        } 
+                    
+                }
+        },
+        mounted: function() {
+            axios.get('http://localhost:5001/Courses')
+                .then(response => {
+                    this.Courses = response.data.data;
+                })
+                .catch(error => alert(error));
+
+                var skillID = localStorage.getItem("SkillID");
+                axios.all([
+                    axios.get('http://localhost:5001/SkillDetails/'+skillID),
+                    axios.get('http://localhost:5001/CoursesOnSkill/'+skillID)
+                ])
+                .then(axios.spread((response1, response2) => {
+                    this.retrieveSkillDetails = response1.data.data;
+                    this.retrieveCourseList = response2.data.data;
+                    this.Skill_ID = this.retrieveSkillDetails.Skill_ID
+                    this.Skill_Name = this.retrieveSkillDetails.Skill_Name
+                    this.Skill_Desc = this.retrieveSkillDetails.Skill_Desc
+                    this.selectedCourseID = this.retrieveCourseList
+                }))
+                .catch(error => alert(error));
+        }
+    });
+    </script>
+</body>
+
+</html>

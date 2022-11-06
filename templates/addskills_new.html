@@ -86,45 +86,24 @@
 
         
         <h2>Select Course(s) to assign the skill to:</h2>
-        <div v-for="Course in Courses" class="form-check">
-            <input class="form-check-input" type="checkbox" name="CoursesSelected[]" :value="Course.Course_ID"  v-bind="Courses">
-            <label class="form-check-label" v-bind:for="Course.Course_ID">
+        <div v-for="Course in Courses" class="form-check" v-bind:key="Course.Course_ID">
+            <input class="form-check-input" type="checkbox" v-bind:value="Course.Course_ID" v-model="selectedCourseID">
+            <label class="form-check-label">
                 {{Course.Course_ID}}, {{Course.Course_Name}}
             </label>
         </div>
-
-          <!-- <h2>Diagnosis</h2>
-
-          <div class="form-group">
-            <input type="text" class="form-control" name="diagnosis" id="diagnosis" v-model="diagnosis">
-          </div>
-
-          <h2>Prescription</h2>
-
-          <div class="form-group">
-            <input type="text" class="form-control" name="prescription" id="prescription" v-model="prescription">
-          </div>
-
-          <h2>Appointment Length</h2>
-
-          <div class="form-group">
-            <input type="number" class="form-control" name="length" id="length" v-model="length">
-            <small id="length" class="form-text text-muted">Please specify the number of <strong>minutes</strong></small>
-          </div> -->
-
-        <button id="addConsultBtn" class="btn btn-primary" v-on:click="multiple">Create Skill</button>
+        <!-- <div>Checked Courses: {{ selectedCourseID }}</div> -->
+        <br>
+        <button id="addConsultBtn" class="btn btn-primary" v-on:click="submitForm">Create Skill</button>
         <p><label id="error" class="text-danger">{{ error }}</label></p>
         </form>
-
-        <!-- <p>
-            <em><strong>Pages:</strong> <a href="view-consultations.html">View Consultation Records</a></em>
-        </p> -->
 
     </div>
     <script>
         const vm = new Vue({
         el: '#main-container',
         data: {
+            selectedCourseID: [],
             Courses: [], 
             Skill_Name: '',
             Skill_ID: '',
@@ -135,10 +114,6 @@
             existing_skills: []
         },
         methods: {
-                multiple:function(){
-                    this.submitForm1()
-                    this.submitForm()
-                },
                 submitForm: function() {
                 event.preventDefault();
                 if (this.Skill_ID !== '' && this.Skill_Name !== '' && this.Skill_Desc !== '' 
@@ -151,10 +126,11 @@
                             Skill_Status: this.Skill_Status
                         })
                     .then(response => {
-                            alert("You have successfully created a new skill");
+                            this.addCourses();
+                            alert("You have successfully created "+ this.Skill_Name);
                             window.location.replace("./skills.html");
                             return false;
-                        })
+                    })
                     .catch(error => { error => alert(error) });
                 } else {
                     if (this.Skill_ID == '') {
@@ -172,24 +148,26 @@
                     if (this.existing_skills.some(e => e.Skill_Name.toUpperCase() === this.Skill_Name.toUpperCase())) {
                         this.error_messages += `A skill with Skill Name ${this.Skill_Name} already exists\n`
                     }              
-                   
                     alert(this.error_messages)
                     this.error_messages = ''    
                 }
                 },
-                submitForm1: function() {
-                event.preventDefault();
-                axios.post('http://localhost:5001/addSkillreqCourses', {
-                        Course_ID: this.Courses,
-                        Skill_ID: this.Skill_ID,
-                    })
-                .then(response => {
-                        // window.location.replace("./skills.html");
+                addCourses: function() {
+                    event.preventDefault();
+                    for (let i = 0; i < this.selectedCourseID.length; i++ ){
+                        console.log(this.selectedCourseID[i])
+                        console.log(this.Skill_ID)
+                        axios.post('http://localhost:5001/addSkillreqCourses', {
+                            Course_ID: this.selectedCourseID[i],
+                            Skill_ID: this.Skill_ID
+                        })
+                        .then(response => {
                         return false;
-                    })
-                .catch(error => { error => alert(error) });
+                        })
+                        .catch(error => { error => alert(error) });
+                    }
                 }
-            },
+        },
         mounted: function() {
             axios.get('http://localhost:5001/Courses')
                 .then(response => {

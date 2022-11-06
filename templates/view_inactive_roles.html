@@ -166,10 +166,10 @@
                     <div class="col-sm-12">
                         <ul class="nav nav-pills nav-justified">
                             <li class="nav-item">
-                                <a class="nav-link" href="view_roles.html">Active Job Roles</a>
+                                <a class="nav-link text-info" href="view_roles.html">Active Job Roles</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link active" aria-current="page">Inactive Job Roles</a>
+                                <a class="nav-link bg-info text-white active" aria-current="page">Inactive Job Roles</a>
                             </li>
                         </ul>
                     </div>
@@ -192,7 +192,7 @@
                         <td>{{ JobRole.JobRole_Status }}</td>
                         <td><skills-comp :id="JobRole.JobRole_ID"></skills-comp></td>
                         <td class="col text-center">
-                            <button type="button" class="btn btn-outline-primary" @click="reactivateJobRole" v-bind:id="JobRole.JobRole_ID" v-bind:name="JobRole.JobRole_Name">Re-Activate</button>
+                            <button type="button" class="btn btn-outline-info btn-sm" @click="reactivateJobRole" v-bind:id="JobRole.JobRole_ID" v-bind:name="JobRole.JobRole_Name">Re-activate</button>
                         </td>
                     </tr>
                 </tbody>

@@ -159,17 +159,22 @@
                     </div>
                 </div>
             </div>
+
             <div class="row">
                 <div class="col-sm-12">
                     <ul class="nav nav-pills nav-justified">
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page">Active Skills</a>
+                            <a class="nav-link bg-info text-white active" aria-current="page">Active Skills</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="view_inactive_skills.html">Inactive Skills</a>
+                            <a class="nav-link text-info" href="view_inactive_skills.html">Inactive Skills</a>
                         </li>
                     </ul>
                 </div>
+            </div>
+
+            <br>
+
             <table style="width:100%" id ="SkillsTable" class="table table-bordered">           
                 <thead>
                     <tr>
@@ -190,15 +195,15 @@
                         <td>{{ Skill.Skill_Status }}</td>
                         <td>
 							<a class="add" title="Add" data-toggle="tooltip"><i class="material-icons">&#xE03B;</i></a>
-                            <a class="edit" title="Edit" data-toggle="tooltip"><i class="material-icons">&#xE254;</i></a>
+                            <i class="material-icons"><a href ="updateSkill.html" class="edit" title="Edit" data-toggle="tooltip" @click="getID" v-bind:id="Skill.Skill_ID">&#xE254;</a></i>
                             <i class="material-icons"><a class="delete" title="Delete" data-toggle="tooltip" @click="softDelete" v-bind:id="Skill.Skill_ID" v-bind:name="Skill.Skill_Name">&#xE872;</a></i>
                         </td>
                     </tr>
-                     
                 </tbody>
             </table>
         </div>
-    </div>     
+    </div>
+
     <script>
     Vue.component('courses-comp', {
     props: ['id'],
@@ -229,10 +234,15 @@
                 .then(response => {
                     var skill_name = event.target.name;
                     alert(skill_name + " has successfully deleted")
-                    window.location.replace("./skills.html");
+                    window.location.replace("./view_inactive_skills.html");
                     return false;
                 })
                 .catch(error => { error => alert(error) });
+                },
+                getID: function(event) {
+                    var id = event.target.id;
+                    console.log(id)
+                    localStorage.setItem("SkillID",id)
                 }
             },
             mounted: function() {

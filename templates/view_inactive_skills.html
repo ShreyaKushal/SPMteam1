@@ -152,10 +152,10 @@
         <div class="table-wrapper">
             <div class="table-title">
                 <div class="row">
-                    <div class="col-sm-8"><h2>Manage <b>Roles</b></h2></div>
+                    <div class="col-sm-8"><h2>Manage <b>Skills</b></h2></div>
                     <div class="col-sm-4" >
                         <!--<button type="button" class="btn btn-info add-new"><i class="fa fa-plus"></i> Add Skill</button>-->
-                        <a  href="addskills_new.html" role="button" class="btn btn-info add-new"><i class="fa fa-plus"></i>Add Roles</a>
+                        <a  href="addskills_new.html" role="button" class="btn btn-info add-new"><i class="fa fa-plus"></i>Add Skills</a>
 
                     </div>
                 </div>
@@ -166,10 +166,10 @@
                     <div class="col-sm-12">
                         <ul class="nav nav-pills nav-justified">
                             <li class="nav-item">
-                                <a class="nav-link" href="skills.html">Active Skills</a>
+                                <a class="nav-link text-info" href="skills.html">Active Skills</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link active" aria-current="page">Inactive Skills</a>
+                                <a class="nav-link bg-info text-white active" aria-current="page">Inactive Skills</a>
                             </li>
                         </ul>
                     </div>
@@ -193,8 +193,8 @@
                         <td>{{ Skill.Skill_Desc }}</td>
                         <td><courses-comp :id="Skill.Skill_ID"></courses-comp></td>
                         <td>{{ Skill.Skill_Status }}</td>
-                        <td>
-							<button>Re-Activate</button>
+                        <td class="col text-center">
+                            <button type="button" class="btn btn-outline-info btn-sm" @click="reactivateSkill" v-bind:id="Skill.Skill_ID" v-bind:name="Skill.Skill_Name">Re-activate</button>
                         </td>
                     </tr>
                 </tbody>
@@ -224,6 +224,19 @@
             data: {
                 id: "",
                 InactiveSkills: []
+            },
+            methods: {
+                reactivateSkill: function(event) {
+                    var id = event.target.id;
+                    axios.post('http://localhost:5001/ReactivateSkills/' + id)
+                .then(response => {
+                        var skill_name = event.target.name;
+                        alert(skill_name + " has successfully re-activated")
+                        window.location.replace("./skills.html");
+                        return false;
+                    })
+                .catch(error => { error => alert(error) });
+                }
             },
             mounted: function() {
                 axios.get('http://localhost:5001/InactiveSkills')
