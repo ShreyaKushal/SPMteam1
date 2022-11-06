@@ -2,13 +2,6 @@ import unittest
 
 from app import JobRoles, Skills, Courses, Role, Staff, JobRoleWithSkills, SkillsRequiredCourses, LearningJourney
 
-
-# class TestCoursesRoute(unittest.TestCase):
-#     def test_courses_route_status_code(self):
-#         route = "/Courses"
-#         rv = self.get(route)
-#         assert rv.status_code == 200
-
 class TestJobRoles(unittest.TestCase):
     def test_to_dict(self):
         role = JobRoles(JobRole_ID='SD01', JobRole_Name='Software Developer', JobRole_Status='Active')
@@ -17,6 +10,11 @@ class TestJobRoles(unittest.TestCase):
             'JobRole_Name': 'Software Developer',
             'JobRole_Status': 'Active'}
         )
+    
+    def test_getName(self):
+        role1 = JobRoles(JobRole_ID='SSD01', JobRole_Name='Senior Software Developer', JobRole_Status='Active')
+        name = role1.getName()
+        self.assertEqual(name, {'JobRole_Name': 'Senior Software Developer'})
         
 class TestSkills(unittest.TestCase):
     def test_to_dict(self):
@@ -29,10 +27,12 @@ class TestSkills(unittest.TestCase):
             'Skill_Desc': 'Able to automate complicated tasks & debug errors Visual Basic for Applications in Microsoft Excel Able',
             'Skill_Status': 'Active'}
         )
-    # def test_skills_route_status_code(self):
-    #     route = "/Skills"
-    #     rv = self.get(route)
-    #     assert rv.status_code == 200
+
+    def test_getName(self):
+        skill1 = Skills(Skill_ID='MPW01', Skill_Name='People Management', 
+        Skill_Desc='Able to manage people at work', Skill_Status='Active')
+        name = skill1.getName()
+        self.assertEqual(name, {'Skill_Name': 'People Management'})
 
 
 class TestCourses(unittest.TestCase):
@@ -49,6 +49,13 @@ class TestCourses(unittest.TestCase):
             'Course_Category': 'Management'
             }
         )
+
+    def test_getName(self):
+        course1 = Courses(Course_ID='FIN01', Course_Name='Corporate Finance', 
+        Course_Desc='Covers fundamental issues of corporate finance, including corporate governance, capital budgeting, and capital structure.',
+        Course_Status='Active', Course_Type='External', Course_Category='Finance')
+        name = course1.getName()
+        self.assertEqual(name, {'Course_Name': 'Corporate Finance'})
 
 class TestRole(unittest.TestCase):
     def test_to_dict(self):
@@ -74,27 +81,52 @@ class TestJobRoleWithSkills(unittest.TestCase):
     def test_to_dict(self):
         jobrolewithskill = JobRoleWithSkills(JobRole_ID='HE8', Skill_ID='HT9')
         self.assertEqual(jobrolewithskill.to_dict(), {
+            'JobRoleWithSkills_ID': None,
             'JobRole_ID': 'HE8',
             'Skill_ID': 'HT9'}
         )
+    
+    def test_getSkillID(self):
+        jobrolewithskill1 = JobRoleWithSkills(JobRole_ID='SD13', Skill_ID='RU02')
+        skill_ID = jobrolewithskill1.getSkillID()
+        self.assertEqual(skill_ID, 'RU02')
 
 class TestSkillsRequiredCourses(unittest.TestCase):
     def test_to_dict(self):
         skillrequiredcourse = SkillsRequiredCourses(Course_ID='COR004', Skill_ID='COR6')
         self.assertEqual(skillrequiredcourse.to_dict(), {
+            'SkillsRequiredCourses_ID': None,
             'Course_ID': 'COR004',
             'Skill_ID': 'COR6'}
         )
+    
+    def test_getCourseID(self):
+        skillrequiredcourse1 = SkillsRequiredCourses(Course_ID='MPW003', Skill_ID='COR8')
+        course_ID = skillrequiredcourse1.getCourseID()
+        self.assertEqual(course_ID, "MPW003")
+
 
 class TestLearningJourney(unittest.TestCase):
     def test_to_dict(self):
         learning_journey = LearningJourney(JobRole_ID='HE8',Skill_ID='COR6', Course_ID='COR004', Staff_ID='172002')
         self.assertEqual(learning_journey.to_dict(), {
+            'LearningJourney_ID': None,
             'JobRole_ID': 'HE8',
             'Skill_ID': 'COR6',
             'Course_ID': 'COR004',
             'Staff_ID': '172002'}
         )
+    
+    def test_getCourseID(self):
+        learning_journey1 = LearningJourney(JobRole_ID='HE15',Skill_ID='COR9', Course_ID='COR009', Staff_ID='172003')
+        course_ID1 = learning_journey1.getCourseID()
+        self.assertEqual(course_ID1, "COR009")
+
+    def test_getCourseID(self):
+        learning_journey2 = LearningJourney(JobRole_ID='HE02',Skill_ID='COR6', Course_ID='COR010', Staff_ID='172004')
+        course_ID2 = learning_journey2.getJobRoleID()
+        self.assertEqual(course_ID2, "HE02")
+
 
 
 if __name__ == "__main__":
