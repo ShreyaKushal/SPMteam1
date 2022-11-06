@@ -3,6 +3,7 @@ import unittest
 from app import JobRoles, Skills, Courses, Role, Staff, JobRoleWithSkills, SkillsRequiredCourses, LearningJourney
 
 class TestJobRoles(unittest.TestCase):
+
     def test_to_dict(self):
         role = JobRoles(JobRole_ID='SD01', JobRole_Name='Software Developer', JobRole_Status='Active')
         self.assertEqual(role.to_dict(), {
@@ -15,16 +16,25 @@ class TestJobRoles(unittest.TestCase):
         role1 = JobRoles(JobRole_ID='SSD01', JobRole_Name='Senior Software Developer', JobRole_Status='Active')
         name = role1.getName()
         self.assertEqual(name, {'JobRole_Name': 'Senior Software Developer'})
+
+    def test_json(self):
+        role2 = JobRoles(JobRole_ID='SD03', JobRole_Name='Junior Software Developer', JobRole_Status='Active')
+        json = role2.json()
+        self.assertEqual(json, {
+            'JobRole_ID': 'SD03',
+            'JobRole_Name': 'Junior Software Developer',
+            'JobRole_Status': 'Active'})
+
         
 class TestSkills(unittest.TestCase):
     def test_to_dict(self):
         skill = Skills(Skill_ID='VBA01', Skill_Name='Visual Basic for Applications in Excel', 
-        Skill_Desc='Able to automate complicated tasks & debug errors Visual Basic for Applications in Microsoft Excel Able'
+        Skill_Desc='Able to automate complicated tasks & debug errors Visual Basic for Applications in Microsoft Excel'
         ,Skill_Status='Active')
         self.assertEqual(skill.to_dict(), {
             'Skill_ID': 'VBA01',
             'Skill_Name': 'Visual Basic for Applications in Excel',
-            'Skill_Desc': 'Able to automate complicated tasks & debug errors Visual Basic for Applications in Microsoft Excel Able',
+            'Skill_Desc': 'Able to automate complicated tasks & debug errors Visual Basic for Applications in Microsoft Excel',
             'Skill_Status': 'Active'}
         )
 
@@ -34,6 +44,16 @@ class TestSkills(unittest.TestCase):
         name = skill1.getName()
         self.assertEqual(name, {'Skill_Name': 'People Management'})
 
+    def test_json(self):
+        skill2 = Skills(Skill_ID='SQL12', Skill_Name='SQL', 
+        Skill_Desc='Able to handle database using mySQL', Skill_Status='Active')
+        json = skill2.json()
+        self.assertEqual(json, {
+            'Skill_ID': 'SQL12',
+            'Skill_Name': 'SQL',
+            'Skill_Desc': 'Able to handle database using mySQL',
+            'Skill_Status': 'Active'}
+        )
 
 class TestCourses(unittest.TestCase):
     def test_to_dict(self):
@@ -57,6 +77,20 @@ class TestCourses(unittest.TestCase):
         name = course1.getName()
         self.assertEqual(name, {'Course_Name': 'Corporate Finance'})
 
+    def test_json(self):
+        course2 = Courses(Course_ID='ESD01', Course_Name='Enterprise Solution Development', 
+        Course_Desc='Learn how to software application designed to meet the multifaceted needs of an organisation.',
+        Course_Status='Active', Course_Type='Internal', Course_Category='Technical')
+        json = course2.json()
+        self.assertEqual(json, {
+            'Course_ID': 'ESD01',
+            'Course_Name': 'Enterprise Solution Development',
+            'Course_Desc': 'Learn how to software application designed to meet the multifaceted needs of an organisation.',
+            'Course_Status': 'Active',
+            'Course_Type':'Internal',
+            'Course_Category': 'Technical'
+            }
+        )
 class TestRole(unittest.TestCase):
     def test_to_dict(self):
         role = Role(Role_ID=5, Role_Name='HR')
@@ -77,6 +111,18 @@ class TestStaff(unittest.TestCase):
             'Role_ID': 2}
         )
 
+    def test_json(self):
+        staff1 = Staff(Staff_ID= 172005, Staff_Fname='Sam', Staff_Lname='Tan', Dept='Sales', Email='samtan@allinone.com.sg', Role_ID=2)
+        json = staff1.json()
+        self.assertEqual(json, {
+            'Staff_ID': 172005,
+            'Staff_Fname': 'Sam',
+            'Staff_Lname': 'Tan',
+            'Dept':'Sales',
+            'Email': 'samtan@allinone.com.sg',
+            'Role_ID': 2
+        })
+
 class TestJobRoleWithSkills(unittest.TestCase):
     def test_to_dict(self):
         jobrolewithskill = JobRoleWithSkills(JobRole_ID='HE8', Skill_ID='HT9')
@@ -90,6 +136,15 @@ class TestJobRoleWithSkills(unittest.TestCase):
         jobrolewithskill1 = JobRoleWithSkills(JobRole_ID='SD13', Skill_ID='RU02')
         skill_ID = jobrolewithskill1.getSkillID()
         self.assertEqual(skill_ID, 'RU02')
+
+    def test_json(self):
+        jobrolewithskill2 = JobRoleWithSkills(JobRole_ID='SD43', Skill_ID='JVS12')
+        json = jobrolewithskill2.json()
+        self.assertEqual(json, {
+            'JobRoleWithSkills_ID': None,
+            'JobRole_ID': 'SD43',
+            'Skill_ID': 'JVS12'
+        })
 
 class TestSkillsRequiredCourses(unittest.TestCase):
     def test_to_dict(self):
@@ -105,6 +160,14 @@ class TestSkillsRequiredCourses(unittest.TestCase):
         course_ID = skillrequiredcourse1.getCourseID()
         self.assertEqual(course_ID, "MPW003")
 
+    def test_json(self):
+        skillrequiredcourse2 = SkillsRequiredCourses(Course_ID='ESM001', Skill_ID='JR01')
+        json = skillrequiredcourse2.json()
+        self.assertEqual(json, {
+            'SkillsRequiredCourses_ID': None,
+            'Course_ID': 'ESM001',
+            'Skill_ID': 'JR01'          
+        })
 
 class TestLearningJourney(unittest.TestCase):
     def test_to_dict(self):
@@ -127,6 +190,16 @@ class TestLearningJourney(unittest.TestCase):
         course_ID2 = learning_journey2.getJobRoleID()
         self.assertEqual(course_ID2, "HE02")
 
+    def test_json(self):
+        learning_journey3 = LearningJourney(JobRole_ID='SF12',Skill_ID='JR02', Course_ID='ESM010', Staff_ID='172005')
+        course_ID3 = learning_journey3.json()
+        self.assertEqual(course_ID3, {
+            'LearningJourney_ID': None,
+            'JobRole_ID': 'SF12',
+            'Skill_ID': 'JR02',
+            'Course_ID': 'ESM010',
+            'Staff_ID': '172005'
+        })
 
 
 if __name__ == "__main__":
