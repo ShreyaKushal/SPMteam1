@@ -244,6 +244,7 @@
                 id: "",
                 jobRoleList: [],
                 uniqueJobRoleIDList: []
+
             },
             methods: {
                 deleteLearningJourney: function(event){
@@ -252,7 +253,7 @@
 
                     axios.delete('http://localhost:5001/StaffDeleteLearningJourney/'+staffID+ '/' +jobroleID)
                     .then(response => {
-                        alert("Successfully delete from Learning Journey");
+                        alert("Learning journey has been successfully deleted");
                         window.location.replace("./staffLearningJourney.html");
                         return false;
                     })
