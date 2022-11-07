@@ -233,7 +233,7 @@
                     axios.post('http://localhost:5001/Skills/' + id)
                 .then(response => {
                     var skill_name = event.target.name;
-                    alert(skill_name + " has successfully deleted")
+                    alert("You have successfully deleted " +skill_name)
                     window.location.replace("./view_inactive_skills.html");
                     return false;
                 })

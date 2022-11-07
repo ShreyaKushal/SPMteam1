@@ -231,7 +231,7 @@
                     axios.post('http://localhost:5001/ReactivateSkills/' + id)
                 .then(response => {
                         var skill_name = event.target.name;
-                        alert(skill_name + " has successfully re-activated")
+                        alert("You have successfully reactivated " + skill_name )
                         window.location.replace("./skills.html");
                         return false;
                     })

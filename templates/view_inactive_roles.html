@@ -137,10 +137,6 @@
                 <a class="nav-link active" href="view_roles.html">Roles</a>
               </li>
             </ul>
-            <!--Have just left this here in case we do implement, if not remove!-->
-            <form class="d-flex" role="search">
-              <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-              <button class="btn btn-outline-success" type="submit">Search</button>
             </form>
           </div>
         </div>
@@ -229,7 +225,7 @@
                     axios.post('http://localhost:5001/ReactivateJobRoles/' + id)
                 .then(response => {
                         var role_name = event.target.name;
-                        alert(role_name + " has successfully re-activated")
+                        alert("You have successfully reactivated " + role_name)
                         window.location.replace("./view_roles.html");
                         return false;
                     })
