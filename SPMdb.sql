@@ -616,8 +616,8 @@ insert into JobRoles (JobRole_ID, JobRole_Name, JobRole_Status) values
 ("PM5", "Project Manager", "Active"),
 ("FM6", "Finance Manager", "Active"),
 ("SE7", "Sales Executive", "Active"),
-("HE8", "Hardware Engineer", "Active"),
-("NA9", "Network Architech", "Inactive");
+("HE8", "Hardware Engineer", "Active");
+
 
 create table Skills
 (	Skill_ID 		varchar(50)		primary key,
