@@ -713,10 +713,10 @@ def delete_entireStaffLearningJourneyBasedOnJobRole(staff_id, jobrole_id):
         }
     ), 404
 
-# Retrieve the list of course the staff has added to his/her learning journey
-@app.route("/StaffLearningJourneyButton/<string:staff_id>")
-def view_StaffAddedCourses(staff_id):
-    course_list = LearningJourney.query.filter(LearningJourney.Staff_ID==staff_id).all()
+# Retrieve the list of course the staff has added to his/her learning journey based on JobRole_ID
+@app.route("/StaffLearningJourneyButton/<string:staff_id>/<string:jobrole_id>")
+def view_StaffAddedCourses(staff_id, jobrole_id):
+    course_list = LearningJourney.query.filter_by(Staff_ID=staff_id).filter_by(JobRole_ID=jobrole_id).all()
     return jsonify(
         {
             "data":[course.getCourseID()

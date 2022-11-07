@@ -156,10 +156,11 @@
             mounted: function() {
                 var staffID = 130001; // NEED TO CHANGE TO localStorage.getItem("StaffID")
                 var skillID = localStorage.getItem("SkillID");
+                var jobID = localStorage.getItem("JobroleID");
 
                 axios.all([
                     axios.get('http://localhost:5001/StaffViewCourses/'+skillID),
-                    axios.get('http://localhost:5001/StaffLearningJourneyButton/'+staffID)
+                    axios.get('http://localhost:5001/StaffLearningJourneyButton/'+staffID+'/'+jobID)
                 ])
                 .then(axios.spread((response1, response2) => {
                     this.courses = response1.data.data;
