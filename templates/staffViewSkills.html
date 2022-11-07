@@ -60,13 +60,13 @@
     <!-- Header Start -->
     <div class="container-fluid bg-primary mb-5">
         <div class="d-flex flex-column align-items-center justify-content-center" style="min-height: 250px">
-            <h3 class="display-3 font-weight-bold text-white">View Skills Required</h3>
+            <h3 class="display-3 font-weight-bold text-white">Skills Required</h3>
             <div class="d-inline-flex text-white">
                 <p class="m-0"><a class="text-white" href="staffHomepage.html">Home</a></p>
                 <p class="m-0 px-2">/</p>
-                <p class="m-0"><a class="text-white" href="staffViewRoles.html">View Job Roles</a></p>
+                <p class="m-0"><a class="text-white" href="staffViewRoles.html">Job Roles</a></p>
                 <p class="m-0 px-2">/</p>
-                <p class="m-0">View Skills Required</p>
+                <p class="m-0">Skills Required</p>
             </div>
         </div>
     </div>
@@ -74,6 +74,7 @@
 
     <!-- Content Start -->
     <div id="main-container" class="container">
+        <h4>Skills required for {{jobrole_name}}:</h4>
         <div class="table-wrapper">
             <table id ="JobRolesTable" class="table table-hover">
                 <thead class="bg-info text-white">
@@ -133,7 +134,8 @@
         const vm = new Vue({
             el: '#main-container',
             data: {
-                skills: []
+                skills: [],
+                jobrole_name: ""
             },
             mounted: function() {
                 var jobID = localStorage.getItem("JobroleID");
@@ -141,7 +143,14 @@
                     .then(response => {
                         this.skills = response.data.data;
                 })
-                    .catch(error => alert(error));
+                .catch(error => alert(error));
+                axios.get('http://localhost:5001/JobRolesDetails/'+jobID)
+                .then(response => {
+                    this.jobrole_name = response.data.data.JobRole_Name;
+                    console.log(this.jobrole_name)
+                })
+                .catch(error => alert(error));
+                    
             },
             methods:{
                 getID:function (event) {

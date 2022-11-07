@@ -64,11 +64,11 @@
             <div class="d-inline-flex text-white">
                 <p class="m-0"><a class="text-white" href="staffHomepage.html">Home</a></p>
                 <p class="m-0 px-2">/</p>
-                <p class="m-0"><a class="text-white" href="staffViewRoles.html">View Job Roles</a></p>
+                <p class="m-0"><a class="text-white" href="staffViewRoles.html">Job Roles</a></p>
                 <p class="m-0 px-2">/</p>
-                <p class="m-0"><a class="text-white" href="staffViewSkills.html">View Skills Required</a></p>
+                <p class="m-0"><a class="text-white" href="staffViewSkills.html">Skills Required</a></p>
                 <p class="m-0 px-2">/</p>
-                <p class="m-0">View Courses Available</p>
+                <p class="m-0">Courses Available</p>
             </div>
         </div>
     </div>
@@ -77,6 +77,7 @@
 
     <!-- Content Start -->
     <div id="main-container" class="container">
+        <h4>Courses available to acquire the skill {{skill_name}}:</h4>
         <div class="table-wrapper">
             <table id ="JobRolesTable" class="table table-hover">
                 <thead class="bg-info text-white">
@@ -148,6 +149,7 @@
         const vm = new Vue({
             el: '#main-container',
             data: {
+                skill_name: "",
                 courses: [],
                 courseAdded_list: []
             },
@@ -163,6 +165,12 @@
                     this.courses = response1.data.data;
                     this.courseAdded_list = response2.data.data;
                 }))
+                .catch(error => alert(error));
+
+                axios.get('http://localhost:5001/SkillDetails/'+skillID)
+                .then(response => {
+                    this.skill_name = response.data.data.Skill_Name;
+                })
                 .catch(error => alert(error));
             }, 
             methods:{
