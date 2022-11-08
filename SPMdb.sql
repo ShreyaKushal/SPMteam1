@@ -603,9 +603,9 @@ INSERT INTO registration VALUES
 
 
 create table JobRoles
-(	JobRole_ID		varchar(50)		primary key,
+(	JobRole_ID		varchar(10)		primary key,
 	JobRole_Name 	varchar(50)		not null,
-	JobRole_Status 	varchar(50)
+	JobRole_Status 	varchar(10)
 );
 
 insert into JobRoles (JobRole_ID, JobRole_Name, JobRole_Status) values 
@@ -620,10 +620,10 @@ insert into JobRoles (JobRole_ID, JobRole_Name, JobRole_Status) values
 
 
 create table Skills
-(	Skill_ID 		varchar(50)		primary key,
+(	Skill_ID 		varchar(10)		primary key,
 	Skill_Name		varchar(50)		not null,
 	Skill_Desc		varchar(255) 	not null,
-	Skill_Status 	varchar(255) 	not null
+	Skill_Status 	varchar(10) 	not null
 );
 
 insert into Skills (Skill_ID, Skill_Name, Skill_Desc, Skill_Status) values
@@ -640,8 +640,8 @@ insert into Skills (Skill_ID, Skill_Name, Skill_Desc, Skill_Status) values
 
 create table JobRoleWithSkills
 (	JobRoleWithSkills_ID int AUTO_INCREMENT primary key,
-    JobRole_ID 		varchar(50) 	not null,
-	Skill_ID 		varchar(50) 	not null,
+    JobRole_ID 		varchar(10) 	not null,
+	Skill_ID 		varchar(10) 	not null,
 	constraint JobRoleWithSkills_fk1 foreign key(JobRole_ID) references JobRoles(JobRole_ID),
 	constraint JobRoleWithSkills_fk2 foreign key(Skill_ID) references Skills(Skill_ID));
 
@@ -678,7 +678,7 @@ insert into JobRoleWithSkills (JobRole_ID, Skill_ID) values
 create table SkillsRequiredCourses
 (	SkillsRequiredCourses_ID int AUTO_INCREMENT primary key,
     Course_ID 			varchar(20) 	not null,
-	Skill_ID 			varchar(50) 	not null,
+	Skill_ID 			varchar(10) 	not null,
 	constraint SkillsRequiredCourses_fk1 foreign key(Course_ID) references Courses(Course_ID),
 	constraint SkillsRequiredCourses_fk2 foreign key(Skill_ID) references Skills(Skill_ID));
 
@@ -733,8 +733,8 @@ insert into SkillsRequiredCourses (Course_ID, Skill_ID) values
 
 create table LearningJourney
 (	LearningJourney_ID int AUTO_INCREMENT primary key,
-	JobRole_ID 			varchar(50) 	not null,
-	Skill_ID 			varchar(50) 	not null,
+	JobRole_ID 			varchar(10) 	not null,
+	Skill_ID 			varchar(10) 	not null,
 	Course_ID 			varchar(20) 	not null,
 	Staff_ID 			int 			not null,
 	constraint LearningJourney_fk1 foreign key(JobRole_ID) references JobRoles(JobRole_ID),

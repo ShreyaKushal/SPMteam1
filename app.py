@@ -17,9 +17,9 @@ CORS(app, support_credentials=True)
 
 class JobRoles(db.Model):
     __tablename__ = 'JobRoles'
-    JobRole_ID = db.Column(db.String(50), primary_key=True)
+    JobRole_ID = db.Column(db.String(10), primary_key=True)
     JobRole_Name = db.Column(db.String(50))
-    JobRole_Status = db.Column(db.String(50))
+    JobRole_Status = db.Column(db.String(10))
 
     def __init__(self, JobRole_ID, JobRole_Name, JobRole_Status): #initialise value of job role record, specify properties of a job role when it is created
         self.JobRole_ID = JobRole_ID
@@ -53,10 +53,10 @@ class JobRoles(db.Model):
 
 class Skills(db.Model):
     __tablename__ = 'Skills'
-    Skill_ID = db.Column(db.String(50), primary_key=True)
+    Skill_ID = db.Column(db.String(10), primary_key=True)
     Skill_Name = db.Column(db.String(50), nullable=False)
     Skill_Desc = db.Column(db.String(255), nullable=False)
-    Skill_Status = db.Column(db.String(50), nullable=False)
+    Skill_Status = db.Column(db.String(10), nullable=False)
 
     def __init__(self, Skill_ID, Skill_Name, Skill_Desc, Skill_Status): #initialise value of job role record, specify properties of a job role when it is created
         self.Skill_ID = Skill_ID
@@ -160,8 +160,8 @@ class Staff(db.Model):
 class JobRoleWithSkills(db.Model):
     __tablename__ = 'JobRoleWithSkills'
     JobRoleWithSkills_ID = db.Column(db.Integer, primary_key=True)
-    JobRole_ID = db.Column(db.String(50), db.ForeignKey('Role.Role_ID'))
-    Skill_ID = db.Column(db.String(50), db.ForeignKey('Skills.Skill_ID'))
+    JobRole_ID = db.Column(db.String(10), db.ForeignKey('Role.Role_ID'))
+    Skill_ID = db.Column(db.String(10), db.ForeignKey('Skills.Skill_ID'))
 
     def __init__(self, JobRole_ID, Skill_ID):
         self.JobRole_ID = JobRole_ID
@@ -187,8 +187,8 @@ class JobRoleWithSkills(db.Model):
 class SkillsRequiredCourses(db.Model):
     __tablename__ = 'SkillsRequiredCourses'
     SkillsRequiredCourses_ID = db.Column(db.Integer, primary_key=True)
-    Course_ID = db.Column(db.String(50), db.ForeignKey('Courses.Course_ID'))
-    Skill_ID = db.Column(db.String(50), db.ForeignKey('Skills.Skill_ID'))
+    Course_ID = db.Column(db.String(20), db.ForeignKey('Courses.Course_ID'))
+    Skill_ID = db.Column(db.String(10), db.ForeignKey('Skills.Skill_ID'))
 
     def __init__(self, Course_ID, Skill_ID):
         self.Course_ID = Course_ID
@@ -215,8 +215,8 @@ class LearningJourney(db.Model):
     __tablename__ = 'LearningJourney'
     LearningJourney_ID = db.Column(db.Integer, primary_key=True)
     Staff_ID =  db.Column(db.Integer, db.ForeignKey('Staff.Staff_ID'))
-    JobRole_ID = db.Column(db.String(50), db.ForeignKey('JobRoles.JobRole_ID'))
-    Skill_ID = db.Column(db.String(50), db.ForeignKey('Skills.Skill_ID'))
+    JobRole_ID = db.Column(db.String(10), db.ForeignKey('JobRoles.JobRole_ID'))
+    Skill_ID = db.Column(db.String(10), db.ForeignKey('Skills.Skill_ID'))
     Course_ID = db.Column(db.String(20), db.ForeignKey('Courses.Course_ID'))
 
     def __init__(self, Staff_ID, JobRole_ID, Skill_ID, Course_ID):
