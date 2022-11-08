@@ -160,7 +160,7 @@
                 skillname: []
             },
             mounted: function() {
-                var staffID = 130001; // NEED TO CHANGE TO localStorage.getItem("StaffID")
+                var staffID = localStorage.getItem("StaffID")
                 var skillID = localStorage.getItem("SkillID");
                 var jobID = localStorage.getItem("JobroleID");
 
@@ -181,7 +181,7 @@
                     var jobroleID = localStorage.getItem("JobroleID");
                     var skillID = localStorage.getItem("SkillID");
                     var courseID = event.target.id;
-                    var staffID = 130001; /* HAVE TO CHANGE THIS LATER ON */
+                    var staffID = localStorage.getItem("StaffID")
 
                     axios.post('http://localhost:5001/StaffLearningJourney', {
                             JobRole_ID: jobroleID,
@@ -197,7 +197,7 @@
                     .catch(error => { this.error = error.response.data.message });
                 },
                 removeFromLearningJourney: function(event){
-                    var staffID = 130001; // NEED TO CHANGE TO localStorage.getItem("StaffID")
+                    var staffID = localStorage.getItem("StaffID")
                     var courseID = event.target.id;
                     var jobroleID = localStorage.getItem("JobroleID");
 

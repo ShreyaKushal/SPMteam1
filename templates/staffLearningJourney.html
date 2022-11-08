@@ -183,7 +183,7 @@
             };
         },
         created: function () {
-            var staffID = 130001; // NEED TO CHANGE TO localStorage.getItem("StaffID")
+            var staffID = localStorage.getItem("StaffID")
             axios.get('http://localhost:5001/StaffLearningJourney/'+ staffID + '/' + this.id)
             .then(response => {
                 this.coursesAddedInJobRole = response.data.data;
@@ -191,7 +191,7 @@
         },
         methods:{
             removeFromLearningJourney: function(event){
-                    var staffID = 130001; // NEED TO CHANGE TO localStorage.getItem("StaffID")
+                    var staffID = localStorage.getItem("StaffID")
                     var courseID = event.target.id;
 
                     axios.delete('http://localhost:5001/StaffLearningJourney/'+staffID+ '/' +this.id+ '/' +courseID)
@@ -260,7 +260,7 @@
                     .catch(error => alert(error));
                 },
                 delete(){
-                    var staffID = 130001; // NEED TO CHANGE TO localStorage.getItem("StaffID")
+                    var staffID = localStorage.getItem("StaffID")
                     var jobroleID = localStorage.getItem("JobroleID")
 
                     axios.delete('http://localhost:5001/StaffDeleteLearningJourney/'+staffID+'/'+jobroleID)
@@ -280,7 +280,7 @@
                 }
             },
             mounted: function() {
-                var staffID = 130001; // NEED TO CHANGE TO localStorage.getItem("StaffID")
+                var staffID = localStorage.getItem("StaffID")
                 axios.get('http://localhost:5001/StaffLearningJourney/'+ staffID)
                 .then(response => {
                     this.jobRoleList = response.data.data;
