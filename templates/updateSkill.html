@@ -103,7 +103,12 @@
         <!--<div>Checked Courses: {{ selectedCourseID }}</div>
         <div>retrieveCourseList: {{ retrieveCourseList }}</div>-->
         <br>
-        <button class="btn btn-primary" v-on:click="submitForm">Update Skill</button>
+        <template v-if="retrieveCourseList==selectedCourseID && Skill_Name==retrieveSkillDetails.Skill_Name && Skill_Desc==retrieveSkillDetails.Skill_Desc">
+            <button class="btn btn-primary" v-on:click="submitForm" disabled>Update Skill</button>
+        </template>
+        <template v-else>
+            <button class="btn btn-primary" v-on:click="submitForm">Update Skill</button>
+        </template>
         <p><label id="error" class="text-danger">{{ error }}</label></p>
         </form>
 

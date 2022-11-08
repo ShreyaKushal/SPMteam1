@@ -96,7 +96,12 @@
         <!--<div>Checked Skills: {{ selectedSkillID }}</div>
         <div>retrieveSkillList: {{ retrieveSkillList }}</div>-->
         <br>
-        <button class="btn btn-primary" v-on:click="submitForm">Update Role</button>
+        <template v-if="retrieveSkillList==selectedSkillID && JobRole_Name==retrieveJobRoleDetails.JobRole_Name">
+            <button class="btn btn-primary" v-on:click="submitForm" disabled>Update Role</button>
+        </template>
+        <template v-else>
+            <button class="btn btn-primary" v-on:click="submitForm">Update Role</button>
+        </template>
         <p><label id="error" class="text-danger">{{ error }}</label></p>
         </form>
 
