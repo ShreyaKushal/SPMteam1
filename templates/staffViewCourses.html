@@ -77,37 +77,43 @@
 
     <!-- Content Start -->
     <div id="main-container" class="container">
-        <h4>Courses available to acquire the skill {{skill_name}}:</h4>
-        <div class="table-wrapper">
-            <table id ="JobRolesTable" class="table table-hover">
-                <thead class="bg-info text-white">
-                    <tr>
-                        <th class="col-md-1">Course ID</th>
-                        <th class="col-md-2">Course Name</th>
-                        <th class="col-md-5">Course Description</th>
-                        <th class="col-md-1">Course Type</th>
-                        <th class="col-md-1">Course Category</th>
-                        <th class="col-md-2"></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="course in courses" v-bind:key="course.Course_ID">
-                        <td>{{ course.Course_ID }}</td>
-                        <td>{{ course.Course_Name }}</td>
-                        <td>{{ course.Course_Desc }}</td>
-                        <td>{{ course.Course_Type }}</td>
-                        <td>{{ course.Course_Category }}</td>
-                        <td class="col text-center">
-                            <template v-if="courseAdded_list.includes(course.Course_ID)">
-                                <button type="button" class="btn btn-outline-danger" @click="removeFromLearningJourney" v-bind:id="course.Course_ID">Remove from Learning Journey</button>
-                            </template>
-                            <template v-else>
-                                <button type="button" class="btn btn-outline-success" @click="addToLearningJourney" v-bind:id="course.Course_ID">Add to Learning Journey</button>
-                            </template>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+        <div v-if="courses.length > 0">
+            <div class="table-wrapper">
+                <table id ="JobRolesTable" class="table table-hover">
+                    <thead class="bg-info text-white">
+                        <tr>
+                            <th class="col-md-1">Course ID</th>
+                            <th class="col-md-2">Course Name</th>
+                            <th class="col-md-5">Course Description</th>
+                            <th class="col-md-1">Course Type</th>
+                            <th class="col-md-1">Course Category</th>
+                            <th class="col-md-2"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="course in courses" v-bind:key="course.Course_ID">
+                            <td>{{ course.Course_ID }}</td>
+                            <td>{{ course.Course_Name }}</td>
+                            <td>{{ course.Course_Desc }}</td>
+                            <td>{{ course.Course_Type }}</td>
+                            <td>{{ course.Course_Category }}</td>
+                            <td class="col text-center">
+                                <template v-if="courseAdded_list.includes(course.Course_ID)">
+                                    <button type="button" class="btn btn-outline-danger" @click="removeFromLearningJourney" v-bind:id="course.Course_ID">Remove from Learning Journey</button>
+                                </template>
+                                <template v-else>
+                                    <button type="button" class="btn btn-outline-success" @click="addToLearningJourney" v-bind:id="course.Course_ID">Add to Learning Journey</button>
+                                </template>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div v-else>
+            <div class="d-flex flex-column align-items-center justify-content-center" style="min-height: 150px">
+                <p v-for="name in skillname">There are currently no courses assign assigned to {{name.Skill_Name}}</p>
+            </div>
         </div>
     </div>
     <!-- Content End -->
@@ -149,9 +155,9 @@
         const vm = new Vue({
             el: '#main-container',
             data: {
-                skill_name: "",
                 courses: [],
-                courseAdded_list: []
+                courseAdded_list: [],
+                skillname: []
             },
             mounted: function() {
                 var staffID = 130001; // NEED TO CHANGE TO localStorage.getItem("StaffID")
@@ -160,18 +166,14 @@
 
                 axios.all([
                     axios.get('http://localhost:5001/StaffViewCourses/'+skillID),
-                    axios.get('http://localhost:5001/StaffLearningJourneyButton/'+staffID+'/'+jobID)
+                    axios.get('http://localhost:5001/StaffLearningJourneyButton/'+staffID+'/'+jobID),
+                    axios.get('http://localhost:5001/StaffGetSkillName/' + skillID)
                 ])
-                .then(axios.spread((response1, response2) => {
+                .then(axios.spread((response1, response2, response3) => {
                     this.courses = response1.data.data;
                     this.courseAdded_list = response2.data.data;
+                    this.skillname = response3.data.data;
                 }))
-                .catch(error => alert(error));
-
-                axios.get('http://localhost:5001/SkillDetails/'+skillID)
-                .then(response => {
-                    this.skill_name = response.data.data.Skill_Name;
-                })
                 .catch(error => alert(error));
             }, 
             methods:{
@@ -197,8 +199,9 @@
                 removeFromLearningJourney: function(event){
                     var staffID = 130001; // NEED TO CHANGE TO localStorage.getItem("StaffID")
                     var courseID = event.target.id;
+                    var jobroleID = localStorage.getItem("JobroleID");
 
-                    axios.delete('http://localhost:5001/StaffLearningJourney/'+staffID+ '/' +courseID)
+                    axios.delete('http://localhost:5001/StaffLearningJourney/'+staffID+ '/' +jobroleID+ '/' +courseID)
                     .then(response => {
                         alert("Successfully removed from Learning Journey");
                         window.location.replace("./staffViewCourses.html");

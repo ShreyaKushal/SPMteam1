@@ -577,13 +577,12 @@ def view_JobRoleWithSkills(jobrole_id):
 @app.route("/StaffViewCourses/<string:skill_id>")
 def view_CoursesInSkill(skill_id):
     course_list = Courses.query.join(SkillsRequiredCourses, SkillsRequiredCourses.Course_ID==Courses.Course_ID).join(Skills, Skills.Skill_ID==SkillsRequiredCourses.Skill_ID).filter(Skills.Skill_ID==skill_id).all()
-    if course_list:
-        return jsonify(
-            {
-                "data":[course.to_dict()
-                        for course in course_list]
+    return jsonify(
+        {
+            "data":[course.to_dict()
+                    for course in course_list]
             }
-        ), 200
+    ), 200
 
 # Create Staff Learning Journey
 @app.route("/StaffLearningJourney", methods=['POST'])
@@ -659,9 +658,9 @@ def get_StaffLearningJourneys(staff_id):
     }), 200
         
 # Delete course in Staff Learning Journey
-@app.route("/StaffLearningJourney/<string:staff_id>/<string:course_id>", methods=['DELETE'])
-def delete_coursesFromStaffLearningJourney(staff_id, course_id):
-    learningJourney = LearningJourney.query.filter_by(Staff_ID=staff_id).filter_by(Course_ID=course_id).first()
+@app.route("/StaffLearningJourney/<string:staff_id>/<string:jobrole_id>/<string:course_id>", methods=['DELETE'])
+def delete_coursesFromStaffLearningJourney(staff_id, jobrole_id, course_id):
+    learningJourney = LearningJourney.query.filter_by(Staff_ID=staff_id).filter_by(JobRole_ID=jobrole_id).filter_by(Course_ID=course_id).first()
     if learningJourney:
         db.session.delete(learningJourney)
         db.session.commit()
@@ -670,6 +669,7 @@ def delete_coursesFromStaffLearningJourney(staff_id, course_id):
                 "code": 200,
                 "data": {
                     "Staff_ID": staff_id,
+                    "JobRole_ID": jobrole_id,
                     "Course_ID": course_id
                 }
             }
@@ -679,6 +679,7 @@ def delete_coursesFromStaffLearningJourney(staff_id, course_id):
             "code": 404,
             "data": {
                 "Staff_ID": staff_id,
+                "JobRole_ID": jobrole_id,
                 "Course_ID": course_id
             },
             "message": "Course not found in Learning Journey."

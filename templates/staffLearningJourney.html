@@ -194,7 +194,7 @@
                     var staffID = 130001; // NEED TO CHANGE TO localStorage.getItem("StaffID")
                     var courseID = event.target.id;
 
-                    axios.delete('http://localhost:5001/StaffLearningJourney/'+staffID+ '/' +courseID)
+                    axios.delete('http://localhost:5001/StaffLearningJourney/'+staffID+ '/' +this.id+ '/' +courseID)
                     .then(response => {
                         alert("Successfully removed from Learning Journey");
                         window.location.replace("./staffLearningJourney.html");
