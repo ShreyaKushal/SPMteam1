@@ -140,7 +140,7 @@
                         axios.post('http://localhost:5001/SkillDetails/'+skillID+'/'+this.Skill_ID+'/'+this.Skill_Name+'/'+this.Skill_Desc)
                         .then(response => {
                             this.updateCourses();
-                            alert("You have successfully updated " + this.Skill_Name);
+                            alert("Your updates have been successfully saved!");
                             window.location.replace("./skills.html");
                             return false;
                         })
