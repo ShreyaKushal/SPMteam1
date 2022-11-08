@@ -116,7 +116,7 @@
         methods: {
                 submitForm: function() {
                 event.preventDefault();
-                if (this.Skill_ID !== '' && this.Skill_Name !== '' && this.Skill_Desc !== '' 
+                if (this.Skill_ID !== '' && this.Skill_Name !== '' && this.Skill_Desc !== '' && this.Skill_ID.length <= 10 && this.Skill_Name.length <=50 && this.Skill_Desc.length <=255
                 && !this.existing_skills.some(e => e.Skill_ID.toUpperCase() === this.Skill_ID.toUpperCase() ) 
                 && !this.existing_skills.some(e => e.Skill_Name.toUpperCase() === this.Skill_Name.toUpperCase()) ) {
                     axios.post('http://localhost:5001/addSkill', {
@@ -141,7 +141,16 @@
                     }    
                     if (this.Skill_Desc == '') {
                         this.error_messages += "Skill Description must be filled\n"
-                    }    
+                    }
+                    if (this.Skill_ID.length > 10) {
+                        this.error_messages += "Skill ID must be less than or equal to 10 characters\n"
+                    }
+                    if (this.Skill_Name.length > 50) {
+                        this.error_messages += "Skill Name must be less than or equal to 50 characters\n"
+                    }
+                    if (this.Skill_Desc.length > 255) {
+                        this.error_messages += "Skill Description must be less than or equal to 255 characters\n"
+                    }     
                     if (this.existing_skills.some(e => e.Skill_ID.toUpperCase()=== this.Skill_ID.toUpperCase())) {
                         this.error_messages += `A skill with Skill ID ${this.Skill_ID} already exists\n`
                     }

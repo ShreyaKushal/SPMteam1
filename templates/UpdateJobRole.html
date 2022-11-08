@@ -121,7 +121,7 @@
                     event.preventDefault();
 
                     var jobID = localStorage.getItem("JobRoleID");
-                    if (this.JobRole_ID !== '' && this.JobRole_Name !== '' && this.selectedSkillID.length !== 0
+                    if (this.JobRole_ID !== '' && this.JobRole_Name !== '' && this.selectedSkillID.length !== 0 && this.JobRole_ID.length <= 10 && this.JobRole_Name.length <= 50
                     && !this.existingJobRoles.some(e => e.JobRole_ID.toUpperCase()=== this.JobRole_ID.toUpperCase()) 
                     && !this.existingJobRoles.some(e => e.JobRole_Name.toUpperCase()=== this.JobRole_Name.toUpperCase()) ){
                         axios.post('http://localhost:5001/JobRolesDetails/'+jobID+'/'+this.JobRole_ID+'/'+this.JobRole_Name)
@@ -142,6 +142,12 @@
                     }                  
                     if (this.selectedSkillID.length == 0) {
                         this.error_messages += "Skills required must be selected\n"
+                    }
+                    if (this.JobRole_ID.length > 10) {
+                        this.error_messages += "Role ID must be less than or equal to 10 characters\n"
+                    }
+                    if (this.JobRole_Name.length > 50) {
+                        this.error_messages += "Role Name must be less than or equal to 50 characters\n\n"
                     }
                     if (this.existingJobRoles.some(e => e.JobRole_ID.toUpperCase()=== this.JobRole_ID.toUpperCase() )) {
                         this.error_messages += `A role with Role ID ${this.JobRole_ID} already exists\n`
