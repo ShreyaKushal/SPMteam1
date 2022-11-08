@@ -267,7 +267,7 @@
                         .then(response => {
                             console.log(this.jobRoleName)
                             alert("You have successfully deleted the learning journey for " + this.jobRoleName);
-                            //window.location.replace("./staffLearningJourney.html");
+                            window.location.replace("./staffLearningJourney.html");
                             return false;
                         })
                         .catch(error => alert(error));
