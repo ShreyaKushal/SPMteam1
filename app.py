@@ -31,6 +31,9 @@ class JobRoles(db.Model):
     
     def getName(self):
         return {"JobRole_Name":self.JobRole_Name}
+    
+    def name(self):
+        return self.JobRole_Name
 
     def to_dict(self):
         """
@@ -533,6 +536,16 @@ def get_jobrole(jobrole_id):
     return jsonify(
         {
             "data": [jobrole.getName()]
+        }
+    ), 200
+
+# Retrieve jobrole_Name based on jobrole_ID
+@app.route("/StaffGetJobRolesName/<string:jobrole_id>")
+def get_jobroleName(jobrole_id):
+    jobrole = JobRoles.query.filter_by(JobRole_ID=jobrole_id).first()
+    return jsonify(
+        {
+            "data": jobrole.name()
         }
     ), 200
 

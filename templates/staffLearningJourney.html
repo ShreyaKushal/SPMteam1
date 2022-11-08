@@ -248,16 +248,29 @@
             },
             methods: {
                 deleteLearningJourney: function(event){
-                    var staffID = 130001; // NEED TO CHANGE TO localStorage.getItem("StaffID")
                     var jobroleID = event.target.id;
+                    localStorage.setItem("JobroleID", jobroleID)
 
-                    axios.delete('http://localhost:5001/StaffDeleteLearningJourney/'+staffID+ '/' +jobroleID)
+                    axios.get('http://localhost:5001/StaffGetJobRolesName/' + jobroleID)
                     .then(response => {
-                        alert("Learning journey has been successfully deleted");
-                        window.location.replace("./staffLearningJourney.html");
-                        return false;
+                        this.jobRoleName = response.data.data;
+                        console.log(this.jobRoleName)
+                        this.delete()
                     })
-                    .catch(error => { this.error = error.response.data.message });
+                    .catch(error => alert(error));
+                },
+                delete(){
+                    var staffID = 130001; // NEED TO CHANGE TO localStorage.getItem("StaffID")
+                    var jobroleID = localStorage.getItem("JobroleID")
+
+                    axios.delete('http://localhost:5001/StaffDeleteLearningJourney/'+staffID+'/'+jobroleID)
+                        .then(response => {
+                            console.log(this.jobRoleName)
+                            alert("You have successfully deleted the learning journey for " + this.jobRoleName);
+                            //window.location.replace("./staffLearningJourney.html");
+                            return false;
+                        })
+                        .catch(error => alert(error));
                 },
                 addMoreCourseToLearningJourney: function(event){
                     var jobroleID = event.target.id;
