@@ -260,19 +260,6 @@ def get_StaffDetails(staff_id):
             "message": "JobRole not found."
         }), 404
 
-# Retrieve employee in your department based on dept
-@app.route("/DeptStaffDetails/<string:dept>")
-def get_DeptStaffDetails(dept):
-    staff = Staff.query.filter_by(Dept=dept).all()
-    if staff:
-        return jsonify({
-            "data": staff.json()
-        }), 200
-    else:
-        return jsonify({
-            "message": "JobRole not found."
-        }), 404
-
 # Retrieve all active jobroles
 @app.route("/ActiveJobRoles")
 def get_all_ActiveJobRoles():
