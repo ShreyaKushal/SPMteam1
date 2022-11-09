@@ -18,8 +18,8 @@ CORS(app, support_credentials=True)
 class JobRoles(db.Model):
     __tablename__ = 'JobRoles'
     JobRole_ID = db.Column(db.String(10), primary_key=True)
-    JobRole_Name = db.Column(db.String(50))
-    JobRole_Status = db.Column(db.String(10))
+    JobRole_Name = db.Column(db.String(50), nullable=False)
+    JobRole_Status = db.Column(db.String(10), nullable=False)
 
     def __init__(self, JobRole_ID, JobRole_Name, JobRole_Status): #initialise value of job role record, specify properties of a job role when it is created
         self.JobRole_ID = JobRole_ID
