@@ -299,6 +299,19 @@ def get_topthree_ActiveJobRoles():
             "message": "Job Role not found."
         }), 404
 
+# Retrieve top 3 active skills
+@app.route("/TopThreeActiveSkills")
+def get_topthree_ActiveSkills():
+    Skill = Skills.query.filter_by(Skill_Status = 'Active').limit(3).all()
+    if len(Skill):
+        return jsonify({
+            "data": [Skills.json() for Skills in Skill]
+        }), 200
+    else:
+        return jsonify({
+            "message": "Job Role not found."
+        }), 404
+
 # Retrieve all inactive jobroles
 @app.route("/InactiveJobRoles")
 def get_all_InactiveJobRoles():
